@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        td, th { border: 1px solid grey; text-align: center;}
+        table { padding: 0; }
+    </style>
+    <title>NewChance Shop</title> 
+</head>
+<body>
+    <nav th:replace="frags/nav.html :: nav">
+		Nav goes here
+	</nav>
+    <div>
+        <th:block th:replace="frags/header.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+    <p>Solo en caso de Administrador al estar dentro de la tienda.</p>
+    <p><button>Administrar Productos</button> <button>Incluir Nuevo Producto</button></p>
+    <div>
+        <p>
+            <b>Productos:</b>
+               <table>
+                    <tr>
+                        <th>Imagen</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Categoría</th>
+                        <th>Talla (EUR)</th>
+                    </tr>
+                    <tr th:each="p: ${prods}">
+                        <td><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/></td>
+                        <td th:text="${p.nombre}">N</td>
+                        <td th:text="${p.desc}">D</td>
+                        <td th:text="${p.categorias}">C</td>
+                        <td th:text="${p.talla} ">T</td>
+                    </tr>
+                </table>
+        </p>
+    </div>
+
+   <!-- ruta del proyecto  es/ucm/fdi/...
+    hacer un getmapping por vista
+    hacer en resources templates un html por vista
+    el getmapping hace un return que es el nombre del templates
+    Tenemos que tener fragmentos - por ejemplo productos en caso de tiendas -->
+    <div>
+        <th:block th:replace="frags/pie.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+
+</body>
+</html>

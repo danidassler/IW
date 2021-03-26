@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        td { padding: 1em; }
+        table { padding: 1em; }
+    </style>
+    <title>Finalizar Venta</title>
+</head>
+<body>
+    <nav th:replace="frags/nav.html :: nav">
+		Nav goes here
+	</nav>
+    <div>
+        <th:block th:replace="frags/header.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+    <p><b>Esta pantalla será similar a la de compra, cambiando los botones checkbox finales.</b></p>
+    <h4>Finalizar venta:</h4>
+    <table>
+        <tr>
+            <td><b><span th:text="${prod.nombre}">N</span></b></td>
+            <td><b>Revisión de la venta:</b></td>
+        </tr>
+        <tr>
+            <td>
+                <!--<p><b><span th:text="${prod.nombre}">N</span></b></p>-->
+                <p>Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€</p>
+                <p>Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p>  
+                <p><span th:text="${prod.talla}">N</span>EUR</p>
+                <p><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/></p>
+            </td>
+            <td>
+                <!-- <p><b>Revisión de la venta:</b></p> -->
+                <p>Precio de venta: <span th:text="${mejorPuja} ">LA</span>€</p>
+                <p>Impuestos (9%): - 30€</p>
+                <p>Envio: - 10€</p>
+                <p>Pago final: <b>470€</b></p>
+            </td>
+            <td>
+                <p><input type="checkbox" id="cb"><label for="cb">Confirmo que mi articulo es nuevo y original.</label></p>
+                <p><input type="checkbox" id="cb2"><label for="cb2">Confirmo que enviare mi producto en dos dia hábiles para evitar las multas.</label></p>
+                <button>Confirmar venta</button>
+            </td>
+
+        </tr>
+    </table>
+
+    <th:block th:replace="frags/pie.html">
+        Aqui va lo que hay en header, esto no se ve
+    </th:block>
+</body>
+</html>

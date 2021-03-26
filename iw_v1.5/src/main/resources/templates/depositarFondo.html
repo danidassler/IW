@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        td, th { border: 1px solid grey; text-align: center; border-spacing: 10px;}
+        table { padding: 0; }
+    </style>
+    <title>Depositar fondo</title>
+</head>
+<body>
+    <nav th:replace="frags/nav.html :: nav">
+		Nav goes here
+	</nav>
+    <div>
+        <th:block th:replace="frags/header.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+    <h3>Depositar Fondo</h3>
+    <p>Aquí podrás depositar fondos para poder seguir realizando compras dentro de la web y poder participar en las pujas. La vista para retirar fondos hacia tu cuenta bancaria será muy parecida. </p>
+    <table>
+        <tr>
+            <td>
+                <p>Información del usuario</p>
+                <img src="../static/img/ipsum.jpg" th:src="@{/img/ipsum.jpg}" alt="foto"/>
+                <p><span th:text="${prof.nombre}"></span> <span th:text="${prof.apellidos}"></span></p>
+                <p>Saldo Actual: <span th:text="${prof.saldo}"></span> </p>
+            </td>
+            <td>
+                <h4>Métodos de Pago</h4>
+                <p>Aceptamos los siguientes métodos de pago:</p>
+                <select>
+                    <optgroup label="Cuenta Bancaria"></optgroup>
+                    <option>Visa</option>
+                    <option>Mastercard</option>
+                    <option>American Express</option>
+                    <optgroup label="Pago Online"></optgroup>
+                    <option>Paypal</option>
+                    <option>WebMoney</option>
+                    <option>Paysafecard</option>
+                </select>
+                <p>Nombre<input type="text"></input></p>
+                <p>Correo Electrónico<input type="text"></input></p>
+                <p>Dirección<input type="text"></input></p>
+                <p>Introduce su tarjeta de débito: <input type="text"></input></p>
+                <p>CVV <input type="text"></input></p>
+                <p>Dinero a incluir en tu cuenta de NewChance <input type="text"></input></p>
+                <button>Agregar Saldo</button>
+            </td>
+        </tr>
+    </table>
+    <th:block th:replace="frags/pie.html">
+    Aqui va lo que hay en header, esto no se ve
+    </th:block>
+</body>
+</html>
