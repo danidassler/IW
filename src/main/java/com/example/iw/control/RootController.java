@@ -14,7 +14,9 @@ import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import javax.transaction.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -46,6 +48,7 @@ public class RootController {
     public String tienda(Model model) {   
         //@RequestParam long id, Hay que revisar esto 
         
+        //FALTA METER MEJOR PRECIO Y PUJA MAS ALTA
         List<?> prods = entityManager.createQuery("SELECT p FROM Producto p").getResultList();
         
         model.addAttribute("prods", prods);
@@ -236,18 +239,47 @@ public class RootController {
         return "chat";                     
     }
 
-    @GetMapping("/depositarFondo") 
-    public String depositarFondo(@RequestParam long id, Model model) {    
+    @GetMapping("/depositarFondo/{id}") 
+    public String depositarFondo(@PathVariable long id, Model model) {    
+        Usuario prof = entityManager.find(Usuario.class, id);
+        model.addAttribute("prof", prof);
+        return "depositarFondo";                     
+    }
+
+    @PostMapping("/depositarFondo/{id}")
+    @Transactional 
+    public String depositarFondo(@PathVariable long id, 
+        @RequestParam BigDecimal saldo,
+        Model model) {    
 
         Usuario prof = entityManager.find(Usuario.class, id);
-
-        model.addAttribute("prof", prof); 
-            
+        BigDecimal nuevoSaldo = prof.getSaldo().add(saldo);
+        prof.setSaldo(nuevoSaldo);
+        entityManager.merge(prof);
+        model.addAttribute("prof", prof);     
         return "depositarFondo";                     
     }
 
     @GetMapping("/formularioProducto")
-    public String formularioProducto(Model model){
+    public String formularioProducto(){
+        return "formularioProducto";
+    }
+
+    @PostMapping("/formularioProducto")
+    @Transactional
+    public String formularioProducto(
+        @RequestParam String nombre,
+        @RequestParam String desc,
+        @RequestParam String categorias,
+        @RequestParam String talla,
+        Model model){
+        
+        Producto prod = new Producto();
+        prod.setNombre(nombre);
+        prod.setDesc(desc);
+        prod.setCategorias(categorias);
+        prod.setTalla(talla);
+        entityManager.persist(prod);
 
         return "formularioProducto";
     }

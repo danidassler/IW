@@ -104,7 +104,7 @@ public class Usuario implements Transferable<Usuario.Transfer> {
 	public boolean hasRole(Rol rol) {
 		String rolName = rol.name();
 		boolean ok = false;
-		if (rolName == "ADMIN" || rolName == "USER"){
+		if (rolName == "ADMIN"){
 			ok = true;
 		}
 		return ok;

@@ -27,12 +27,31 @@
                 <p style="text-align: center;"><button>Seleccionar foto...</button ></p>
             </td>
             <td>
-                <h4>Información del producto</h4>
-                <p>Nombre producto: <input type="text"></input></p>
-                <p>Categoria: <input type="text"></input></p>
-                <p>Descripción: <input type="text"></input></p>
-                <p>Talla: <input type="text"></input></p>
-                <button>Agregar Producto</button>
+                <form method="post" th:action="@{/formularioProducto}">
+                    <h4>Información del producto</h4>
+                    <p>
+                        <label for="nombre" class="sr-only">Nombre producto: </label>
+                        <input type="text" id="nombre" name="nombre" 
+                          class="form-control" placeholder="Producto" required="required"></input>
+                    </p>
+                    <p>
+                        <label for="categorias" class="sr-only">Categoría: </label>
+                        <input type="text" id="categorias" name="categorias" 
+                          class="form-control" placeholder="Categoria" required="required"></input>
+                    </p>
+                    <p>
+                        <label for="desc" class="sr-only">Descripción: </label>
+                        <input type="text" id="desc" name="desc" 
+                          class="form-control" placeholder="Descripcion" required="required"></input>
+                    </p>
+                    <p>
+                        <label for="talla" class="sr-only">Talla: </label>
+                        <input type="text" id="talla" name="talla" 
+                          class="form-control" placeholder="Talla" required="required"></input>
+                    </p>
+                
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Agregar Producto</button>
+                </form>
             </td>
         </tr>
     </table>

@@ -70,18 +70,21 @@ public class UserController {
 	public String getUser(@PathVariable long id, Model model, HttpSession session) 			
 			throws JsonProcessingException {		
 		Usuario u = entityManager.find(Usuario.class, id);
+		System.out.printf("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 		model.addAttribute("user", u);
+		Usuario user = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+		log.info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA {}", user.getOferta().get(0).toString());
 
 
-		List<Oferta> ofertas = u.getOferta(); //Aqui 
+		List<Oferta> ofertas = user.getOferta(); //Aqui 
         List<Oferta> pujas = new ArrayList<>(); //Aqui se necesita pujas altas
         List<Oferta> precios = new ArrayList<>(); //Aqui se necesita precios bajos
 
         //estos gets no sabemos si estan bien, porque tenemos una transaccion
         //la transaccion es: sergio vende a dani un producto aceptando su puja mas alta
         //en los perfiles a dani si le sale la compra pero a sergio no le sale la venta
-        List<Transaccion> tVentas = u.getTransaccionesVenta();
-        List<Transaccion> tCompras = u.getTransaccionesCompra();
+        List<Transaccion> tVentas = user.getTransaccionesVenta();
+        List<Transaccion> tCompras = user.getTransaccionesCompra();
 
 		for(Oferta oferta : ofertas){
             if(oferta.getTipo() == Oferta.Tipo.PUJA){

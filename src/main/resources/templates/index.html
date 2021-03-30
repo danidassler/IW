@@ -6,9 +6,7 @@
 	<title>IW: Plantilla</title>
 </head>
 <body>
-	<nav th:replace="fragments/nav.html :: nav">
-		Nav goes here
-	</nav>
+
 	<nav th:replace="frags/nav.html :: nav">
 		Nav goes here
 	</nav>
@@ -27,9 +25,9 @@
 	<div th:if="${session.u == null}">
 	<h4>Intenta ver un perfil</h4>
 	<ul>
-		<li><a th:href="@{/user/1}">Uno</a>
-		<li><a th:href="@{/user/2}">Dos</a>
-		<li><a th:href="@{/user/3}">Tres</a>
+		<li><a th:href="@{/perfil/1}">Uno</a>
+		<li><a th:href="@{/perfil/2}">Dos</a>
+		<li><a th:href="@{/perfil/3}">Tres</a>
 	</li>
 	</div>
 	

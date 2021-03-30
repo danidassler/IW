@@ -28,25 +28,55 @@
                 <p>Saldo Actual: <span th:text="${prof.saldo}"></span> </p>
             </td>
             <td>
-                <h4>Métodos de Pago</h4>
-                <p>Aceptamos los siguientes métodos de pago:</p>
-                <select>
-                    <optgroup label="Cuenta Bancaria"></optgroup>
-                    <option>Visa</option>
-                    <option>Mastercard</option>
-                    <option>American Express</option>
-                    <optgroup label="Pago Online"></optgroup>
-                    <option>Paypal</option>
-                    <option>WebMoney</option>
-                    <option>Paysafecard</option>
-                </select>
-                <p>Nombre<input type="text"></input></p>
-                <p>Correo Electrónico<input type="text"></input></p>
-                <p>Dirección<input type="text"></input></p>
-                <p>Introduce su tarjeta de débito: <input type="text"></input></p>
-                <p>CVV <input type="text"></input></p>
-                <p>Dinero a incluir en tu cuenta de NewChance <input type="text"></input></p>
-                <button>Agregar Saldo</button>
+                <form method="post" th:action="@{'/depositarFondo/' + ${prof.id}}">
+                    <h4>Métodos de Pago</h4>
+                    <label for="metodoPago" class="sr-only">Aceptamos los siguientes métodos de pago: </label>
+                    <select name="metodoPago" id="cars">
+                        <optgroup label="Cuenta Bancaria"></optgroup>
+                        <option>Visa</option>
+                        <option>Mastercard</option>
+                        <option>American Express</option>
+                        <optgroup label="Pago Online"></optgroup>
+                        <option>Paypal</option>
+                        <option>WebMoney</option>
+                        <option>Paysafecard</option>
+                    </select>
+                    
+                    <p>
+                        <label for="nombre" class="sr-only">Nombre </label>
+                        <input type="text" id="nombre" name="nombre" 
+                          class="form-control" placeholder="Nombre" required="required"></input>
+                    </p>
+                    <p>
+                        <label for="correo" class="sr-only">Correo Electrónico</label>
+                        <input type="text" id="correo" name="correo" 
+                          class="form-control" placeholder="Correo" required="required"></input>
+                    </p>
+                    <p>
+                        <label for="direccion" class="sr-only">Dirección </label>
+                        <input type="text" id="direccion" name="direccion" 
+                          class="form-control" placeholder="Direccion" required="required"></input>
+                    </p>
+                    <p>
+                        <label for="tarjetaDebito" class="sr-only">Introduce su tarjeta de débito: </label>
+                        <input type="text" id="tarjetaDebito" name="tarjetaDebito" 
+                          class="form-control" placeholder="TarjetaDebito" required="required"></input>
+                    </p>
+
+                    <p>
+                        <label for="cvv" class="sr-only">CVV </label>
+                        <input type="text" id="cvv" name="cvv" 
+                          class="form-control" placeholder="CVV" required="required"></input>
+                    </p>
+
+                    <p>
+                        <label for="saldo" class="sr-only">Dinero a incluir en tu cuenta de NewChance </label>
+                        <input type="text" id="saldo" name="saldo" 
+                          class="form-control" placeholder="Saldo" required="required"></input>
+                    </p>
+                
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Agregar Saldo</button>
+                </form>
             </td>
         </tr>
     </table>
