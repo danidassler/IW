@@ -17,8 +17,17 @@
             Aqui va lo que hay en header, esto no se ve
         </th:block>
     </div>
-    <p>Solo en caso de Administrador al estar dentro de la tienda.</p>
-    <p><button>Administrar Productos</button> <button>Incluir Nuevo Producto</button></p>
+    <p>
+        <!-- También es viable de esta forma: (Elegir en el futuro cuál es preferible)
+
+            <form th:action="@{/logout}" method="post">
+				<button type="submit">logout</button>
+			</form>
+        -->
+        
+        <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:if="${session.u.hasRole(session.u.getRol())}" th:href="@{/adminProductos}">Administrar Producto </a></button>
+        <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:if="${session.u.hasRole(session.u.getRol())}" th:href="@{/formularioProducto}">Nuevo Producto </a></button>
+    </p>
     <div>
         <p>
             <b>Productos:</b>

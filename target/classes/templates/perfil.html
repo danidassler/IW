@@ -26,7 +26,9 @@
 
         <button>Mensajes</button>   <button>Notificaciones</button>
         
-        <p><h3>Perfil - <span th:text="${user.nombre}"></span> <span th:text="${user.apellidos}"></span> </h3><button>Editar perfil</button></p>
+        <p><h3>Perfil - <span th:text="${user.nombre}"></span> <span th:text="${user.apellidos}"></span> </h3>
+                <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:href="@{'/perfil/modificarPerfil/' + ${user.id}}">Editar perfil </a></button>
+        </p>
         <p><span th:text="${user.username}"></span></p>
         <img src="../static/img/ipsum.jpg" th:src="@{/img/ipsum.jpg}" alt="foto"/>
         <p>Saldo: <span th:text="${user.saldo}">saldo</span>€  <button>Transacciones</button></p> 

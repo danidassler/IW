@@ -16,13 +16,15 @@
 
 
     <b><p th:text="${prod.nombre}">Producto</p></b>
+
+    <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:if="${session.u.hasRole(session.u.getRol())}" th:href="@{'/modificarProducto/' + ${prod.id}}">Editar Producto </a></button>
     <img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/>
     <p th:text="${prod.desc}"> Descripción</p>
     <p th:text="${prod.categorias}"> Categoria</p>
     <p>Talla: <span th:text="${prod.talla}"> T</span> EUR</p>
     <p>Ultima venta: <span th:text="${ultimaVenta}"> UV</span>€ <button>Ver todas las ventas</button></p>
-    <p>Precio mas bajo: <span th:text="${menorPrecio}"> LA</span>€ <button>Comprar ya</button> <button>Pujar</button> <button>Ver lista de precios</button></p>
-    <p>Puja mas alta:<span th:text="${mejorPuja}"> HB</span>€ <button>Vender ya</button> <button>Fijar precio</button> <button>Ver lista de pujas</button></p>
+    <p>Precio mas bajo: <span th:text="${menorPrecio}"> LA</span>€ <a th:href="@{/confirmacionProducto}"> <button>Comprar ya</button> </a> <a th:href="@{'/puja/' + ${prod.id}}"> <button>Pujar</button> </a> <button>Ver lista de precios</button></p>
+    <p>Puja mas alta:<span th:text="${mejorPuja}"> HB</span>€ <a th:href="@{'/venta/' + ${prod.id}}"> <button>Vender ya</button> </a> <button>Fijar precio</button> <button>Ver lista de pujas</button></p>
 
    <!-- ruta del proyecto  es/ucm/fdi/...
     hacer un getmapping por vista

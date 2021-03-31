@@ -24,12 +24,20 @@
         <button>Administrar Usuario</button> <button>Administrar Productos</button>
         <p>Solo en caso de Administrador al visitar un perfil.</p>
 
-        <button>Mensajes</button>   <button>Notificaciones</button>
+        <a th:href="@{'/chat/' + ${user.id}"> <button>Mensajes</button> </a>   <button>Notificaciones</button>
         
-        <p><h3>Perfil - <span th:text="${user.nombre}"></span> <span th:text="${user.apellidos}"></span> </h3><button>Editar perfil</button></p>
+        <p>
+            <h3>Perfil - <span th:text="${user.nombre}"></span> <span th:text="${user.apellidos}"></span> </h3>
+            <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:href="@{'/perfil/modificarPerfil/' + ${user.id}}">Editar perfil </a></button>
+        </p>
+
         <p><span th:text="${user.username}"></span></p>
         <img src="../static/img/ipsum.jpg" th:src="@{/img/ipsum.jpg}" alt="foto"/>
-        <p>Saldo: <span th:text="${user.saldo}">saldo</span>€  <button>Transacciones</button></p> 
+        <p>Saldo: 
+            <span th:text="${user.saldo}">saldo</span>€  
+            <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:href="@{'/depositarFondo/' + ${user.id}}">Depositar fondo </a></button>
+            <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:href="@{'/retirarFondo/' + ${user.id}}">Retirar fondo </a></button>
+        </p> 
         <div>
         <p>
             <b>Pujas Activas:</b> <button>Ver todo</button>

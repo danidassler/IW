@@ -22,12 +22,13 @@
         <div>
             <b>Lista de productos:</b>
             <button>Filtro</button>
-            <button>Añadir productos</button>
+            <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:if="${session.u.hasRole(session.u.getRol())}" th:href="@{/formularioProducto}">Nuevo Producto </a></button>
         </div>
         <div th:each="p: ${prods}">
             <div>
                 <img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/>
                 <p> <span th:text="${p.nombre}"></span></p>
+                <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:href="@{'/modificarProducto/' + ${p.id}}">Editar Producto </a></button>
             </div>
         </div>
 
