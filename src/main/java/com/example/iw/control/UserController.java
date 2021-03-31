@@ -38,6 +38,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import java.lang.Object;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -230,4 +233,48 @@ public class UserController {
 		}
 		return "perfil";
 	}
+	
+	@GetMapping("/modificarPerfil/{id}") 
+    public String modificarPerfil(@PathVariable long id, Model model) {    
+        Usuario user = entityManager.find(Usuario.class, id);
+        model.addAttribute("user", user);
+        return "modificarPerfil";                     
+    }
+
+    @PostMapping("/modificarPerfil/{id}")
+    @Transactional 
+    public String modificarPerfil(@PathVariable long id, 
+		HttpServletResponse response,
+        @RequestParam String nombre, 
+		@RequestParam String apellidos,
+		@RequestParam (required = false) String newpassword, 
+		@RequestParam String password,
+		@RequestParam String password2,
+        Model model, HttpSession session) {    
+		
+		Usuario u = entityManager.find(Usuario.class, id);
+        Usuario user = entityManager.find(
+			Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+
+		if(u.getId() != user.getId()){
+			//response.sendError(HttpServletResponse.SC_FORBIDDEN,  "Este no es tu perfil");
+			log.info("ESTE NO ES TU PERFIL.");
+			return "modificarPerfil";
+		}
+
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+		
+		if(password.equals(password2) && passwordEncoder.matches(password, user.getPassword().substring(8))/*user.matchesPassword(password, user.getPassword().substring(8))*/){
+			
+			user.setNombre(nombre);
+			user.setApellidos(apellidos);
+			if(newpassword != null){
+				user.setPassword("{bcrypt}"+passwordEncoder.encode(newpassword));
+			}
+			entityManager.merge(user);
+			model.addAttribute("user", user);  
+		}   
+        return "modificarPerfil";
+    }
 }

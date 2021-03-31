@@ -123,7 +123,11 @@ public class Usuario implements Transferable<Usuario.Transfer> {
 	public String encodePassword(String rawPassword) {
 		return passwordEncoder.encode(rawPassword);
 	}
-
+	
+	public Boolean matchesPassword(String rawPassword, String encodePassword) {
+		return passwordEncoder.matches(rawPassword, encodePassword);
+	}
+	
 	@Getter
     @AllArgsConstructor
     public static class Transfer {

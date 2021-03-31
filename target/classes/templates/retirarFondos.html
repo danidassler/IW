@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        td, th { border: 1px solid grey; text-align: center; border-spacing: 10px;}
+        table { padding: 0; }
+    </style>
+    <title>Retirar fondo</title>
+</head>
+<body>
+    <nav th:replace="frags/nav.html :: nav">
+		Nav goes here
+	</nav>
+    <div>
+        <th:block th:replace="frags/header.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+    <h3>Retirar Fondo</h3>
+    <p>Aquí podrás retirar fondos y recuperar las ganancias obtenidas en la web, en cuestión de segundos. </p>
+    <table>
+        <tr>
+            <td>
+                <p>Información del usuario</p>
+                <img src="../static/img/ipsum.jpg" th:src="@{/img/ipsum.jpg}" alt="foto"/>
+                <p><span th:text="${prof.nombre}"></span> <span th:text="${prof.apellidos}"></span></p>
+                <p>Saldo Actual: <span th:text="${prof.saldo}"></span> </p>
+            </td>
+            <td>
+                <form method="post" th:action="@{'/retirarFondo/' + ${prof.id}}">
+                    <h4>Métodos de Pago</h4>
+                    <label for="metodoPago" class="sr-only">Aceptamos los siguientes métodos de pago: </label>
+                    <select name="metodoPago" id="cars">
+                        <optgroup label="Cuenta Bancaria"></optgroup>
+                        <option>Visa</option>
+                        <option>Mastercard</option>
+                        <option>American Express</option>
+                        <optgroup label="Pago Online"></optgroup>
+                        <option>Paypal</option>
+                        <option>WebMoney</option>
+                        <option>Paysafecard</option>
+                    </select>
+                    
+                    <p>
+                        <label for="nombre" class="sr-only">Nombre </label>
+                        <input type="text" id="nombre" name="nombre" 
+                          class="form-control" placeholder="Nombre" required="required"></input>
+                    </p>
+                    <p>
+                        <label for="correo" class="sr-only">Correo Electrónico</label>
+                        <input type="text" id="correo" name="correo" 
+                          class="form-control" placeholder="Correo" required="required"></input>
+                    </p>
+                    <p>
+                        <label for="direccion" class="sr-only">Dirección </label>
+                        <input type="text" id="direccion" name="direccion" 
+                          class="form-control" placeholder="Direccion" required="required"></input>
+                    </p>
+                    <p>
+                        <label for="tarjetaDebito" class="sr-only">Introduce su tarjeta de débito: </label>
+                        <input type="text" id="tarjetaDebito" name="tarjetaDebito" 
+                          class="form-control" placeholder="TarjetaDebito" required="required"></input>
+                    </p>
+
+                    <p>
+                        <label for="cvv" class="sr-only">CVV </label>
+                        <input type="text" id="cvv" name="cvv" 
+                          class="form-control" placeholder="CVV" required="required"></input>
+                    </p>
+
+                    <p>
+                        <label for="saldo" class="sr-only">Dinero a retirar de tu cuenta de NewChance </label>
+                        <input type="text" id="saldo" name="saldo" 
+                          class="form-control" placeholder="Saldo" required="required"></input>
+                    </p>
+                
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Retirar Saldo</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <th:block th:replace="frags/pie.html">
+    Aqui va lo que hay en header, esto no se ve
+    </th:block>
+</body>
+</html>

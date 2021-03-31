@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        td, th { border: 1px solid grey; text-align: center; border-spacing: 10px;}
+        table { padding: 0; }
+    </style>
+    <title>Modificar perfil</title>
+</head>
+<body>
+    <nav th:replace="frags/nav.html :: nav">
+		Nav goes here
+	</nav>
+    <div>
+        <th:block th:replace="frags/header.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+    <h3>Modificar Perfil</h3>
+    <p>Desde aquí el usuario puede cambiar sus datos personales.</p>
+    <table>
+        <tr>
+            <td>
+                <p>Foto de perfil</p>
+                <img src="../static/img/ipsum.jpg" th:src="@{/img/ipsum.jpg}" alt="foto" width="350" height="400"/>
+                <p style="text-align: center;"><button>Seleccionar foto...</button ></p>
+            </td>
+            <td>
+                <form method="post" th:action="@{'/perfil/modificarPerfil/' + ${user.id}}">
+                    <h4>Información del perfil</h4>
+                    <p>
+                        <label for="nombre" class="sr-only">Nombre: </label>
+                        <input type="text" id="nombre" name="nombre" 
+                          class="form-control" th:value="${user.nombre}" required="required"></input>
+                    </p>
+                    <p>
+                        <label for="apellidos" class="sr-only">Apellidos: </label>
+                        <input type="text" id="apellidos" name="apellidos" 
+                          class="form-control" th:value="${user.apellidos}" required="required"></input>
+                    </p>
+                    <p>
+                        <label for="newpassword" class="sr-only">Nueva Contraseña (opcional): </label>
+                        <input type="text" id="newpassword" name="newpassword" 
+                          class="form-control" placeholder="" ></input>
+                    </p>
+                    <p>
+                        <label for="password" class="sr-only">Contraseña: </label>
+                        <input type="text" id="password" name="password" 
+                          class="form-control" placeholder="" required="required"></input>
+                    </p>
+                    <p>
+                        <label for="password2" class="sr-only">Repite contraseña: </label>
+                        <input type="text" id="password2" name="password2" 
+                          class="form-control" placeholder="" required="required"></input>
+                    </p>
+                
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Modificar Perfil</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <th:block th:replace="frags/pie.html">
+    Aqui va lo que hay en header, esto no se ve
+    </th:block>
+</body>
+</html>

@@ -25,6 +25,8 @@ import com.example.iw.model.*;
 @Controller
 public class RootController {
 
+    private static final Logger log = LogManager.getLogger(UserController.class);
+
     @Autowired
     private EntityManager entityManager;
 
@@ -250,15 +252,62 @@ public class RootController {
     @Transactional 
     public String depositarFondo(@PathVariable long id, 
         @RequestParam BigDecimal saldo,
-        Model model) {    
+        Model model, HttpSession session) {    
 
-        Usuario prof = entityManager.find(Usuario.class, id);
+        Usuario u = entityManager.find(Usuario.class, id);
+        Usuario prof = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+		if(u.getId() != prof.getId()){
+			//response.sendError(HttpServletResponse.SC_FORBIDDEN,  "Este no es tu perfil");
+			log.info("ESTE NO ES TU PERFIL.");
+			return "depositarFondo";
+		}
         BigDecimal nuevoSaldo = prof.getSaldo().add(saldo);
         prof.setSaldo(nuevoSaldo);
         entityManager.merge(prof);
         model.addAttribute("prof", prof);     
         return "depositarFondo";                     
     }
+
+    
+    @GetMapping("/retirarFondo/{id}") 
+    public String retirarFondo(@PathVariable long id, Model model) {    
+        Usuario prof = entityManager.find(Usuario.class, id);
+        model.addAttribute("prof", prof);
+        return "retirarFondo";                     
+    }
+
+    @PostMapping("/retirarFondo/{id}")
+    @Transactional 
+    public String retirarFondo(@PathVariable long id, 
+        @RequestParam BigDecimal saldo,
+        Model model, HttpSession session) {    
+
+        Usuario u = entityManager.find(Usuario.class, id);
+        Usuario prof = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+		if(u.getId() != prof.getId()){
+			//response.sendError(HttpServletResponse.SC_FORBIDDEN,  "Este no es tu perfil");
+			log.info("ESTE NO ES TU PERFIL.");
+			return "retirarFondo";
+		}
+        log.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa {}", prof.getSaldo());
+        log.info("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb {}", saldo);
+        log.info("cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc {}", prof.getSaldo().subtract(saldo));
+        log.info("dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd {}", saldo.compareTo(prof.getSaldo()));
+
+        if(saldo.compareTo(prof.getSaldo()) == 1){ //PREGUNTAR AL PROFESOR POR QUÉ PETA 
+            // ERROR: Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, application/signed-exchange;v=b3;q=0.9, */*;q=0.8]
+			//response.sendError(HttpServletResponse.SC_FORBIDDEN,  "Este no es tu perfil");
+			log.info("NO PUEDES RETIRAR MAS DINERO DE LO QUE TIENES");
+            model.addAttribute("prof", prof);     
+			return "retirarFondo";
+        }
+        BigDecimal nuevoSaldo = prof.getSaldo().subtract(saldo);
+        prof.setSaldo(nuevoSaldo);
+        entityManager.merge(prof);
+        model.addAttribute("prof", prof);     
+        return "retirarFondo";                     
+    }
+
 
     @GetMapping("/formularioProducto")
     public String formularioProducto(){
@@ -282,6 +331,34 @@ public class RootController {
         entityManager.persist(prod);
 
         return "formularioProducto";
+    }
+
+    @GetMapping("/modificarProducto/{id}")
+    public String modificarProducto(@PathVariable long id, Model model){
+        Producto prod = entityManager.find(Producto.class, id);
+        model.addAttribute("prod", prod); 
+        return "modificarProducto";
+    }
+
+    @PostMapping("/modificarProducto/{id}")
+    @Transactional
+    public String modificarProducto(
+        @PathVariable long id,
+        @RequestParam String nombre,
+        @RequestParam String desc,
+        @RequestParam String categorias,
+        @RequestParam String talla,
+        Model model){
+        
+        Producto prod = entityManager.find(Producto.class, id);
+        prod.setNombre(nombre);
+        prod.setDesc(desc);
+        prod.setCategorias(categorias);
+        prod.setTalla(talla);
+        entityManager.merge(prod);
+        model.addAttribute("prod", prod);     
+
+        return "modificarProducto";
     }
 
     @GetMapping("/confirmacionProducto")

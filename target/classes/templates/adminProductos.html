@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Administrador Productos</title>
+</head>
+<body>
+    <nav th:replace="frags/nav.html :: nav">
+		Nav goes here
+	</nav>
+    <div>
+        <th:block th:replace="frags/header.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+
+    <div>
+        <div>
+            <b>Buscador</b>
+            <button>Buscar</button>
+        </div>
+        <div>
+            <b>Lista de productos:</b>
+            <button>Filtro</button>
+            <button>Añadir productos</button>
+        </div>
+        <div th:each="p: ${prods}">
+            <div>
+                <img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/>
+                <p> <span th:text="${p.nombre}"></span></p>
+            </div>
+        </div>
+
+    </div>
+    <div>
+        <th:block th:replace="frags/pie.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+</body>
+</html>
