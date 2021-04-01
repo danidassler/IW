@@ -59,7 +59,7 @@ import com.example.iw.model.*;
 public class UserController {
 	
 	private static final Logger log = LogManager.getLogger(UserController.class);
-	
+
 	@Autowired 
 	private EntityManager entityManager;
 	
@@ -75,16 +75,16 @@ public class UserController {
 		Usuario u = entityManager.find(Usuario.class, id);
 		model.addAttribute("user", u);
 		Usuario user = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+		List<Oferta> ofertas = entityManager.createQuery("SELECT o FROM Oferta o where o.usuario = '" + id + "'").getResultList();
 
-		List<Oferta> ofertas = user.getOferta(); //Aqui 
         List<Oferta> pujas = new ArrayList<>(); //Aqui se necesita pujas altas
         List<Oferta> precios = new ArrayList<>(); //Aqui se necesita precios bajos
 
         //estos gets no sabemos si estan bien, porque tenemos una transaccion
         //la transaccion es: sergio vende a dani un producto aceptando su puja mas alta
         //en los perfiles a dani si le sale la compra pero a sergio no le sale la venta
-        List<Transaccion> tVentas = user.getTransaccionesVenta();
-        List<Transaccion> tCompras = user.getTransaccionesCompra();
+        List<Transaccion> tVentas = entityManager.createQuery("SELECT o FROM Transaccion o where o.vendedor = '" + id + "'").getResultList();//user.getTransaccionesVenta();
+        List<Transaccion> tCompras = entityManager.createQuery("SELECT o FROM Transaccion o where o.comprador = '" + id + "'").getResultList();//user.getTransaccionesCompra();
 
 		for(Oferta oferta : ofertas){
             if(oferta.getTipo() == Oferta.Tipo.PUJA){

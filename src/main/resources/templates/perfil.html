@@ -24,7 +24,7 @@
         <button>Administrar Usuario</button> <button>Administrar Productos</button>
         <p>Solo en caso de Administrador al visitar un perfil.</p>
 
-        <a th:href="@{'/chat/' + ${user.id}"> <button>Mensajes</button> </a>   <button>Notificaciones</button>
+        <a th:href="@{/message}"> <button>Mensajes</button> </a>   <button>Notificaciones</button>
         
         <p>
             <h3>Perfil - <span th:text="${user.nombre}"></span> <span th:text="${user.apellidos}"></span> </h3>
