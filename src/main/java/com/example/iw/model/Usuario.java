@@ -5,6 +5,7 @@ import java.util.List;
 
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -71,11 +72,11 @@ public class Usuario implements Transferable<Usuario.Transfer> {
     private BigDecimal saldo;
 
 	//Duda ManyToMany: dos usuarios en cada transacción (comprador y vendedor), un usuario puede tener muchas transacciones
-	@OneToMany  
+	@OneToMany
 	@JoinColumn(name="comprador_id")
 	private List<Transaccion> transaccionesCompra;
 
-	@OneToMany 
+	@OneToMany
 	@JoinColumn(name="vendedor_id")
 	private List<Transaccion> transaccionesVenta;
 
@@ -142,3 +143,4 @@ public class Usuario implements Transferable<Usuario.Transfer> {
 		return new Transfer(id,	username, mensajesRecibidos.size(), mensajesEnviados.size());
     }
 }
+//CONTROLAR QUE NO SE METE UN PRODUCTO YA EXISTENTE

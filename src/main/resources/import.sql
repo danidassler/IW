@@ -3,7 +3,7 @@ INSERT INTO Usuario VALUES (1, 'Sanz Mayo' , 1, 'Daniel', '{bcrypt}$2a$10$xLFtBI
 INSERT INTO Usuario VALUES (2, 'Moran Aguero' , 1, 'Sergio', 'sergio4', 0, 500, 'sergiom23');
 INSERT INTO Usuario VALUES (3, 'Casado Molinero' , 1, 'Alvaro', 'alvaro4', 0, 500, 'alvaro09');
 INSERT INTO Usuario VALUES (4, 'Ivan Susana' , 1, 'Jin', 'jin4', 0, 1000, 'Ivanchino07');
-INSERT INTO Usuario VALUES (5, 'JinTao Peng Zhou' , 1, 'JinTao', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', 1, 1000, 'TheRealJin');
+INSERT INTO Usuario VALUES (5, 'Peng Zhou' , 1, 'JinTao', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', 1, 1000, 'TheRealJin');
 INSERT INTO Producto VALUES (2, 'Zapatillas', 'Nuevas zapatillas con un disenio rompedor', 'Adidas Yeezy 500', '45');
 INSERT INTO Oferta VALUES (1, '2021-10-10T22:25', '2021-10-01T14:28', 470, 0, 1, 1, 1); -- puja dani 470 p1 --
 INSERT INTO Oferta VALUES (2, '2021-11-15T12:57', '2021-11-05T10:55', 500, 1, 1, NULL, 2); -- precio sergio 500 p1 --

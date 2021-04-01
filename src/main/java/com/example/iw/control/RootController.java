@@ -3,7 +3,7 @@ import java.util.Random;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.time.*;
 import org.json.*;
 
 import javax.servlet.http.HttpSession;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
+import java.time.LocalDateTime;
 
 import com.example.iw.model.*;
 
@@ -58,8 +59,8 @@ public class RootController {
         return "tienda";                     
     }
 
-    @GetMapping("/producto") 
-    public String producto(@RequestParam long id, Model model) {
+    @GetMapping("/producto/{id}") 
+    public String producto(@PathVariable long id, Model model) {
         //@RequestParam long id
         Producto prod = entityManager.find(Producto.class, id);
         List<Oferta> ofertas = prod.getOferta();
@@ -91,9 +92,10 @@ public class RootController {
         return "producto";                     
     }
 
-    
-    @GetMapping("/venta") 
-    public String venta(@RequestParam long id, Model model) {    
+
+
+    @GetMapping("/venta/{id}") 
+    public String venta(@PathVariable long id, Model model) {    
         Producto prod = entityManager.find(Producto.class, id);
         List<Oferta> ofertas = prod.getOferta();
         BigDecimal mejorPuja = new BigDecimal("0");
@@ -115,6 +117,33 @@ public class RootController {
         model.addAttribute("mejorPuja", mejorPuja);
         model.addAttribute("menorPrecio", menorPrecio);    
         return "venta";                     
+    }
+
+    //HACER EL POST de compra y venta, donde restamos y sumamos precios al saldo de usuarios, creamos transaccion y eliminamos oferta
+
+    @GetMapping("/compra/{id}") 
+    public String compra(@PathVariable long id, Model model) {    
+        Producto prod = entityManager.find(Producto.class, id);
+        List<Oferta> ofertas = prod.getOferta();
+        BigDecimal mejorPuja = new BigDecimal("0");
+        BigDecimal menorPrecio = ofertas.get(0).getPrecio();
+
+        for(Oferta oferta : ofertas){
+            if(oferta.getTipo() == Oferta.Tipo.PUJA){
+                if(oferta.getPrecio().compareTo(mejorPuja) == 1){
+                    mejorPuja = oferta.getPrecio();
+                }
+            }
+            else{
+                if(oferta.getPrecio().compareTo(menorPrecio) == -1){
+                    menorPrecio = oferta.getPrecio();
+                }
+            }
+        }
+        model.addAttribute("prod", prod); 
+        model.addAttribute("mejorPuja", mejorPuja);
+        model.addAttribute("menorPrecio", menorPrecio);    
+        return "compra";                     
     }
 
     /*@GetMapping("/perfil") 
@@ -207,13 +236,23 @@ public class RootController {
     }*/
 
     @GetMapping("/adminUsuarios") 
-    public String adminUsuario(Model model) {    
+    public String adminUsuarios(Model model) {    
             
         List<?> users = entityManager.createQuery("SELECT u FROM Usuario u").getResultList();
 
         model.addAttribute("users", users); 
             
         return "adminUsuarios";                     
+    }
+
+    @GetMapping("/administrarUsuario/{id}") 
+    public String administrarUsuario(@PathVariable long id, Model model) {    
+            
+        Usuario user = entityManager.find(Usuario.class, id); 
+
+        model.addAttribute("user", user); 
+            
+        return "administrarUsuario";                     
     }
 
     @GetMapping("/adminProductos") 
@@ -289,10 +328,6 @@ public class RootController {
 			log.info("ESTE NO ES TU PERFIL.");
 			return "retirarFondo";
 		}
-        log.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa {}", prof.getSaldo());
-        log.info("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb {}", saldo);
-        log.info("cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc {}", prof.getSaldo().subtract(saldo));
-        log.info("dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd {}", saldo.compareTo(prof.getSaldo()));
 
         if(saldo.compareTo(prof.getSaldo()) == 1){ //PREGUNTAR AL PROFESOR POR QUÉ PETA 
             // ERROR: Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, application/signed-exchange;v=b3;q=0.9, */*;q=0.8]
@@ -323,6 +358,7 @@ public class RootController {
         @RequestParam String talla,
         Model model){
         
+        //CONTROLAR QUE NO SE METE UN PRODUCTO YA EXISTENTE
         Producto prod = new Producto();
         prod.setNombre(nombre);
         prod.setDesc(desc);
@@ -350,6 +386,7 @@ public class RootController {
         @RequestParam String talla,
         Model model){
         
+        //CONTROLAR QUE NO SE METE UN PRODUCTO YA EXISTENTE
         Producto prod = entityManager.find(Producto.class, id);
         prod.setNombre(nombre);
         prod.setDesc(desc);
@@ -375,8 +412,148 @@ public class RootController {
         return "confirmacionProducto";
     }
 
-    @GetMapping("/puja") 
-    public String puja(@RequestParam long id, Model model) {    
+    @GetMapping("/pujar/{id}") 
+    public String pujar(@PathVariable long id, Model model) {    
+        Producto prod = entityManager.find(Producto.class, id);
+        List<Oferta> ofertas = prod.getOferta();
+        BigDecimal mejorPuja = new BigDecimal("0");
+        BigDecimal menorPrecio = ofertas.get(0).getPrecio();
+
+        for(Oferta oferta : ofertas){
+            if(oferta.getTipo() == Oferta.Tipo.PUJA){
+                if(oferta.getPrecio().compareTo(mejorPuja) == 1){
+                    mejorPuja = oferta.getPrecio();
+                }
+            }
+            else{
+                if(oferta.getPrecio().compareTo(menorPrecio) == -1){
+                    menorPrecio = oferta.getPrecio();
+                }
+            }
+        }
+        model.addAttribute("prod", prod); 
+        model.addAttribute("mejorPuja", mejorPuja);
+        model.addAttribute("menorPrecio", menorPrecio);
+
+        return "pujar";                     
+    }
+
+    @PostMapping("/pujar/{id}")
+    @Transactional
+    public String pujar(
+        @PathVariable long id,
+        @RequestParam BigDecimal precio,
+        @RequestParam int tiempoExpiracion,
+        Model model, HttpSession session){
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Oferta puja = new Oferta();
+        Producto prod = entityManager.find(Producto.class, id);
+        Usuario u = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+
+        //CONTROLAR QUE TIENE SALDO DISPONIBLE
+        puja.setProducto(prod);
+        puja.setPrecio(precio);
+        puja.setFechaInicio(localDateTime);
+        puja.setFechaExpiracion(localDateTime.plusDays(tiempoExpiracion));
+        puja.setUsuario(u);
+        puja.setTipo(Oferta.Tipo.PUJA);
+        entityManager.persist(puja);
+
+        List<Oferta> ofertas = prod.getOferta();
+        BigDecimal mejorPuja = new BigDecimal("0");
+        BigDecimal menorPrecio = ofertas.get(0).getPrecio();
+
+        for(Oferta oferta : ofertas){
+            if(oferta.getTipo() == Oferta.Tipo.PUJA){
+                if(oferta.getPrecio().compareTo(mejorPuja) == 1){
+                    mejorPuja = oferta.getPrecio();
+                }
+            }
+            else{
+                if(oferta.getPrecio().compareTo(menorPrecio) == -1){
+                    menorPrecio = oferta.getPrecio();
+                }
+            }
+        }
+        model.addAttribute("prod", prod); 
+        model.addAttribute("mejorPuja", mejorPuja);
+        model.addAttribute("menorPrecio", menorPrecio);
+        
+        return "pujar";
+    }
+    
+    @PostMapping("/fijarPrecio/{id}")
+    @Transactional
+    public String fijarPrecio(
+        @PathVariable long id,
+        @RequestParam BigDecimal precio,
+        @RequestParam int tiempoExpiracion,
+        Model model, HttpSession session){
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Oferta prec = new Oferta();
+        Producto prod = entityManager.find(Producto.class, id);
+        Usuario u = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+
+        prec.setProducto(prod);
+        prec.setPrecio(precio);
+        prec.setFechaInicio(localDateTime);
+        prec.setFechaExpiracion(localDateTime.plusDays(tiempoExpiracion));
+        prec.setUsuario(u);
+        prec.setTipo(Oferta.Tipo.PUJA);
+        entityManager.persist(prec);
+
+        List<Oferta> ofertas = prod.getOferta();
+        BigDecimal mejorPuja = new BigDecimal("0");
+        BigDecimal menorPrecio = ofertas.get(0).getPrecio();
+
+        for(Oferta oferta : ofertas){
+            if(oferta.getTipo() == Oferta.Tipo.PUJA){
+                if(oferta.getPrecio().compareTo(mejorPuja) == 1){
+                    mejorPuja = oferta.getPrecio();
+                }
+            }
+            else{
+                if(oferta.getPrecio().compareTo(menorPrecio) == -1){
+                    menorPrecio = oferta.getPrecio();
+                }
+            }
+        }
+        model.addAttribute("prod", prod); 
+        model.addAttribute("mejorPuja", mejorPuja);
+        model.addAttribute("menorPrecio", menorPrecio);  
+        
+        return "pujar";
+    }
+
+    @GetMapping("/fijarPrecio/{id}") 
+    public String fijarPrecio(@PathVariable long id, Model model) {    
+        Producto prod = entityManager.find(Producto.class, id);
+        List<Oferta> ofertas = prod.getOferta();
+        BigDecimal mejorPuja = new BigDecimal("0");
+        BigDecimal menorPrecio = ofertas.get(0).getPrecio();
+
+        for(Oferta oferta : ofertas){
+            if(oferta.getTipo() == Oferta.Tipo.PUJA){
+                if(oferta.getPrecio().compareTo(mejorPuja) == 1){
+                    mejorPuja = oferta.getPrecio();
+                }
+            }
+            else{
+                if(oferta.getPrecio().compareTo(menorPrecio) == -1){
+                    menorPrecio = oferta.getPrecio();
+                }
+            }
+        }
+        model.addAttribute("prod", prod); 
+        model.addAttribute("mejorPuja", mejorPuja);
+        model.addAttribute("menorPrecio", menorPrecio);    
+        return "fijarPrecio";                     
+    }
+
+    @GetMapping("/listaPujas/{id}") 
+    public String listaPujas(@PathVariable long id, Model model) {    
             
         Producto prod = entityManager.find(Producto.class, id);
         
@@ -413,7 +590,50 @@ public class RootController {
         model.addAttribute("menorPrecio", menorPrecio);
         model.addAttribute("pujas", pujas); 
             
-        return "puja";                     
+        return "listaPujas";                     
     }
+
+    @GetMapping("/listaPrecios/{id}") 
+    public String listaPrecios(@PathVariable long id, Model model) {    
+            
+        Producto prod = entityManager.find(Producto.class, id);
+        
+        List<Oferta> ofertas = prod.getOferta();
+        List<Oferta> pujas = new ArrayList<>();
+        List<Oferta> precios = new ArrayList<>();
+        
+        for(Oferta oferta : ofertas){
+            if(oferta.getTipo() == Oferta.Tipo.PUJA){
+                pujas.add(oferta); 
+            }
+            else{
+                precios.add(oferta);
+            }
+        }
+
+        BigDecimal mejorPuja = new BigDecimal(0);
+        BigDecimal menorPrecio = ofertas.get(0).getPrecio();
+
+        for(Oferta oferta : ofertas){
+            if(oferta.getTipo() == Oferta.Tipo.PUJA){
+                if(oferta.getPrecio().compareTo(mejorPuja) == 1){
+                    mejorPuja = oferta.getPrecio();
+                }
+            }
+            else{
+                if(oferta.getPrecio().compareTo(menorPrecio) == -1){
+                    menorPrecio = oferta.getPrecio();
+                }
+            }
+        }
+        model.addAttribute("prod", prod); 
+        model.addAttribute("mejorPuja", mejorPuja);
+        model.addAttribute("menorPrecio", menorPrecio);
+        model.addAttribute("precios", precios); 
+            
+        return "listaPrecios";                     
+    }
+
+    
 
 }  

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        td { padding: 1em; }
+        table { padding: 1em; }
+        .in_table {border: 1px solid grey; text-align: center;}
+    </style>
+    <title>Precio de un producto</title>
+</head>
+<body>
+    <nav th:replace="frags/nav.html :: nav">
+		Nav goes here
+	</nav>
+    <div>
+        <th:block th:replace="frags/header.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+    <h4>Precio:</h4>
+    <div>Esta vista mostrará el historial de los precios que tiene un producto específico</div>
+    <table>
+        <tr>    
+            <td>
+                <p><b><span th:text="${prod.nombre}">N</span></b></p>
+                <p>Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€  |  Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p>  
+                <p><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto" width="350" height="400"/></p>
+            </td>
+            <td>
+                <button>Poner precio</button>
+                <button>Comprar Ahora</button>
+                <p><input type="text"> €</input></p>
+                <b><p>Precios Activos</p></b>
+
+                <table class="in_table">
+                    <tr> 
+                        <td>
+                            <p>Talla</p>
+                        </td>
+                        <td>
+                            <p>Precio</p>
+                        </td>
+                    </tr>
+
+                    <tr th:each="p: ${precios}">    
+                        <td>
+                            <span th:text="${prod.talla}">N</span>
+                        </td>
+                        <td>
+                           <span th:text="${p.precio}">N</span>€
+                        </td>
+                    </tr>
+
+                </table>
+                
+
+            </td>
+            <td style="vertical-align:top">
+                <p>Saldo disponible: 800 €</p>
+            </td>
+        </tr>
+    </table>
+
+    <th:block th:replace="frags/pie.html">
+        Aqui va lo que hay en header, esto no se ve
+    </th:block>
+</body>
+</html>

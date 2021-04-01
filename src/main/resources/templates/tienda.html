@@ -25,8 +25,8 @@
 			</form>
         -->
         
-        <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:if="${session.u.hasRole(session.u.getRol())}" th:href="@{/adminProductos}">Administrar Producto </a></button>
-        <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:if="${session.u.hasRole(session.u.getRol())}" th:href="@{/formularioProducto}">Nuevo Producto </a></button>
+        <button class="btn btn-lg btn-primary btn-block" type="button" th:if="${session.u.hasRole(session.u.getRol())}" > <a th:href="@{/adminProductos}">Administrar Producto </a></button>
+        <button class="btn btn-lg btn-primary btn-block" type="button" th:if="${session.u.hasRole(session.u.getRol())}"> <a th:href="@{/formularioProducto}">Nuevo Producto </a></button>
     </p>
     <div>
         <p>
@@ -38,13 +38,24 @@
                         <th>Descripción</th>
                         <th>Categoría</th>
                         <th>Talla (EUR)</th>
+                        <th>Opciones</th>
                     </tr>
                     <tr th:each="p: ${prods}">
                         <td><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/></td>
-                        <td th:text="${p.nombre}">N</td>
+                        <td><a th:href="@{'/producto/' + ${p.id}}" th:text="${p.nombre}">N</a></td>
                         <td th:text="${p.desc}">D</td>
                         <td th:text="${p.categorias}">C</td>
                         <td th:text="${p.talla} ">T</td>
+                        <td>
+                            <p>
+                                <button>Comprar ya </button>
+                                <button>Vender ya</button> 
+                            </p>
+                            <p>
+                                <button>Pujar</button>
+                                <button>Listar Precio</button> 
+                            </p>
+                        </td>
                     </tr>
                 </table>
         </p>

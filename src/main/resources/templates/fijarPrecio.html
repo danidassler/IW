@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        td, th { border: 1px solid grey; text-align: center; border-spacing: 10px;}
+        table { padding: 0; }
+    </style>
+    <title>Fijar precio del producto</title>
+</head>
+<body>
+    <nav th:replace="frags/nav.html :: nav">
+		Nav goes here
+	</nav>
+    <div>
+        <th:block th:replace="frags/header.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+    <h3>Fijar precio de un producto</h3>
+    <p>Aquí un usuario podrá fijar el precio de un producto y luego visualizar el historial de precios fijados de otros usuarios</p>
+    <table>
+        <tr>
+            <td>
+                <b><p th:text="${prod.nombre}">Producto</p></b>
+                <img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto" width="350" height="400"/>
+            </td>
+            <td>
+                <form method="post" th:action="@{'/pujar/' + ${prod.id}}">
+                    <h4>Información de la fijación del precio</h4>
+                    <p>
+                        <label for="precio" class="sr-only">Precio a fijar: </label>
+                        <input type="text" id="precio" name="precio" 
+                          class="form-control" placeholder="Precio" required="required"></input>
+                    </p>
+                    <p>
+                        <label for="tiempoExpiracion" class="sr-only">Tiempo de expiración (dias): </label>
+                        <select name="tiempoExpiracion">
+                            <option>1</option>
+                            <option>3</option>
+                            <option>7</option>
+                            <option>14</option>
+                            <option>30</option>
+                            <option>60</option>
+
+                        </select>
+                    </p>
+                
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Fijar precio</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <th:block th:replace="frags/pie.html">
+    Aqui va lo que hay en header, esto no se ve
+    </th:block>
+</body>
+</html>

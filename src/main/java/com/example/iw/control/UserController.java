@@ -73,11 +73,8 @@ public class UserController {
 	public String getUser(@PathVariable long id, Model model, HttpSession session) 			
 			throws JsonProcessingException {		
 		Usuario u = entityManager.find(Usuario.class, id);
-		System.out.printf("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 		model.addAttribute("user", u);
 		Usuario user = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
-		log.info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA {}", user.getOferta().get(0).toString());
-
 
 		List<Oferta> ofertas = user.getOferta(); //Aqui 
         List<Oferta> pujas = new ArrayList<>(); //Aqui se necesita pujas altas

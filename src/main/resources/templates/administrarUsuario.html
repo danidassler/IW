@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        td, th { border: 1px solid grey; text-align: center; border-spacing: 10px;}
+        table { padding: 0; }
+    </style>
+    <title>Administrar Usuario</title>
+</head>
+<body>
+    <nav th:replace="frags/nav.html :: nav">
+		Nav goes here
+	</nav>
+    <div>
+        <th:block th:replace="frags/header.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+    <h3>Administrar - Usuario: <span th:text=${user.username}>A</span></h3>
+    <p>Desde aquí el usuario puede cambiar sus datos personales.</p>
+    <table>
+        <tr>
+            <td>
+                <p><b>Foto de perfil</b></p>
+                <img src="../static/img/ipsum.jpg" th:src="@{/img/ipsum.jpg}" alt="foto" width="350" height="400"/>
+                <p style="text-align: center;"><button style= "margin: 5px;">Banear</button><button style= "margin: 5px;">Eliminar</button><button style= "margin: 5px;">Mensaje</button></p>
+            </td>
+            <td>
+                    <h4>Información del perfil</h4>
+                    <p>
+                        Nombre: <span th:text=${user.nombre}>A</span>
+                    </p>
+                    <p>
+                        Apellidos: <span th:text=${user.apellidos}>A</span>
+                    </p> 
+
+                    <!-- METER AQUI OFERTAS, PUJAS ACTIVAS...-->
+            </td>
+            <td>
+                <p><b>Ofertas Realizas</b></p>
+                <p>---- por solucionar ----</p>
+                <p><b>Productos en venta</b></p>
+                <p>---- por solucionar ----</p>
+                <p><b>Transacciones</b></p>
+                <p>---- por solucionar ----</p>
+            </td>
+        </tr>
+    </table>
+    <th:block th:replace="frags/pie.html">
+    Aqui va lo que hay en header, esto no se ve
+    </th:block>
+</body>
+</html>
