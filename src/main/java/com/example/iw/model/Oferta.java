@@ -14,11 +14,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import lombok.Data;
 
 @Entity
 @Data
+@NamedQueries({
+	@NamedQuery(name="Oferta.byUser",
+			query="SELECT o FROM Oferta o "
+					+ "WHERE o.usuario.id = :userId"),
+})
 public class Oferta {
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

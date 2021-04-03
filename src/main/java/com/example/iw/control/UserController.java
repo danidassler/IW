@@ -75,7 +75,10 @@ public class UserController {
 		Usuario u = entityManager.find(Usuario.class, id);
 		model.addAttribute("user", u);
 		Usuario user = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
-		List<Oferta> ofertas = entityManager.createQuery("SELECT o FROM Oferta o where o.usuario = '" + id + "'").getResultList();
+
+		List<Oferta> ofertas = entityManager.createNamedQuery("Oferta.byUser")
+				.setParameter("userId", id)
+				.getResultList();
 
         List<Oferta> pujas = new ArrayList<>(); //Aqui se necesita pujas altas
         List<Oferta> precios = new ArrayList<>(); //Aqui se necesita precios bajos
