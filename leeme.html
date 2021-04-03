@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<title>New Chance</title>
+	</head>
+
+	<body>
+
+		<h1>New Chance</h1>
+		
+		<h2>Fecha 03-04-2021</h2>
+
+		<p>Enumeración de las vistas:</p>
+		<p>Todas las vistas tendrán un header y un pie como fragmentos</p>
+		<ul>
+			<li><a href="http://localhost:8080/tienda">localhost:8080/tienda</a>: Vista sobre la tienda principal, donde se mostrará la lista de productos. Además si eres un administrador, se habilitarán los botones "Administrar Productos" e "Incluir Nuevo Producto".</li>
+			<li><a href="http://localhost:8080/producto/1">localhost:8080/producto/1</a>: Vista sobre un producto detallado que el usuario ha seleccionado. En la vista, el usuario será capaz de ver todas las ventas, comprar, pujar, vender o fijar un precio.</li>
+			<li><a href="http://localhost:8080/venta/1">localhost:8080/venta/1</a>: Esta vista, será bastante parecida al de la compra. Detalla un resumen sobre la venta de un producto en el cual el vendedor debe de confirmar 2 checkboxs para verificar que el producto es nuevo y se debe de enviar en 2 días hábiles.</li>
+			<li><a href="http://localhost:8080/listaPujas/1">localhost:8080/listaPujas/1</a>: Esta vista mostrará el historial de las pujas que tiene un producto. En el historial se mostrará ibnformación importante del producto, como por ejemplo la talla, el precio y cuántos productos hay disponibles. </li>
+			<li><a href="http://localhost:8080/listaPrecios/1">localhost:8080/listaPrecios/1</a>: Esta vista mostrará el historial de los precios que tiene un producto. En el historial se mostrará ibnformación importante del producto, como por ejemplo la talla, el precio y cuántos productos hay disponibles. </li>
+			<li><a href="http://localhost:8080/formularioProducto">localhost:8080/formularioProducto</a>: Vista con formulario para poder agregar un producto. Únicamente el administrador será capaz de ver esta vista y poder agregar un producto nuevo.</li>
+			<li><a href="http://localhost:8080/confirmacionProducto/1">localhost:8080/confirmacionProducto/1</a>: La vista muestra la confirmación de un pedido completado, con un resumen de la factura, detallando el número del pedido y los costes adicionales.</li>
+			<li><a href="http://localhost:8080/perfil/1">localhost:8080/perfil/1</a>: Muestra el perfil del usuario, detallando el historial de pujas pendientes o aceptadas, y productos pendientes de venta o ya confirmados. En el caso de ser administrador, se habilitarán dos botones para ver el listado de usuarios y el listado de productos.</li>
+			<li><a href="http://localhost:8080/adminUsuarios">localhost:8080/adminUsuarios</a>: Vista para administrar la lista de usuarios. Únicamente el administrador es capaz de ver esta vista. Adicionalmente, cuando entre en el perfil de un usuario, tendrá dos botones para banear o eliminar al usuario.</li>
+			<li><a href="http://localhost:8080/adminProductos">localhost:8080/adminProductos</a>: Vista que se mostrará la lista de los productos. Únicamente el administrador es capaz de ver esta vista y será capaz de añadir, modificar o eliminar los productos.</li>
+			<li><a href="http://localhost:8080/chat?id=1">localhost:8080/chat?id=1</a>: (actualmente sin funcionalidad) Consiste en visualizar el chat de un usuario con un asistente virtual de la página. </li>
+			<li><a href="http://localhost:8080/depositarFondo/1">localhost:8080/depositarFondo/1</a>: En esta vista, el usuario será capaz de añadir nuevos fondos a la página, para seguir pujando o comprando productos de la página.</li>
+			<li><a href="http://localhost:8080/fijarPrecio/1">localhost:8080/fijarPrecio/1</a>: Pagina con un pequeño formulario, donde un usuario que quiera vender un producto puede fijar el precio por el cual quiere vender dicho producto. Se añadirá una oferta (tipo precio) en la BBDD. </li>
+			<li><a href="http://localhost:8080/perfil/modificarPerfil/1">localhost:8080/perfil/modificarPerfil/1</a>: Página con un pequeño formulario donde el usuario podrá cambiar su contraseña o información de su perfil. </li>
+			<li><a href="http://localhost:8080/retirarFondo/1">localhost:8080/retirarFondo/1</a>: Página con un pequeño formulario donde el usuario podrá retirar dinero desde su cuenta en nuestra web a su cuenta bancaria. (Operación contraria a la de depositarFondo) </li>
+			<li><a href="http://localhost:8080/administrarUsuario/1">localhost:8080/administrarUsuario/1</a>: Pagina donde el administrador podrá visualizar la información relacionada con un usuario en concreto y realizar diferentes acciones (eliminar al usuario, enviarle un mensaje, banearle ...). Aún sin funcionalidad. </li>
+			<li><a href="http://localhost:8080/modificarProducto/1">localhost:8080/modificarProducto/1</a>: Página con un pequeño formulario donde el administrador podrá modificar datos de un producto ya existente (nombre, desc...) </li>
+			<li><a href="http://localhost:8080/compra/1">localhost:8080/compra/1</a>: Página muy similar a la de venta donde se detallan los datos de una compra y donde el usuario que va a comprar el producto debe confirmar la compra.  </li>
+			<li><a href="http://localhost:8080/index">localhost:8080/index</a>: Pagina inicial, index cogido de la plantilla creada por el profesor. </li>
+			<li><a href="http://localhost:8080/login">localhost:8080/login</a>: Página con un pequeño formulario para logearse con un usuario de la web. </li>
+			<li><a href="http://localhost:8080/pujar/1">localhost:8080/pujar/1</a>: Página con un pequeño formulario donde el usuario podrá pujar por un producto indicando la cantidad de dinero que considere oportuna. </li>
+		</ul>
+
+		<p>Procedencia de las imágenes utilizadas:</p>
+		<p>Las 4 primeras imágenes han sido sacados personalmente por los miembros del equipo</p>
+		<p>Las 2 últimas imágenes se han sacado por la página recomendada por el profesor: <a href="https://picsum.photos/">picsum.photos</a></p>
+		<ul>
+			<li>NMD.jpg</li>
+			<li>yeezy500.jpg</li>
+			<li>yeezy700.jpg</li>
+			<li>yeezy700.png</li>
+			<li>ipsum.jpg</li>
+			<li>ipsumOrdenador.jpg</li>
+		</ul>
+		<h2>Fecha 25-02-2021</h2>
+		<h2> Nuevos detalles de la aplicacion Web </h2>
+		
+		<h3> Hay dos formas de vender tu producto en NewChance: Fijar el precio que quieres obtener por tu producto o pulsar el botón de "vender ya"</h3>
+		<p> Al poner un precio a tu producto, indicas que estas dispuesto a vender tu articulo por ese determinado precio.</p>
+		<p> Para cada producto, nuestra página listará de menor a mayor los precios puestos por los usuarios que desean vender dicho producto. </p>
+		<p> El usuario puede determinar el numero de dias que el precio se mantendrá en nuestra plataforma antes de que caduque: 1, 3, 7, 14, 31, 62.</p>
+		<p> El usuario recibirá un mensaje cuando el precio esté a punto de caducar, para que pueda renovarlo o dejarlo ir.</p>
+		<p> El usuario solo puede fijar un unico precio por cada producto al mismo tiempo. </p>
+		<p> Además el usuario puede editarlo y/o cancelarlo en todo momento (siempre y cuando no se haya realizado ya la venta). </p>
+		<p> Si el usuario fija un precio por un producto y este es el más bajo de todos los que existen listados, su precio será denominado: "Precio más bajo".</p>
+		<p> Si el usuario tiene el "Precio más bajo", los compradores que realicen una puja coincidente con el precio, comprarán el producto automaticamente del usuario. Los compradores realizarán esta acción mediante el botón "Comprar ya".</p>
+		<p> Si otro usuario lista un precio más bajo que el tuyo, tu precio seguirá activo y en el momento que vuelva a ser el precio mas bajo volverás a la misma situaciónn descrita anteriormente. </p>
+		<p> Si no quieres esperar, simplemente pulsa el botón "Vender ya", para vender tu producto a la puja más alta ofrecida por un comprador.</p>
+		<p> En tu cuenta de usuario aparecerá una tabla de ventas con las categorias "Pendientes", "Confirmadas", "Historial".</p>
+		<p> "Pendientes" mostrará la informacion de los precios que tienes activos en la plataforma.</p>
+		<p> "Confirmadas" aquellos precios de los articulos que han sido aceptados por compradores y que aún debes enviar.</p>
+		<p> "Historial" aquellas ventas totalmente completadas.
+		
+		<h3> Hay dos formas de comprar un producto en NewChance: hacer una puja por un producto o pulsar el botón de "Comprar ya" </h3>
+		<p> Hacer una puja refleja tu inteción de comprar un producto por ese determinado precio. </p>
+		<p> Para cada producto, nuestra página listará de mayor a menor las pujas realizadas por los usuarios que desean comprar dicho producto. </p>
+		<p> El usuario puede determinar el numero de dias que la puja se mantendrá en nuestra plataforma antes de que caduque: 1, 3, 7, 14, 31, 62.</p>
+		<p> El usuario recibirá un mensaje cuando la puja esté a punto de caducar, para que pueda renovarla o dejarlo ir.</p>
+		<p> El usuario solo puede fijar una puja por cada producto al mismo tiempo (esto habria que pensarlo, porque no tiene sentido que haga más de una puja para el mismo producto ya que la úica que "sirve" de verdad es la puja que haga de mayor cantidad).<p>
+		<p> Además el usuario puede editarla y/o cancelarla en todo momento (siempre y cuando no se haya realizado ya la venta). </p>
+		<p> Si el usuario fija una puja por un producto y esta es la más alta de todas las que existen listadas, su puja será denominada: "Puja más alta".</p>
+		<p> Si el usuario tiene la "Puja más alta", los vendedores que fijen un precio coincidente con esta puja, venderán el producto automaticamente al usuario. Los vendedores realizarán esta acción mediante el botón "Vender ya".</p>
+		<p> Si otro usuario lista una puja más alta que la tuya, tu puja seguirá activa y en el momento que vuelva a ser la puja mas alta volverás a la misma situaciónn descrita anteriormente. </p>
+		<p> Si no quieres esperar, simplemente pulsa el botón "Comprar ya", para comprar el producto al precio más bajo listado por un vendedor.</p>
+		<p> En el perfil de usuario aparecerán las mismas tablas descritas en el apartado de vendedores pero en este caso con pujas y compras.</p>
+		
+		<h3> Otros detalles </h3>
+		<p> No es necesario tener credito/dinero en la aplicación para hacer pujas, sin embargo, si una de tus pujas es aceptada, deberás tener el dinero suficiente para completar la trasacción.</p>
+		<p> Si en el momento en el que se acepta tu puja no posees el saldo suficiente, la transacción no se completará, tu puja será eliminada, tus valoraciones de usuario se verán afectadas </p>
+		<p> Si es reincidente, se te cobrará una multa y/o el administrador podrá bloquear tu usuario.</p>
+		<p> Si eres vendedor, deberás marcar unas casillas asegurando que tu pproducto es original y está nuevo a la hora de listar un precio en la app.</p>
+		<p> Si vendes el producto, también te comprometes a enviar a la empresa el producto en un plazo de 2 dias laborables. </p>
+		<p> Si estos requisitos no se cumplen, la venta no se efectuará, el dinero será devuelto al vendedor, y el vendedor cubrirá los gastos del envío de vuelta de su producto.</p>
+		<p> Si es reincidente, se te cobrará una multa y/o el administrador podrá bloquear tu usuario.</p>
+		<p> Existirá la opcion de que los compradores y vendedores tengan notificaciones/mensajes sobre como evolucionan los precios y pujas de los productos en los que estan involucrados. </p>
+		
+		<h2> Detalles de la aplicación web</h2>
+		<p>
+			¿Tienes problemas a la hora de encontrar un artículo de tu marca favorita que se ha agotado? ¿Cansado de pagar precios que superan el valor de mercado? 
+			<br>
+			<br>
+			New Chance es una página de compra-venta de artículos (ropa, zapatillas, electrónica, relojes…) donde los usuarios se encontrarán con un sistema similar al de una subasta, donde podrán añadir pujas y los vendedores solicitar precios por los productos listados en la página web.
+			La página actúa como intermediario entre el comprador y el vendedor, una vez se realiza una compra, el vendedor tiene un límite de tiempo para enviar el producto a New Chance, una vez en las oficinas de nuestra página, se verificará que el producto es nuevo y original y se envía al comprador. 
+			<br>
+			<br>
+			Para asegurarnos de que no se comete ningún fraude se emitirán condiciones de uso, sancionarán con multas a los vendedores si sus productos no se cumplen las condiciones deseadas o se retrasan y se controlarán los métodos de pago y fondos de los usuarios (sistema "ESCROW").
+			<br>
+			<br>
+			Nuestra página usará WebSockets para la actualización instantánea de las pujas, las cuales tendrán que actualizarse rápidamente cuando los usuarios pongan nuevas pujas/precios en los productos o estas pujas/precios se acepten por parte de los usuarios y se produzca la venta de los productos.
+			<br>
+			También sera necesario para mantener los productos de la página actualizados correctamente cuando el usuario administrador incluya nuevos productos o cambie las características de estos.
+			<br>
+			El uso de WebSockets también nos seria útil para que los usuarios puedan recibir notificaciones instantáneas cuando estos sucesos nombrados se produzcan con algún producto que quieran seguir o estén relacionados con el (tengan una puja o estén esperando un comprador).
+		</p>
+		
+		<h2> Roles de usuario: </h2>
+		<ul>
+			<li>
+				Usuario no registrado -> Estos usuarios que pueden realizar acciones como : 
+				<ul>
+					<li>
+						Ver productos y sus precios.
+					</li>
+					<li>
+						Ver evolución del producto en el mercado.
+					</li>
+					<li>
+						Ver datos y características de este y navegar por la página.
+					</li>
+				</ul>
+			</li>
+
+			<li>	
+				Usuario registrado -> Estos usuarios, además de poder realizar las acciones de los 
+				usuarios no registrados, tienen dos roles: El comprador o el vendedor
+				<ul>
+					<li>
+						Comprador -> El usuario que desea comprar un producto puede:
+						<ul>
+							<li>Hacer una puja.</li>
+							<li>Ver el estado de sus pujas.</li>
+							<li>Comprar directamente el producto al menor precio solicitado por los vendedores de este.</li>
+							<li>Ver el estado de sus compras.</li>
+							<li>Problemas con un producto comprado (daños, retrasos …). </li>
+							<li>Realizar el seguimiento de un producto (al usuario le llegan notificaciones).</li>
+						</ul>
+					</li>
+					<li>
+						Vendedor -> El usuario que vende un producto puede:
+						<ul>
+							<li>Vender directamente el producto, aceptando la puja más alta que ofrece un comprador sobre este.</li>
+							<li>Consultar el estado de sus ventas.</li>
+							<li>Hacer una propuesta de precio para un producto.</li>
+							<li>Ver las pujas actuales relacionadas con su producto.</li>
+							<li>Realizar el seguimiento de un producto (al usuario le llegan notificaciones).</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+
+			<li>
+				Administrador -> Se encarga de mantener la página web, tiene todos los permisos para modificar las páginas de la aplicación además de 
+				administrar y gestionar la base de datos.
+				Las funcionalidades de este usuario son:
+				<ul>
+					<li> Insertar un nuevo producto.</li>
+					<li> Actualizar los datos de un producto existente.</li>
+					<li> Eliminar un producto.</li>
+					<li> Verificar la autenticidad de los productos que llegan a los administradores.</li>
+					<li> Asegurarse de que los artículos vendidos lleguen al destino. </li>
+					<li> Poner sanciones económicas a usuarios. </li>
+					<li> Eliminar usuarios de forma temporal o permanente en función de su comportamiento. </li>
+				</ul>
+			</li>
+
+		</ul>
+
+	</body>
+</html>
