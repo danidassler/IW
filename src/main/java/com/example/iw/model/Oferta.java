@@ -25,9 +25,26 @@ import lombok.Data;
 	@NamedQuery(name="Oferta.byUser",
 			query="SELECT o FROM Oferta o "
 					+ "WHERE o.usuario.id = :userId"),
-})
+    @NamedQuery(name="Oferta.mejorPuja",
+            query="SELECT o FROM Oferta o " + 
+            "WHERE o.precio = (SELECT MAX(precio) FROM Oferta WHERE tipo = 0 AND producto.id = :productoId)"),
+    @NamedQuery(name="Oferta.menorPrecio",
+            query="SELECT o FROM Oferta o " + 
+            "WHERE o.precio = (SELECT MIN(precio) FROM Oferta WHERE tipo = 1 AND producto.id = :productoId)"),
+    @NamedQuery(name="Oferta.pujas",
+            query="SELECT o FROM Oferta o WHERE tipo = 0 AND producto.id = :productoId"),
+    @NamedQuery(name="Oferta.precios", 
+            query="SELECT o FROM Oferta o WHERE tipo = 1 AND producto.id = :productoId"),
+
+    @NamedQuery(name="Oferta.pujasUser",
+            query="SELECT o FROM Oferta o WHERE tipo = 0 AND usuario.id = :userId"),
+    @NamedQuery(name="Oferta.preciosUser", 
+            query="SELECT o FROM Oferta o WHERE tipo = 1 AND usuario.id = :userId")
+        
+        })
+            
 public class Oferta {
-    @Id
+    @Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
    

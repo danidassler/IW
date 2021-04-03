@@ -24,13 +24,16 @@
         <tr>    
             <td>
                 <p><b><span th:text="${prod.nombre}">N</span></b></p>
-                <p>Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€  |  Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p>  
+                <p th:if="${menorPrecio != 0}">Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€</p>
+                <p th:if="${menorPrecio == 0}">Precio mas bajo: --- €</p>
+                <p th:if="${mejorPuja != 0}">Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p> 
+                <p th:if="${mejorPuja == 0}">Puja mas alta: --- € </p>  
                 <p><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto" width="350" height="400"/></p>
             </td>
             <td>
-                <button>Poner precio</button>
-                <button>Comprar Ahora</button>
-                <p><input type="text"> €</input></p>
+                <button><a th:href="@{'/fijarPrecio/' + ${prod.id}}">Fijar precio</a></button>
+                <button th:if="${menorPrecio != 0}"><a th:href="@{'/compra/' + ${prod.id}}">Comprar ya</a></button>
+                <!--<p><input type="text"> €</input></p>-->
                 <b><p>Precios Activos</p></b>
 
                 <table class="in_table">
@@ -57,7 +60,7 @@
 
             </td>
             <td style="vertical-align:top">
-                <p>Saldo disponible: 800 €</p>
+                <p>Saldo disponible: 800 €</p>  <!-- coger el saldo del usuario en el controller para mostrarlo !!!-->
             </td>
         </tr>
     </table>

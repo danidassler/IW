@@ -49,11 +49,32 @@ public class RootController {
 
     @GetMapping("/tienda") 
     public String tienda(Model model) {   
-        //@RequestParam long id, Hay que revisar esto 
         
-        //FALTA METER MEJOR PRECIO Y PUJA MAS ALTA
-        List<?> prods = entityManager.createQuery("SELECT p FROM Producto p").getResultList();
+        List<BigDecimal> menorPrecio = new ArrayList<>();
+        List<BigDecimal> mejorPuja = new ArrayList<>();
+        List<?> prods = new ArrayList<>();
+        prods = entityManager.createQuery("SELECT p FROM Producto p").getResultList();
         
+        /*for (int i=0; i<prods.size(); i++){
+            List<Oferta> mejPuja = entityManager.createNamedQuery("Oferta.mejorPuja").setParameter("productoId", prods.get(i).getId()).getResultList();
+            List<Oferta> minPrecio = entityManager.createNamedQuery("Oferta.menorPrecio").setParameter("productoId", prods.get(i).getId()).getResultList(); 
+    
+            if((minPrecio.size() > 0)){
+                menorPrecio.add(minPrecio.get(0).getPrecio());
+            }
+            else{
+                menorPrecio.add(new BigDecimal("0"));
+            }
+            if((mejPuja.size() > 0)){
+                mejorPuja.add(mejPuja.get(0).getPrecio());
+            }
+            else{
+                mejorPuja.add(new BigDecimal("0"));
+            }
+        }
+        model.addAttribute("mejorPuja", mejorPuja);
+        model.addAttribute("menorPrecio", menorPrecio);   
+        */
         model.addAttribute("prods", prods);
             
         return "tienda";                     
@@ -64,28 +85,30 @@ public class RootController {
     public String producto(@PathVariable long id, Model model) {
         //@RequestParam long id
         Producto prod = entityManager.find(Producto.class, id);
-        List<Oferta> ofertas = new ArrayList<>(prod.getOferta());
-        List<Transaccion> trans = new ArrayList<>(prod.getTransaccion());
-
-        BigDecimal ultimaVenta = trans.get(0).getOferta().getPrecio();
+        List<Transaccion> trans = new ArrayList<>();
+        BigDecimal ultimaVenta = new BigDecimal("0");
+        BigDecimal menorPrecio = new BigDecimal("0");
         BigDecimal mejorPuja = new BigDecimal("0");
-        BigDecimal menorPrecio = ofertas.get(0).getPrecio();
+        trans = prod.getTransaccion();
+        
+        if(trans.size() > 0){
+            ultimaVenta = trans.get(0).getOferta().getPrecio();
+        }
+
+        List<Oferta> mejPuja = entityManager.createNamedQuery("Oferta.mejorPuja").setParameter("productoId", id).getResultList();
+        List<Oferta> minPrecio = entityManager.createNamedQuery("Oferta.menorPrecio").setParameter("productoId", id).getResultList(); 
+
+        if((minPrecio.size() > 0)){
+            menorPrecio = minPrecio.get(0).getPrecio();
+        }
+        
+        if((mejPuja.size() > 0)){
+            mejorPuja = mejPuja.get(0).getPrecio();
+        }
 
         //cuando lo hagamos bien, habra que borrar la oferta de la BBDD una vez se haya realizado la transacción
         // http://localhost:8080/producto?id=1
 
-        for(Oferta oferta : ofertas){
-            if(oferta.getTipo() == Oferta.Tipo.PUJA){
-                if(oferta.getPrecio().compareTo(mejorPuja) == 1 ){
-                    mejorPuja = oferta.getPrecio();
-                }
-            }
-            else{
-                if(oferta.getPrecio().compareTo(menorPrecio) == -1){
-                    menorPrecio = oferta.getPrecio();
-                }
-            }
-        }
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
         model.addAttribute("ultimaVenta", ultimaVenta);
@@ -93,27 +116,24 @@ public class RootController {
         return "producto";                     
     }
 
-
-
-    @GetMapping("/venta/{id}") 
+    @GetMapping("/venta/{id}")
+    @Transactional 
     public String venta(@PathVariable long id, Model model) {    
         Producto prod = entityManager.find(Producto.class, id);
-        List<Oferta> ofertas = prod.getOferta();
+        BigDecimal menorPrecio = new BigDecimal("0");
         BigDecimal mejorPuja = new BigDecimal("0");
-        BigDecimal menorPrecio = ofertas.get(0).getPrecio();
+        
+        List<Oferta> mejPuja = entityManager.createNamedQuery("Oferta.mejorPuja").setParameter("productoId", id).getResultList();
+        List<Oferta> minPrecio = entityManager.createNamedQuery("Oferta.menorPrecio").setParameter("productoId", id).getResultList(); 
 
-        for(Oferta oferta : ofertas){
-            if(oferta.getTipo() == Oferta.Tipo.PUJA){
-                if(oferta.getPrecio().compareTo(mejorPuja) == 1){
-                    mejorPuja = oferta.getPrecio();
-                }
-            }
-            else{
-                if(oferta.getPrecio().compareTo(menorPrecio) == -1){
-                    menorPrecio = oferta.getPrecio();
-                }
-            }
+        if((minPrecio.size() > 0)){
+            menorPrecio = minPrecio.get(0).getPrecio();
         }
+        
+        if((mejPuja.size() > 0)){
+            mejorPuja = mejPuja.get(0).getPrecio();
+        }
+        
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
         model.addAttribute("menorPrecio", menorPrecio);    
@@ -122,121 +142,32 @@ public class RootController {
 
     //HACER EL POST de compra y venta, donde restamos y sumamos precios al saldo de usuarios, creamos transaccion y eliminamos oferta
 
-    @GetMapping("/compra/{id}") 
+    @GetMapping("/compra/{id}")
+    @Transactional 
     public String compra(@PathVariable long id, Model model) {    
         Producto prod = entityManager.find(Producto.class, id);
-        List<Oferta> ofertas = prod.getOferta();
+        BigDecimal menorPrecio = new BigDecimal("0");
         BigDecimal mejorPuja = new BigDecimal("0");
-        BigDecimal menorPrecio = ofertas.get(0).getPrecio();
 
-        for(Oferta oferta : ofertas){
-            if(oferta.getTipo() == Oferta.Tipo.PUJA){
-                if(oferta.getPrecio().compareTo(mejorPuja) == 1){
-                    mejorPuja = oferta.getPrecio();
-                }
-            }
-            else{
-                if(oferta.getPrecio().compareTo(menorPrecio) == -1){
-                    menorPrecio = oferta.getPrecio();
-                }
-            }
+        List<Oferta> mejPuja = entityManager.createNamedQuery("Oferta.mejorPuja").setParameter("productoId", id).getResultList();
+        List<Oferta> minPrecio = entityManager.createNamedQuery("Oferta.menorPrecio").setParameter("productoId", id).getResultList(); 
+
+        if((minPrecio.size() > 0)){
+            menorPrecio = minPrecio.get(0).getPrecio();
         }
+        
+        if((mejPuja.size() > 0)){
+            mejorPuja = mejPuja.get(0).getPrecio();
+        }
+        
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
         model.addAttribute("menorPrecio", menorPrecio);    
         return "compra";                     
     }
 
-    /*@GetMapping("/perfil") 
-    public String perfil(@RequestParam long id, Model model) {    
-        Usuario user = entityManager.find(Usuario.class, id);
-        
-        List<Oferta> ofertas = user.getOferta(); //Aqui 
-        List<Oferta> pujas = new ArrayList<>(); //Aqui se necesita pujas altas
-        List<Oferta> precios = new ArrayList<>(); //Aqui se necesita precios bajos
-
-        //estos gets no sabemos si estan bien, porque tenemos una transaccion
-        //la transaccion es: sergio vende a dani un producto aceptando su puja mas alta
-        //en los perfiles a dani si le sale la compra pero a sergio no le sale la venta
-        List<Transaccion> tVentas = user.getTransaccionesVenta();
-        List<Transaccion> tCompras = user.getTransaccionesCompra();
-        
-        //JsonArray pujas = new JsonArray();
-        //JsonArray precios = new JsonArray();
-        
-        for(Oferta oferta : ofertas){
-            if(oferta.getTipo() == Oferta.Tipo.PUJA){
-                pujas.add(oferta);
-                /*Producto p = oferta.getProducto();
-                int menorPrecio = 0;
-                int mejorPuja = 0;
-                for(Oferta ofertaProd : p.getOferta()){
-                    if(mejorPuja < ofertaProd.getPrecio()){
-                        mejorPuja = ofertaProd.getPrecio();
-                    }
-                    if(menorPrecio > ofertaProd.getPrecio()){
-                        menorPrecio = ofertaProd.getPrecio();
-                    }
-                }
-                pujas.put(oferta, mejorPuja, menorPrecio);
-            }
-            else{
-                precios.add(oferta);
-                /*Producto p = oferta.getProducto();
-                int menorPrecio = 0;
-                int mejorPuja = 0;
-                for(Oferta ofertaProd : p.getOferta()){
-                    if(mejorPuja < ofertaProd.getPrecio()){
-                        mejorPuja = ofertaProd.getPrecio();
-                    }
-                    if(menorPrecio > ofertaProd.getPrecio()){
-                        menorPrecio = ofertaProd.getPrecio();
-                    }
-                }
-                precios.put(oferta, mejorPuja, menorPrecio);
-            }
-        }
-        /*List<int> listMejorPuja = new ArrayList<>();
-        for(Oferta oferta : pujas){
-            int mejorPuja = 0;
-            Producto p = oferta.getProducto();
-            for(Oferta ofertaProd : p.getOferta()){
-                if(mejorPuja < ofertaProd.getPrecio()){
-                    mejorPuja = ofertaProd.getPrecio();
-                }
-            }
-            listMejorPuja.add(mejorPuja);
-        }
-
-        List<int> listMenorPrecio = new ArrayList<>();
-        for(Oferta oferta : precios){
-            int menorPrecio = 0;
-            Producto p = oferta.getProducto();
-            for(Oferta ofertaProd : p.getOferta()){
-                if(menorPrecio > ofertaProd.getPrecio()){
-                    menorPrecio = ofertaProd.getPrecio();
-                }
-            }
-            listMenorPrecio.add(menorPrecio);
-        }
-        
-
-        
-        model.addAttribute("user", user); 
-
-        model.addAttribute("tVentas", tVentas); 
-        model.addAttribute("tCompras", tCompras); 
-
-        model.addAttribute("pujas", pujas); 
-        //model.addAttribute("listMejorPuja", listMejorPuja);
-        //model.addAttribute("array", array);
-        model.addAttribute("precios", precios); 
-        //model.addAttribute("listMenorPrecio", listMenorPrecio);
-            
-        return "perfil";
-    }*/
-
-    @GetMapping("/adminUsuarios") 
+    @GetMapping("/adminUsuarios")
+    @Transactional 
     public String adminUsuarios(Model model) {    
             
         List<?> users = entityManager.createQuery("SELECT u FROM Usuario u").getResultList();
@@ -246,7 +177,8 @@ public class RootController {
         return "adminUsuarios";                     
     }
 
-    @GetMapping("/administrarUsuario/{id}") 
+    @GetMapping("/administrarUsuario/{id}")
+    @Transactional 
     public String administrarUsuario(@PathVariable long id, Model model) {    
             
         Usuario user = entityManager.find(Usuario.class, id); 
@@ -256,7 +188,8 @@ public class RootController {
         return "administrarUsuario";                     
     }
 
-    @GetMapping("/adminProductos") 
+    @GetMapping("/adminProductos")
+    @Transactional 
     public String adminProductos(Model model) {    
             
         List<?> prods = entityManager.createQuery("SELECT p FROM Producto p").getResultList();
@@ -267,6 +200,7 @@ public class RootController {
     }
 
     @GetMapping("/chat") //HABLAR CON EL PROFE SOBRE ESTO
+    @Transactional
     public String chat(@RequestParam long id, Model model) {    
             
         Usuario user = entityManager.find(Usuario.class, id);
@@ -281,7 +215,8 @@ public class RootController {
         return "chat";                     
     }
 
-    @GetMapping("/depositarFondo/{id}") 
+    @GetMapping("/depositarFondo/{id}")
+    @Transactional 
     public String depositarFondo(@PathVariable long id, Model model) {    
         Usuario prof = entityManager.find(Usuario.class, id);
         model.addAttribute("prof", prof);
@@ -309,7 +244,8 @@ public class RootController {
     }
 
     
-    @GetMapping("/retirarFondo/{id}") 
+    @GetMapping("/retirarFondo/{id}")
+    @Transactional 
     public String retirarFondo(@PathVariable long id, Model model) {    
         Usuario prof = entityManager.find(Usuario.class, id);
         model.addAttribute("prof", prof);
@@ -346,6 +282,7 @@ public class RootController {
 
 
     @GetMapping("/formularioProducto")
+    @Transactional
     public String formularioProducto(){
         return "formularioProducto";
     }
@@ -371,6 +308,7 @@ public class RootController {
     }
 
     @GetMapping("/modificarProducto/{id}")
+    @Transactional
     public String modificarProducto(@PathVariable long id, Model model){
         Producto prod = entityManager.find(Producto.class, id);
         model.addAttribute("prod", prod); 
@@ -399,13 +337,16 @@ public class RootController {
         return "modificarProducto";
     }
 
-    @GetMapping("/confirmacionProducto")
-    public String confirmacionProducto(@RequestParam long id, Model model){
+    @GetMapping("/confirmacionProducto/{id}")
+    @Transactional
+    public String confirmacionProducto(@PathVariable long id, Model model){
         
         Producto prod = entityManager.find(Producto.class, id);
-        List<Transaccion> t = prod.getTransaccion();
-        
-        BigDecimal precioCompra = t.get(0).getOferta().getPrecio();
+        BigDecimal precioCompra = new BigDecimal("0");
+        List<Transaccion> t = new ArrayList<>();
+        t = prod.getTransaccion();
+        if(t != null)
+            precioCompra = t.get(0).getOferta().getPrecio();
 
         model.addAttribute("precioCompra", precioCompra);
         model.addAttribute("prod", prod); 
@@ -413,25 +354,24 @@ public class RootController {
         return "confirmacionProducto";
     }
 
-    @GetMapping("/pujar/{id}") 
+    @GetMapping("/pujar/{id}")
+    @Transactional 
     public String pujar(@PathVariable long id, Model model) {    
         Producto prod = entityManager.find(Producto.class, id);
-        List<Oferta> ofertas = prod.getOferta();
+        BigDecimal menorPrecio = new BigDecimal("0");
         BigDecimal mejorPuja = new BigDecimal("0");
-        BigDecimal menorPrecio = ofertas.get(0).getPrecio();
 
-        for(Oferta oferta : ofertas){
-            if(oferta.getTipo() == Oferta.Tipo.PUJA){
-                if(oferta.getPrecio().compareTo(mejorPuja) == 1){
-                    mejorPuja = oferta.getPrecio();
-                }
-            }
-            else{
-                if(oferta.getPrecio().compareTo(menorPrecio) == -1){
-                    menorPrecio = oferta.getPrecio();
-                }
-            }
+        List<Oferta> mejPuja = entityManager.createNamedQuery("Oferta.mejorPuja").setParameter("productoId", id).getResultList();
+        List<Oferta> minPrecio = entityManager.createNamedQuery("Oferta.menorPrecio").setParameter("productoId", id).getResultList(); 
+
+        if((minPrecio.size() > 0)){
+            menorPrecio = minPrecio.get(0).getPrecio();
         }
+        
+        if((mejPuja.size() > 0)){
+            mejorPuja = mejPuja.get(0).getPrecio();
+        }
+        
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
         model.addAttribute("menorPrecio", menorPrecio);
@@ -461,22 +401,20 @@ public class RootController {
         puja.setTipo(Oferta.Tipo.PUJA);
         entityManager.persist(puja);
 
-        List<Oferta> ofertas = prod.getOferta();
+        BigDecimal menorPrecio = new BigDecimal("0");
         BigDecimal mejorPuja = new BigDecimal("0");
-        BigDecimal menorPrecio = ofertas.get(0).getPrecio();
 
-        for(Oferta oferta : ofertas){
-            if(oferta.getTipo() == Oferta.Tipo.PUJA){
-                if(oferta.getPrecio().compareTo(mejorPuja) == 1){
-                    mejorPuja = oferta.getPrecio();
-                }
-            }
-            else{
-                if(oferta.getPrecio().compareTo(menorPrecio) == -1){
-                    menorPrecio = oferta.getPrecio();
-                }
-            }
+        List<Oferta> mejPuja = entityManager.createNamedQuery("Oferta.mejorPuja").setParameter("productoId", id).getResultList();
+        List<Oferta> minPrecio = entityManager.createNamedQuery("Oferta.menorPrecio").setParameter("productoId", id).getResultList(); 
+
+        if((minPrecio.size() > 0)){
+            menorPrecio = minPrecio.get(0).getPrecio();
         }
+        
+        if((mejPuja.size() > 0)){
+            mejorPuja = mejPuja.get(0).getPrecio();
+        }
+       
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
         model.addAttribute("menorPrecio", menorPrecio);
@@ -502,90 +440,76 @@ public class RootController {
         prec.setFechaInicio(localDateTime);
         prec.setFechaExpiracion(localDateTime.plusDays(tiempoExpiracion));
         prec.setUsuario(u);
-        prec.setTipo(Oferta.Tipo.PUJA);
+        prec.setTipo(Oferta.Tipo.PRECIO);
         entityManager.persist(prec);
 
-        List<Oferta> ofertas = prod.getOferta();
+        BigDecimal menorPrecio = new BigDecimal("0");
         BigDecimal mejorPuja = new BigDecimal("0");
-        BigDecimal menorPrecio = ofertas.get(0).getPrecio();
 
-        for(Oferta oferta : ofertas){
-            if(oferta.getTipo() == Oferta.Tipo.PUJA){
-                if(oferta.getPrecio().compareTo(mejorPuja) == 1){
-                    mejorPuja = oferta.getPrecio();
-                }
-            }
-            else{
-                if(oferta.getPrecio().compareTo(menorPrecio) == -1){
-                    menorPrecio = oferta.getPrecio();
-                }
-            }
+        List<Oferta> mejPuja = entityManager.createNamedQuery("Oferta.mejorPuja").setParameter("productoId", id).getResultList();
+        List<Oferta> minPrecio = entityManager.createNamedQuery("Oferta.menorPrecio").setParameter("productoId", id).getResultList(); 
+
+        if((minPrecio.size() > 0)){
+            menorPrecio = minPrecio.get(0).getPrecio();
         }
+        
+        if((mejPuja.size() > 0)){
+            mejorPuja = mejPuja.get(0).getPrecio();
+        }
+
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
         model.addAttribute("menorPrecio", menorPrecio);  
         
-        return "pujar";
+        return "fijarPrecio";
     }
 
-    @GetMapping("/fijarPrecio/{id}") 
+    @GetMapping("/fijarPrecio/{id}")
+    @Transactional 
     public String fijarPrecio(@PathVariable long id, Model model) {    
         Producto prod = entityManager.find(Producto.class, id);
-        List<Oferta> ofertas = prod.getOferta();
+        BigDecimal menorPrecio = new BigDecimal("0");
         BigDecimal mejorPuja = new BigDecimal("0");
-        BigDecimal menorPrecio = ofertas.get(0).getPrecio();
 
-        for(Oferta oferta : ofertas){
-            if(oferta.getTipo() == Oferta.Tipo.PUJA){
-                if(oferta.getPrecio().compareTo(mejorPuja) == 1){
-                    mejorPuja = oferta.getPrecio();
-                }
-            }
-            else{
-                if(oferta.getPrecio().compareTo(menorPrecio) == -1){
-                    menorPrecio = oferta.getPrecio();
-                }
-            }
+        List<Oferta> mejPuja = entityManager.createNamedQuery("Oferta.mejorPuja").setParameter("productoId", id).getResultList();
+        List<Oferta> minPrecio = entityManager.createNamedQuery("Oferta.menorPrecio").setParameter("productoId", id).getResultList(); 
+
+        if((minPrecio.size() > 0)){
+            menorPrecio = minPrecio.get(0).getPrecio();
         }
+        
+        if((mejPuja.size() > 0)){
+            mejorPuja = mejPuja.get(0).getPrecio();
+        }
+
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
         model.addAttribute("menorPrecio", menorPrecio);    
         return "fijarPrecio";                     
     }
 
-    @GetMapping("/listaPujas/{id}") 
-    public String listaPujas(@PathVariable long id, Model model) {    
+    @GetMapping("/listaPujas/{id}")
+    @Transactional 
+    public String listaPujas(@PathVariable long id, Model model) {  
+        
+        BigDecimal menorPrecio = new BigDecimal("0");
+        BigDecimal mejorPuja = new BigDecimal("0");
             
         Producto prod = entityManager.find(Producto.class, id);
         
-        List<Oferta> ofertas = prod.getOferta();
-        List<Oferta> pujas = new ArrayList<>();
-        List<Oferta> precios = new ArrayList<>();
+        List<Oferta> pujas = entityManager.createNamedQuery("Oferta.pujas").setParameter("productoId", id).getResultList();
+
+        List<Oferta> mejPuja = entityManager.createNamedQuery("Oferta.mejorPuja").setParameter("productoId", id).getResultList();
+        List<Oferta> minPrecio = entityManager.createNamedQuery("Oferta.menorPrecio").setParameter("productoId", id).getResultList(); 
+
+        if((minPrecio.size() > 0)){
+            menorPrecio = minPrecio.get(0).getPrecio();
+        }
         
-        for(Oferta oferta : ofertas){
-            if(oferta.getTipo() == Oferta.Tipo.PUJA){
-                pujas.add(oferta); 
-            }
-            else{
-                precios.add(oferta);
-            }
+        if((mejPuja.size() > 0)){
+            mejorPuja = mejPuja.get(0).getPrecio();
         }
-
-        BigDecimal mejorPuja = new BigDecimal(0);
-        BigDecimal menorPrecio = ofertas.get(0).getPrecio();
-
-        for(Oferta oferta : ofertas){
-            if(oferta.getTipo() == Oferta.Tipo.PUJA){
-                if(oferta.getPrecio().compareTo(mejorPuja) == 1){
-                    mejorPuja = oferta.getPrecio();
-                }
-            }
-            else{
-                if(oferta.getPrecio().compareTo(menorPrecio) == -1){
-                    menorPrecio = oferta.getPrecio();
-                }
-            }
-        }
+       
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
         model.addAttribute("menorPrecio", menorPrecio);
@@ -594,39 +518,26 @@ public class RootController {
         return "listaPujas";                     
     }
 
-    @GetMapping("/listaPrecios/{id}") 
+    @GetMapping("/listaPrecios/{id}")
+    @Transactional 
     public String listaPrecios(@PathVariable long id, Model model) {    
-            
+        BigDecimal menorPrecio = new BigDecimal("0");
+        BigDecimal mejorPuja = new BigDecimal("0");
+
         Producto prod = entityManager.find(Producto.class, id);
-        
-        List<Oferta> ofertas = prod.getOferta();
-        List<Oferta> pujas = new ArrayList<>();
-        List<Oferta> precios = new ArrayList<>();
-        
-        for(Oferta oferta : ofertas){
-            if(oferta.getTipo() == Oferta.Tipo.PUJA){
-                pujas.add(oferta); 
-            }
-            else{
-                precios.add(oferta);
-            }
-        }
+        List<Oferta> precios = entityManager.createNamedQuery("Oferta.precios").setParameter("productoId", id).getResultList();
 
-        BigDecimal mejorPuja = new BigDecimal(0);
-        BigDecimal menorPrecio = ofertas.get(0).getPrecio();
+        List<Oferta> mejPuja = entityManager.createNamedQuery("Oferta.mejorPuja").setParameter("productoId", id).getResultList();
+        List<Oferta> minPrecio = entityManager.createNamedQuery("Oferta.menorPrecio").setParameter("productoId", id).getResultList(); 
 
-        for(Oferta oferta : ofertas){
-            if(oferta.getTipo() == Oferta.Tipo.PUJA){
-                if(oferta.getPrecio().compareTo(mejorPuja) == 1){
-                    mejorPuja = oferta.getPrecio();
-                }
-            }
-            else{
-                if(oferta.getPrecio().compareTo(menorPrecio) == -1){
-                    menorPrecio = oferta.getPrecio();
-                }
-            }
+        if((minPrecio.size() > 0)){
+            menorPrecio = minPrecio.get(0).getPrecio();
         }
+        
+        if((mejPuja.size() > 0)){
+            mejorPuja = mejPuja.get(0).getPrecio();
+        }
+        
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
         model.addAttribute("menorPrecio", menorPrecio);

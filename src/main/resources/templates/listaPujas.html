@@ -25,12 +25,15 @@
         <tr>    
             <td>
                 <p><b><span th:text="${prod.nombre}">N</span></b></p>
-                <p>Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€  |  Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p>  
+                <p th:if="${menorPrecio != 0}">Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€</p>
+                <p th:if="${menorPrecio == 0}">Precio mas bajo: --- €</p>
+                <p th:if="${mejorPuja != 0}">Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p> 
+                <p th:if="${mejorPuja == 0}">Puja mas alta: --- € </p>
                 <p><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto" width="350" height="400"/></p>
             </td>
             <td>
-                <button>Hacer Puja</button>
-                <button>Vender ya</button>
+                <button><a th:href="@{'/pujar/' + ${prod.id}}">Pujar</a></button>
+                <button th:if="${mejorPuja != 0}"><a th:href="@{'/venta/' + ${prod.id}}">Vender ya</a></button>
                 <p><input type="text"> €</input></p>
                 <b><p>Pujas Activas</p></b>
 

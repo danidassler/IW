@@ -20,12 +20,14 @@
     </div>
 
     <div>
-        <p>Solo en caso de Administrador al visitar un perfil.</p>
-        <button>Administrar Usuario</button> <button>Administrar Productos</button>
-        <p>Solo en caso de Administrador al visitar un perfil.</p>
+        <!--<p>Solo en caso de Administrador al visitar un perfil.</p>
+        <button>Administrar Usuario</button> <button>Administrar Productos</button>-->
+        <p th:if="${session.u.hasRole(session.u.getRol())}">Solo en caso de Administrador al visitar un perfil.
 
-        <a th:href="@{/message}"> <button>Mensajes</button> </a>   <button>Notificaciones</button>
+         <button><a th:href="@{/message}">Mensajes</a></button>   <button>Notificaciones</button>
         
+        </p>
+
         <p>
             <h3>Perfil - <span th:text="${user.nombre}"></span> <span th:text="${user.apellidos}"></span> </h3>
             <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:href="@{'/perfil/modificarPerfil/' + ${user.id}}">Editar perfil </a></button>
@@ -52,7 +54,6 @@
                     <th>Cancelar Antes</th>
                 </tr>
 
-
                 <!--<tr th:each="customer, custStat : ${customers}">
                     <td th:text="${custStat.count}">1</td>
                     <td th:text="${customer.firstName}">John</td>
@@ -68,7 +69,6 @@
                         </p>
                     </td>
                 </tr>-->
-
 
                 <tr th:each="p: ${pujas}">
                     <td><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/></td>
@@ -96,6 +96,7 @@
                         <th>Fecha de Intercambio</th>
 
                     </tr>
+                    <!-- mirar que la fecha salga en la vista en un formato decente-->
                     <tr th:each="p: ${tCompras}">
                         <td><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/></td>
                         <td th:text="${p.producto.nombre}">N</td>

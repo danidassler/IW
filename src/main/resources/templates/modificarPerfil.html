@@ -27,6 +27,8 @@
                 <p style="text-align: center;"><button>Seleccionar foto...</button ></p>
             </td>
             <td>
+                <!-- PASA ALGO RARO CUANDO MODIFICAS EL MISMO PERFIL 2 VECES SEGUIDAS
+                MIRAR BIEN QUE PASA-->
                 <form method="post" th:action="@{'/perfil/modificarPerfil/' + ${user.id}}">
                     <h4>Información del perfil</h4>
                     <p>

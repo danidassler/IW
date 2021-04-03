@@ -38,6 +38,8 @@
                         <th>Descripción</th>
                         <th>Categoría</th>
                         <th>Talla (EUR)</th>
+                        <!--<th>Maxima Puja</th>
+                        <th>Menor Precio</th>-->
                         <th>Opciones</th>
                     </tr>
                     <tr th:each="p: ${prods}">
@@ -46,14 +48,19 @@
                         <td th:text="${p.desc}">D</td>
                         <td th:text="${p.categorias}">C</td>
                         <td th:text="${p.talla} ">T</td>
+                        <!--<td th:text="${mp}">MP</td>
+                        <td th:text="${mprec}">MP</td>-->
                         <td>
                             <p>
-                                <button>Comprar ya </button>
-                                <button>Vender ya</button> 
+                                <!-- en estos botones controlar que: si el producto no tiene aun ninguna
+                                oferta o precio de venta, entonces estos botones no deberian de aparecer,
+                                ya que  todavia no se podrian realizar dichas operaciones-->
+                                <button><a th:href="@{'/compra/' + ${p.id}}">Comprar ya</a></button>
+                                <button><a th:href="@{'/venta/' + ${p.id}}">Vender ya</a></button>
                             </p>
                             <p>
-                                <button>Pujar</button>
-                                <button>Listar Precio</button> 
+                                <button><a th:href="@{'/pujar/' + ${p.id}}">Pujar</a></button>
+                                <button><a th:href="@{'/fijarPrecio/' + ${p.id}}">Fijar precio</a></button> 
                             </p>
                         </td>
                     </tr>

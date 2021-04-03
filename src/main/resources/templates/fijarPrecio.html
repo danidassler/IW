@@ -23,10 +23,15 @@
         <tr>
             <td>
                 <b><p th:text="${prod.nombre}">Producto</p></b>
+                <p th:if="${menorPrecio != 0}">Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€</p>
+                <p th:if="${menorPrecio == 0}">Precio mas bajo: --- €</p>
+                <p th:if="${mejorPuja != 0}">Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p> 
+                <p th:if="${mejorPuja == 0}">Puja mas alta: --- € </p>
+                <p>Talla: <span th:text="${prod.talla}">N</span></p>
                 <img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto" width="350" height="400"/>
             </td>
             <td>
-                <form method="post" th:action="@{'/pujar/' + ${prod.id}}">
+                <form method="post" th:action="@{'/fijarPrecio/' + ${prod.id}}">
                     <h4>Información de la fijación del precio</h4>
                     <p>
                         <label for="precio" class="sr-only">Precio a fijar: </label>

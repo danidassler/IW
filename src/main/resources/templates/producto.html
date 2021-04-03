@@ -17,15 +17,17 @@
 
     <b><p th:text="${prod.nombre}">Producto</p></b>
 
-    <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:if="${session.u.hasRole(session.u.getRol())}" th:href="@{'/modificarProducto/' + ${prod.id}}">Editar Producto </a></button>
-    <img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/>
+    <p><button th:if="${session.u.hasRole(session.u.getRol())}" type="button"> <a th:href="@{'/modificarProducto/' + ${prod.id}}">Editar Producto </a></button></p>
+    <img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto" width=200px/>
     <p th:text="${prod.desc}"> Descripción</p>
     <p th:text="${prod.categorias}"> Categoria</p>
     <p>Talla: <span th:text="${prod.talla}"> T</span> EUR</p>
-    <p>Ultima venta: <span th:text="${ultimaVenta}"> UV</span>€ <button>Ver todas las ventas</button></p>
-    <p>Precio mas bajo: <span th:text="${menorPrecio}"> LA</span>€ <a th:href="@{'/compra/' + ${prod.id}}"> <button>Comprar ya</button> </a> <a th:href="@{'/pujar/' + ${prod.id}}"> <button>Pujar</button> </a>  <a th:href="@{'/listaPujas/' + ${prod.id}}"><button>Ver lista de precios</button></a></p>
-    <p>Puja mas alta:<span th:text="${mejorPuja}"> HB</span>€ <a th:href="@{'/venta/' + ${prod.id}}"> <button>Vender ya</button> </a> <a th:href="@{'/fijarPrecio/' + ${prod.id}}"><button>Fijar precio</button> </a>  <a th:href="@{'/listaPrecios/' + ${prod.id}}"><button>Ver lista de pujas</button></a></p>
-
+    <p th:if="${ultimaVenta != 0}">Ultima venta: <span th:text="${ultimaVenta}"> UV</span>€ <button>Ver todas las ventas</button></p>
+    <p th:if="${ultimaVenta == 0}">Ultima venta: --- €</p>
+    <p th:if="${menorPrecio != 0}">Precio mas bajo: <span th:text="${menorPrecio}"> LA</span>€  <button><a th:href="@{'/compra/' + ${prod.id}}">Comprar ya</a></button>  <button><a th:href="@{'/pujar/' + ${prod.id}}">Pujar</a></button> <button><a th:href="@{'/listaPrecios/' + ${prod.id}}">Ver lista de precios</a></button></p>
+    <p th:if="${menorPrecio == 0}">Precio mas bajo: --- €  <button><a th:href="@{'/fijarPrecio/' + ${prod.id}}">Fijar precio</a></button> </p>
+    <p th:if="${menorPuja != 0}">Puja mas alta: <span th:text="${mejorPuja}"> HB</span>€  <button><a th:href="@{'/venta/' + ${prod.id}}">Vender ya</a></button> <button><a th:href="@{'/fijarPrecio/' + ${prod.id}}">Fijar precio</a></button>   <button><a th:href="@{'/listaPujas/' + ${prod.id}}">Ver lista de pujas</a></button></p>
+    <p th:if="${mejorPuja == 0}">Puja mas alta: --- €  <button><a th:href="@{'/pujar/' + ${prod.id}}">Pujar</a></button></p>
    <!-- ruta del proyecto  es/ucm/fdi/...
     hacer un getmapping por vista
     hacer en resources templates un html por vista

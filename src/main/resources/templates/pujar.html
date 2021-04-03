@@ -23,9 +23,17 @@
         <tr>
             <td>
                 <b><p th:text="${prod.nombre}">Producto</p></b>
+                <p th:if="${menorPrecio != 0}">Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€</p>
+                <p th:if="${menorPrecio == 0}">Precio mas bajo: --- €</p>
+                <p th:if="${mejorPuja != 0}">Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p> 
+                <p th:if="${mejorPuja == 0}">Puja mas alta: --- € </p> 
+                <p>Talla: <span th:text="${prod.talla}">N</span></p>
                 <img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto" width="350" height="400"/>
             </td>
             <td>
+                <!-- HABRIA QUE CONTROLAR QUE SI UN USUARIO YA TIENE UNA PUJA EN UN PRODUCTO, 
+                EN VEZ DE CREARSE UNA NUEVA PUJA, SE MODIFIQUE LA QUE TENIA, ya que un usuario 
+                solo puede tener 1 puja activa por un mismo producto a la vez-->
                 <form method="post" th:action="@{'/pujar/' + ${prod.id}}">
                     <h4>Información de la puja</h4>
                     <p>

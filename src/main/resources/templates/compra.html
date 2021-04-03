@@ -26,8 +26,10 @@
         <tr>
             <td>
                 <!--<p><b><span th:text="${prod.nombre}">N</span></b></p>-->
-                <p>Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€</p>
-                <p>Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p>  
+                <p th:if="${menorPrecio != 0}">Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€</p>
+                <p th:if="${menorPrecio == 0}">Precio mas bajo: --- €</p>
+                <p th:if="${mejorPuja != 0}">Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p> 
+                <p th:if="${mejorPuja == 0}">Puja mas alta: --- € </p>
                 <p><span th:text="${prod.talla}">N</span>EUR</p>
                 <p><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/></p>
             </td>

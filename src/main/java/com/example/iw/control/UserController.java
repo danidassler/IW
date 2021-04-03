@@ -71,32 +71,20 @@ public class UserController {
 
 	@GetMapping("/{id}")
 	public String getUser(@PathVariable long id, Model model, HttpSession session) 			
-			throws JsonProcessingException {		
+			throws JsonProcessingException {	
+
 		Usuario u = entityManager.find(Usuario.class, id);
 		model.addAttribute("user", u);
 		Usuario user = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
 
-		List<Oferta> ofertas = entityManager.createNamedQuery("Oferta.byUser")
-				.setParameter("userId", id)
-				.getResultList();
-
-        List<Oferta> pujas = new ArrayList<>(); //Aqui se necesita pujas altas
-        List<Oferta> precios = new ArrayList<>(); //Aqui se necesita precios bajos
+        List<Oferta> pujas = entityManager.createNamedQuery("Oferta.pujasUser").setParameter("userId", id).getResultList(); //Aqui se necesita pujas altas
+		List<Oferta> precios = entityManager.createNamedQuery("Oferta.preciosUser").setParameter("userId", id).getResultList();
 
         //estos gets no sabemos si estan bien, porque tenemos una transaccion
         //la transaccion es: sergio vende a dani un producto aceptando su puja mas alta
         //en los perfiles a dani si le sale la compra pero a sergio no le sale la venta
-        List<Transaccion> tVentas = entityManager.createQuery("SELECT o FROM Transaccion o where o.vendedor = '" + id + "'").getResultList();//user.getTransaccionesVenta();
-        List<Transaccion> tCompras = entityManager.createQuery("SELECT o FROM Transaccion o where o.comprador = '" + id + "'").getResultList();//user.getTransaccionesCompra();
-
-		for(Oferta oferta : ofertas){
-            if(oferta.getTipo() == Oferta.Tipo.PUJA){
-                pujas.add(oferta);
-			}
-            else{
-                precios.add(oferta);
-			}
-        }
+        List<Transaccion> tVentas = entityManager.createNamedQuery("Transaccion.ventas").setParameter("vendedorId" , id).getResultList();//user.getTransaccionesVenta();
+        List<Transaccion> tCompras = entityManager.createNamedQuery("Transaccion.compras").setParameter("compradorId" , id).getResultList();//user.getTransaccionesCompra();
 
 		model.addAttribute("tVentas", tVentas); 
         model.addAttribute("tCompras", tCompras); 
