@@ -60,11 +60,12 @@ public class RootController {
     }
 
     @GetMapping("/producto/{id}") 
+    @Transactional
     public String producto(@PathVariable long id, Model model) {
         //@RequestParam long id
         Producto prod = entityManager.find(Producto.class, id);
-        List<Oferta> ofertas = prod.getOferta();
-        List<Transaccion> trans = prod.getTransaccion();
+        List<Oferta> ofertas = new ArrayList<>(prod.getOferta());
+        List<Transaccion> trans = new ArrayList<>(prod.getTransaccion());
 
         BigDecimal ultimaVenta = trans.get(0).getOferta().getPrecio();
         BigDecimal mejorPuja = new BigDecimal("0");
