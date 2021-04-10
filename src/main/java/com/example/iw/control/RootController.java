@@ -620,7 +620,7 @@ public class RootController {
         LocalDateTime localDateTime = LocalDateTime.now();
         Oferta prec = new Oferta();
         Producto prod = entityManager.find(Producto.class, id);
-        Usuario u = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+        Usuario u = (Usuario)session.getAttribute("u");
 
         prec.setProducto(prod);
         prec.setPrecio(precio);
