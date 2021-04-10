@@ -22,7 +22,8 @@
         <h2>Confirmación del pedido</h2>
         <h4>Muchas gracias por comprar en nuestra tienda. Te confirmamos que ya estamos preparando su pedido. Te mostramos un resumen del pedido: </h4>
         <div class="linearBox">
-            <p>Detalles de la compra:     <b> nº de pedido: 12345642345 </b></p>
+            <p th:if="${dif == 0}">Detalles de la venta:     <b> nº de pedido asociado: <span th:text="${nPedido}"> </b></p>
+            <p th:if="${dif == 1}">Detalles de la compra:     <b> nº de pedido: <span th:text="${nPedido}"> </b></p>
             <table>
                 <tr>
                     <td>
@@ -37,15 +38,15 @@
                         <p>Precio</p>
                     </td>
                     <td>
-                        <p><span th:text="${precioCompra}"></span> €</p>
+                        <p><span th:text="${precio}"></span> €</p>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <p>Tasas</p>
+                        <p>Impuestos</p>
                     </td>
                     <td>
-                        <p>4.00 €</p>
+                        <p><span th:text="${impuestos}"></span> €</p>
                     </td>
                 </tr>
                 <tr>
@@ -53,15 +54,7 @@
                         <p>Costes de envío</p>
                     </td>
                     <td>
-                        <p>8.00 €</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>Gestión de trámite</p>
-                    </td>
-                    <td>
-                        <p>5.00 €</p>
+                        <p><span th:text="${envio}"></span> €</p>
                     </td>
                 </tr>
                 <tr>
@@ -69,7 +62,7 @@
                         <p>Total</p>
                     </td>
                     <td>
-                        <p>453.00 €</p>
+                        <p><span th:text="${precioFinal}"></span> €</p>
                     </td>
                 </tr>
             </table>

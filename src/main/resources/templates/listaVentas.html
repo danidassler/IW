@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        td { padding: 1em; }
+        table { padding: 1em; }
+        .in_table {border: 1px solid grey; text-align: center;}
+    </style>
+    <title>Ventas de un producto</title>
+</head>
+<body>
+    <nav th:replace="frags/nav.html :: nav">
+		Nav goes here
+	</nav>
+    <div>
+        <th:block th:replace="frags/header.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+    <h4>Venta:</h4>
+    <div>Esta vista mostrará el historial de las ventas de un producto específico</div>
+    <div>Será muy parecida al de mostrar los precios marcados por los vendedores sobre este producto</div>
+    <table>
+        <tr>    
+            <td>
+                <p><b><span th:text="${prod.nombre}">N</span></b></p>
+                <p th:if="${menorPrecio != 0}">Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€</p>
+                <p th:if="${menorPrecio == 0}">Precio mas bajo: --- €</p>
+                <p th:if="${mejorPuja != 0}">Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p> 
+                <p th:if="${mejorPuja == 0}">Puja mas alta: --- € </p>
+                <p><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto" width="350" height="400"/></p>
+            </td>
+            <td>
+                <button><a th:href="@{'/compra/' + ${prod.id}}">Comprar ya</a></button>
+                <button th:if="${mejorPuja != 0}"><a th:href="@{'/venta/' + ${prod.id}}">Vender ya</a></button>
+                <p><input type="text"> €</input></p>
+                <b><p>Ultimas Ventas</p></b>
+
+                <table class="in_table">
+                    <tr> 
+                        <td>
+                            <p>Talla</p>
+                        </td>
+                        <td>
+                            <p>Precio de Venta</p>
+                        </td>
+                        <td>
+                            <p>Fecha</p>
+                        </td>
+                    </tr>
+
+                    <tr th:each="v: ${ventas}">    
+                        <td>
+                            <span th:text="${prod.talla}">N</span>
+                        </td>
+                        <td>
+                           <span th:text="${v.precio}">N</span>€
+                        </td>
+                        <td>
+                            <span th:text="${v.fechaTransaccion}">F</span>
+                        </td>
+                    </tr>
+
+                </table>
+                
+
+            </td>
+            <td style="vertical-align:top">
+                <p>Saldo disponible: 800 €</p>
+            </td>
+        </tr>
+    </table>
+
+    <th:block th:replace="frags/pie.html">
+        Aqui va lo que hay en header, esto no se ve
+    </th:block>
+</body>
+</html>

@@ -36,15 +36,24 @@
             </td>
             <td>
                 <!-- <p><b>Revisión de la venta:</b></p> -->
-                <p>Precio de venta: <span th:text="${mejorPuja}">LA</span>€</p>
-                <p>Impuestos (9%): - 30€</p>
-                <p>Envio: - 10€</p>
-                <p>Pago final: <b>470€</b></p>
+                <p>Precio de venta: <span th:text="${precio}">LA</span>€</p>
+                <p>Impuestos (9%): - <span th:text="${impuestos}">I</span>€</p>
+                <p>Envio: - <span th:text="${envio}">I</span>€</p>
+                <p>Pago final: <b><span th:text="${precioFinal}">I</span>€</b></p>
             </td>
             <td>
-                <p><input type="checkbox" id="cb"><label for="cb">Confirmo que mi articulo es nuevo y original.</label></p>
-                <p><input type="checkbox" id="cb2"><label for="cb2">Confirmo que enviare mi producto en dos dia hábiles para evitar las multas.</label></p>
-                <button>Confirmar venta</button>
+                <form th:if="${mejorPuja!=0}" method="post" th:action="@{'/confirmacionProducto/' + ${prod.id}}">
+                    <p><input type="checkbox" id="cb"><label for="cb" required="required">Confirmo que mi articulo es nuevo y original.</label></p>
+                    <p><input type="checkbox" id="cb2"><label for="cb2" required="required">Confirmo que enviare mi producto en dos dia hábiles para evitar las multas.</label></p>
+                    <input type="hidden" name="precio" th:value="${precio}">
+                    <input type="hidden" name="precioFinal" th:value="${precioFinal}">
+                    <input type="hidden" name="impuestos" th:value="${impuestos}">
+                    <input type="hidden" name="envio" th:value="${envio}">
+                    <input type="hidden" name="idOferta" th:value="${idoferta}">
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Confirmar Venta</button>
+                </form>
+                <p th:if="${mejorPuja == 0}">Aun no puedes vender este producto, espera a que un comprador realice una puja o puedes pedir un precio por tu producto aqui:
+                <button><a th:href="@{'/fijarPrecio/' + ${prod.id}}">Fijar precio</a></button></p>
             </td>
 
         </tr>

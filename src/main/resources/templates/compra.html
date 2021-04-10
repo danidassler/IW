@@ -35,14 +35,24 @@
             </td>
             <td>
                 <!-- <p><b>Revisión de la venta:</b></p> -->
-                <p>Precio de la compra: <span th:text="${menorPrecio}">LA</span>€</p>
-                <p>Impuestos (9%): - 30€</p>
-                <p>Envio: - 10€</p>
-                <p>Pago final: <b>470€</b></p>
+                <p>Precio de la compra: <span th:text="${precio}">LA</span>€</p>
+                <p>Impuestos (9%): + <span th:text="${impuestos}">I</span>€</p>
+                <p>Envio: + <span th:text="${envio}">I</span>€</p>
+                <p>Pago final: <b><span th:text="${precioFinal}">I</span>€</b></p>
             </td>
             <td>
-                <p>Esta compra reducirá tu saldo en 470€</p>
-                <button>Confirmar compra</button>
+                <p th:if="${menorPrecio!=0}">Esta compra reducirá tu saldo en <span th:text="${precioFinal}">I</span>€</p>
+                <form th:if="${menorPrecio!=0}" method="post" th:action="@{'/confirmacionProducto/' + ${prod.id}}">
+                    <input type="hidden" name="precio" th:value="${precio}">
+                    <input type="hidden" name="precioFinal" th:value="${precioFinal}">
+                    <input type="hidden" name="impuestos" th:value="${impuestos}">
+                    <input type="hidden" name="envio" th:value="${envio}">
+                    <input type="hidden" name="idOferta" th:value="${idOferta}">
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Confirmar Compra</button>
+                </form>
+                <p th:if="${menorPrecio == 0}">Aun no puedes comprar este producto, espera a que un vendedor fije un precio o puedes realizar una puja aqui:
+                    <button><a th:href="@{'/pujar/' + ${prod.id}}">Pujar</a></button>
+                </p>
             </td>
 
         </tr>

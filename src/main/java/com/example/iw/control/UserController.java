@@ -83,8 +83,8 @@ public class UserController {
         //estos gets no sabemos si estan bien, porque tenemos una transaccion
         //la transaccion es: sergio vende a dani un producto aceptando su puja mas alta
         //en los perfiles a dani si le sale la compra pero a sergio no le sale la venta
-        List<Transaccion> tVentas = entityManager.createNamedQuery("Transaccion.ventas").setParameter("vendedorId" , id).getResultList();//user.getTransaccionesVenta();
-        List<Transaccion> tCompras = entityManager.createNamedQuery("Transaccion.compras").setParameter("compradorId" , id).getResultList();//user.getTransaccionesCompra();
+        List<Oferta> tVentas = entityManager.createNamedQuery("Oferta.ventasUser").setParameter("userId" , id).getResultList();//user.getTransaccionesVenta();
+        List<Oferta> tCompras = entityManager.createNamedQuery("Oferta.comprasUser").setParameter("userId" , id).getResultList();//user.getTransaccionesCompra();
 
 		model.addAttribute("tVentas", tVentas); 
         model.addAttribute("tCompras", tCompras); 

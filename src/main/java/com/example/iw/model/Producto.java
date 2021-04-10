@@ -32,9 +32,9 @@ public class Producto {
     @JoinColumn(name="producto_id")
     private List<Oferta> oferta;
 
-    @OneToMany
+    /*@OneToMany
     @JoinColumn(name="producto_id")
-    private List<Transaccion> transaccion; 
+    private List<Transaccion> transaccion; */
 	
 	@Override
 	public String toString() {

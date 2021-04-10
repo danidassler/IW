@@ -24,22 +24,29 @@ import lombok.Data;
 @NamedQueries({
 	@NamedQuery(name="Oferta.byUser",
 			query="SELECT o FROM Oferta o "
-					+ "WHERE o.usuario.id = :userId"),
+					+ "WHERE o.comprador.id = :userId OR o.vendedor.id = :userId"),
     @NamedQuery(name="Oferta.mejorPuja",
             query="SELECT o FROM Oferta o " + 
-            "WHERE o.precio = (SELECT MAX(precio) FROM Oferta WHERE tipo = 0 AND producto.id = :productoId)"),
+            "WHERE o.precio = (SELECT MAX(precio) FROM Oferta WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId)"),
     @NamedQuery(name="Oferta.menorPrecio",
             query="SELECT o FROM Oferta o " + 
-            "WHERE o.precio = (SELECT MIN(precio) FROM Oferta WHERE tipo = 1 AND producto.id = :productoId)"),
+            "WHERE o.precio = (SELECT MIN(precio) FROM Oferta WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId)"),
     @NamedQuery(name="Oferta.pujas",
-            query="SELECT o FROM Oferta o WHERE tipo = 0 AND producto.id = :productoId"),
+            query="SELECT o FROM Oferta o WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId ORDER BY precio DESC"),
     @NamedQuery(name="Oferta.precios", 
-            query="SELECT o FROM Oferta o WHERE tipo = 1 AND producto.id = :productoId"),
+            query="SELECT o FROM Oferta o WHERE tipo = 1 AND estado = 0  AND producto.id = :productoId ORDER BY precio"),
 
     @NamedQuery(name="Oferta.pujasUser",
-            query="SELECT o FROM Oferta o WHERE tipo = 0 AND usuario.id = :userId"),
+            query="SELECT o FROM Oferta o WHERE tipo = 0 AND estado = 0 AND comprador.id = :userId"),
     @NamedQuery(name="Oferta.preciosUser", 
-            query="SELECT o FROM Oferta o WHERE tipo = 1 AND usuario.id = :userId")
+            query="SELECT o FROM Oferta o WHERE tipo = 1 AND estado = 0 AND vendedor.id = :userId"),
+
+    @NamedQuery(name="Oferta.comprasUser",
+            query="SELECT o FROM Oferta o WHERE fechaTransaccion IS NOT NULL AND comprador.id = :userId"),
+    @NamedQuery(name="Oferta.ventasUser", 
+            query="SELECT o FROM Oferta o WHERE fechaTransaccion IS NOT NULL AND vendedor.id = :userId"),
+    @NamedQuery(name="Oferta.transaction", 
+            query="SELECT o FROM Oferta o WHERE fechaTransaccion IS NOT NULL AND producto.id = :productoId ORDER BY fechaTransaccion DESC")
         
         })
             
@@ -52,19 +59,30 @@ public class Oferta {
         PUJA,
         PRECIO
     };
+
+    public enum Estado{
+        PENDIENTE, 
+        TRANSACCION_REALIZADA,
+        EN_ENVIO,
+        RECIBIDO
+    };
+
     private Tipo tipo; 
     private BigDecimal precio;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaExpiracion;
+    private LocalDateTime fechaTransaccion;
+    private Estado estado;
+    
 
     @ManyToOne
-    private Usuario usuario;
+    private Usuario comprador;
    
     @ManyToOne
-    private Producto producto;
+    private Usuario vendedor;
 
-    @OneToOne
-    private Transaccion transaccion;
+    @ManyToOne
+    private Producto producto;
 
     @Override
     public String toString() {

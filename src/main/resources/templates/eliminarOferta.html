@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        table {border: 1px solid grey;}
+    </style>
+    <title>Confirmación</title>
+</head>
+<body>
+    <nav th:replace="frags/nav.html :: nav">
+		Nav goes here
+	</nav>
+    <div>
+        <th:block th:replace="frags/header.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+
+    <h2>OFERTA ELIMINADA CORRECTAMENTE</h2>
+
+    <p>Compruebalo en tu perfil: <button><a th:href="@{'/perfil/' + ${idUser}}">Perfil</a></button></p>
+    <div>
+        <th:block th:replace="frags/pie.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+</body>
+</html>

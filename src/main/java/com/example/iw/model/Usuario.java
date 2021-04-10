@@ -72,17 +72,21 @@ public class Usuario implements Transferable<Usuario.Transfer> {
     private BigDecimal saldo;
 
 	//Duda ManyToMany: dos usuarios en cada transacción (comprador y vendedor), un usuario puede tener muchas transacciones
-	@OneToMany
+	/*@OneToMany
 	@JoinColumn(name="comprador_id")
 	private List<Transaccion> transaccionesCompra;
 
 	@OneToMany
 	@JoinColumn(name="vendedor_id")
-	private List<Transaccion> transaccionesVenta;
+	private List<Transaccion> transaccionesVenta;*/
 
 	@OneToMany
-	@JoinColumn(name="usuario_id")
-	private List<Oferta> oferta;
+	@JoinColumn(name="comprador_id")
+	private List<Oferta> comprar;
+
+	@OneToMany
+	@JoinColumn(name="vendedor_id")
+	private List<Oferta> vender;
 
     @OneToMany
 	@JoinColumn(name="receptor_id")

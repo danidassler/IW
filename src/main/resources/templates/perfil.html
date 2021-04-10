@@ -54,30 +54,19 @@
                     <th>Cancelar Antes</th>
                 </tr>
 
-                <!--<tr th:each="customer, custStat : ${customers}">
-                    <td th:text="${custStat.count}">1</td>
-                    <td th:text="${customer.firstName}">John</td>
-                    <td th:text="${customer.lastName}">Doe</td>
-                    <td th:text="${customer.age}">18</td>
-                    <td th:text="${customer.email}">john.doe@frontbackend.com</td>
-                    <td>
-                        <p th:each="address : ${customer.addressList}">
-                            <span th:text="${address.street}">Street</span>
-                            <span th:text="${address.city}">City</span>
-                            <span th:text="${address.zip}">ZIP</span>
-                            <span th:text="${address.state}">State</span>
-                        </p>
-                    </td>
-                </tr>-->
-
                 <tr th:each="p: ${pujas}">
                     <td><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/></td>
-                    <td th:text="${p.producto.nombre}">N</td>
+                    <td><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
                     <td th:text="${p.precio}">D</td>
                     <!--<td th:text="${p.mejorPuja}">D</td>
                     <td th:text="${p.menorPrecio}">D</td>-->
                     <td th:text="${p.fechaExpiracion}">C</td>
-                    <td><button>Cancelar Ahora</button></td>
+                    <td><form method="post" th:action="@{'/eliminarOferta/' + ${p.id}}">
+                        <input type="hidden" name="precio" th:value="${p.precio}">
+                        <input type="hidden" name="idOferta" th:value="${p.id}">
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">Cancelar Ahora</button>
+                    </form>
+                    </td>
                 </tr>
             </table>
         </p>
@@ -96,13 +85,13 @@
                         <th>Fecha de Intercambio</th>
 
                     </tr>
-                    <!-- mirar que la fecha salga en la vista en un formato decente-->
+                    <!-- MIRAR COMO HACER QUE LAS FECHAS QUEDEN EN UN FORMATO DECENTE -->
                     <tr th:each="p: ${tCompras}">
                         <td><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/></td>
-                        <td th:text="${p.producto.nombre}">N</td>
-                        <td th:text="${p.oferta.precio}">D</td>
+                        <td><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
+                        <td th:text="${p.precio}">D</td>
                         <td th:text="${p.estado}">C</td>
-                        <td th:text="${p.fecha}">F</td>
+                        <td th:text="${p.fechaTransaccion}">F</td>
                     </tr>
                 </table>
             </p>
@@ -123,12 +112,17 @@
                     </tr>
                     <tr th:each="p: ${precios}">
                         <td><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/></td>
-                        <td th:text="${p.producto.nombre}">N</td>
+                        <td><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
                         <td th:text="${p.precio}">D</td>
                         <!--<td th:text="${p.producto.highestBid}">D</td>
                         <td th:text="${p.producto.lowestAsk}">D</td>-->
                         <td th:text="${p.fechaExpiracion}">F</td>
-                        <td><button>Cancelar Ahora</button></td>
+                        <td><form method="post" th:action="@{'/eliminarOferta/' + ${p.id}}">
+                            <input type="hidden" name="precio" th:value="${p.precio}">
+                            <input type="hidden" name="idOferta" th:value="${p.id}">
+                            <button class="btn btn-lg btn-primary btn-block" type="submit">Cancelar Ahora</button>
+                        </form>
+                        </td>
                     </tr>
                 </table>
             </p>
@@ -145,12 +139,12 @@
                         <th>Estado</th>
                         <th>Fecha de Intercambio</th>
                     </tr>
-                    <tr th:each="p: ${tVenta}">
+                    <tr th:each="p: ${tVentas}">
                         <td><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/></td>
-                        <td th:text="${p.producto.nombre}">N</td>
-                        <td th:text="${p.oferta.precio}">D</td>
+                        <td><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
+                        <td th:text="${p.precio}">D</td>
                         <td th:text="${p.estado}">C</td>
-                        <td th:text="${p.fecha}">F</td>
+                        <td th:text="${p.fechaTransaccion}">F</td>
                     </tr>
                 </table>
             </p>

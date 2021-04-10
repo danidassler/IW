@@ -22,7 +22,7 @@ import lombok.Data;
 	@NamedQuery(name="Transaccion.ventas",
 			query="SELECT o FROM Transaccion o WHERE o.vendedor.id = :vendedorId"),
     @NamedQuery(name="Transaccion.compras",
-            query="SELECT o FROM Transaccion o WHERE o.comprador.id = :compradorId"),       
+            query="SELECT o FROM Transaccion o WHERE o.comprador.id = :compradorId")
          
 })
 
