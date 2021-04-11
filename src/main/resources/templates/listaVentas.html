@@ -32,8 +32,8 @@
                 <p><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto" width="350" height="400"/></p>
             </td>
             <td>
-                <button><a th:href="@{'/compra/' + ${prod.id}}">Comprar ya</a></button>
-                <button th:if="${mejorPuja != 0}"><a th:href="@{'/venta/' + ${prod.id}}">Vender ya</a></button>
+                <button><a th:href="@{'/producto/compra/' + ${prod.id}}">Comprar ya</a></button>
+                <button th:if="${mejorPuja != 0}"><a th:href="@{'/producto/venta/' + ${prod.id}}">Vender ya</a></button>
                 <p><input type="text"> €</input></p>
                 <b><p>Ultimas Ventas</p></b>
 

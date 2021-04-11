@@ -34,7 +34,7 @@ public class IwUserDetailsService implements UserDetailsService {
 	        String rol = u.getRol().toString();
 			ArrayList<SimpleGrantedAuthority> rolUser = new ArrayList<>();
 
-			rolUser.add(new SimpleGrantedAuthority(u.getRol().toString()));
+			rolUser.add(new SimpleGrantedAuthority("ROLE_" + u.getRol()));
 		    log.info("Rol for " + username + " include " + rol);
 			
 	        return new org.springframework.security.core.userdetails.User(u.getUsername(), u.getPassword(), rolUser);

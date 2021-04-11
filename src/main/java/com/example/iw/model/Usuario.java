@@ -1,6 +1,7 @@
 package com.example.iw.model;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -61,10 +62,10 @@ public class Usuario implements Transferable<Usuario.Transfer> {
     @NotNull
     public enum Rol{
 		USER,
-		ADMIN
+		ADMIN,
 	};
 
-	private Rol rol;
+	private String rol;
 
 	private byte enabled;
 
@@ -104,8 +105,19 @@ public class Usuario implements Transferable<Usuario.Transfer> {
 	public Usuario(){
 
 	}
+	/**
+	 * Checks whether this user has a given role.
+	 * @param rol to check
+	 * @return true iff this user has that role.
+	 */
 
-
+	public boolean hasRole(Rol rols) {
+		String roleName = rols.name();
+		return Arrays.stream(rol.split(","))
+				.anyMatch(r -> r.equals(roleName));
+	}
+	
+	/*
 	public boolean hasRole(Rol rol) {
 		String rolName = rol.name();
 		boolean ok = false;
@@ -114,8 +126,7 @@ public class Usuario implements Transferable<Usuario.Transfer> {
 		}
 		return ok;
 	}
-
-
+	*/
 	/**
 	 * Encodes a password, so that it can be saved for future checking. Notice
 	 * that encoding the same password multiple times will yield different

@@ -25,8 +25,8 @@
 			</form>
         -->
         
-        <button class="btn btn-lg btn-primary btn-block" type="button" th:if="${session.u.hasRole(session.u.getRol())}" > <a th:href="@{/adminProductos}">Administrar Producto </a></button>
-        <button class="btn btn-lg btn-primary btn-block" type="button" th:if="${session.u.hasRole(session.u.getRol())}"> <a th:href="@{/formularioProducto}">Nuevo Producto </a></button>
+        <button class="btn btn-lg btn-primary btn-block" type="button" th:if="${session.u.hasRole(session.u.getRol())}" > <a th:href="@{/admin/adminProductos}">Administrar Producto </a></button>
+        <button class="btn btn-lg btn-primary btn-block" type="button" th:if="${session.u.hasRole(session.u.getRol())}"> <a th:href="@{/admin/formularioProducto}">Nuevo Producto </a></button>
     </p>
     <div>
         <p>
@@ -55,12 +55,12 @@
                                 <!-- en estos botones controlar que: si el producto no tiene aun ninguna
                                 oferta o precio de venta, entonces estos botones no deberian de aparecer,
                                 ya que  todavia no se podrian realizar dichas operaciones-->
-                                <button><a th:href="@{'/compra/' + ${p.id}}">Comprar ya</a></button>
-                                <button><a th:href="@{'/venta/' + ${p.id}}">Vender ya</a></button>
+                                <button><a th:href="@{'/producto/compra/' + ${p.id}}">Comprar ya</a></button>
+                                <button><a th:href="@{'/producto/venta/' + ${p.id}}">Vender ya</a></button>
                             </p>
                             <p>
-                                <button><a th:href="@{'/pujar/' + ${p.id}}">Pujar</a></button>
-                                <button><a th:href="@{'/fijarPrecio/' + ${p.id}}">Fijar precio</a></button> 
+                                <button><a th:href="@{'/oferta/pujar/' + ${p.id}}">Pujar</a></button>
+                                <button><a th:href="@{'/oferta/fijarPrecio/' + ${p.id}}">Fijar precio</a></button> 
                             </p>
                         </td>
                     </tr>

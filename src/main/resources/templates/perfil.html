@@ -22,7 +22,7 @@
     <div>
         <!--<p>Solo en caso de Administrador al visitar un perfil.</p>
         <button>Administrar Usuario</button> <button>Administrar Productos</button>-->
-        <p th:if="${session.u.hasRole(session.u.getRol())}">Solo en caso de Administrador al visitar un perfil.
+        <p th:if="${session.u.hasRole('ADMIN')}">Solo en caso de Administrador al visitar un perfil.
 
          <button><a th:href="@{/message}">Mensajes</a></button>   <button>Notificaciones</button>
         
@@ -37,8 +37,8 @@
         <img src="../static/img/ipsum.jpg" th:src="@{/img/ipsum.jpg}" alt="foto"/>
         <p>Saldo: 
             <span th:text="${user.saldo}">saldo</span>€  
-            <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:href="@{'/depositarFondo/' + ${user.id}}">Depositar fondo </a></button>
-            <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:href="@{'/retirarFondo/' + ${user.id}}">Retirar fondo </a></button>
+            <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:href="@{'/perfil/depositarFondo/' + ${user.id}}">Depositar fondo </a></button>
+            <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:href="@{'/perfil/retirarFondo/' + ${user.id}}">Retirar fondo </a></button>
         </p> 
         <div>
         <p>
@@ -61,7 +61,7 @@
                     <!--<td th:text="${p.mejorPuja}">D</td>
                     <td th:text="${p.menorPrecio}">D</td>-->
                     <td th:text="${p.fechaExpiracion}">C</td>
-                    <td><form method="post" th:action="@{'/eliminarOferta/' + ${p.id}}">
+                    <td><form method="post" th:action="@{'/oferta/eliminarOferta/' + ${p.id}}">
                         <input type="hidden" name="precio" th:value="${p.precio}">
                         <input type="hidden" name="idOferta" th:value="${p.id}">
                         <button class="btn btn-lg btn-primary btn-block" type="submit">Cancelar Ahora</button>
@@ -117,7 +117,7 @@
                         <!--<td th:text="${p.producto.highestBid}">D</td>
                         <td th:text="${p.producto.lowestAsk}">D</td>-->
                         <td th:text="${p.fechaExpiracion}">F</td>
-                        <td><form method="post" th:action="@{'/eliminarOferta/' + ${p.id}}">
+                        <td><form method="post" th:action="@{'/oferta/eliminarOferta/' + ${p.id}}">
                             <input type="hidden" name="precio" th:value="${p.precio}">
                             <input type="hidden" name="idOferta" th:value="${p.id}">
                             <button class="btn btn-lg btn-primary btn-block" type="submit">Cancelar Ahora</button>

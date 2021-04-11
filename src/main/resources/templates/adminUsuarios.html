@@ -28,7 +28,7 @@
             <div>
                 <img src="../static/img/ipsum.jpg" th:src="@{/img/ipsum.jpg}" alt="foto"/>
                 <p> <span th:text="${u.nombre}"></span> <span th:text="${u.apellidos}"></span></p>
-                <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:href="@{'/administrarUsuario/' + ${u.id}}">Administrar Usuario </a></button>
+                <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:href="@{'/admin/administrarUsuario/' + ${u.id}}">Administrar Usuario </a></button>
             </div>
         </div>
 

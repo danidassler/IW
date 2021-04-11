@@ -64,8 +64,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 				.replaceFirst("/[^/]*$", "/ws"));	// .../foo		 => .../ws
 		
 		// redirects to 'admin' or 'user/{id}', depending on the user
-		response.sendRedirect(u.hasRole(u.getRol()) ? 
-				"adminUsuarios/" :
+		response.sendRedirect(u.hasRole(Usuario.Rol.ADMIN) ? 
+				"admin/adminUsuarios/" :
 				"perfil/" + u.getId());
 	}
 }

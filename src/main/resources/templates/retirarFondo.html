@@ -28,7 +28,7 @@
                 <p>Saldo Actual: <span th:text="${prof.saldo}"></span> </p>
             </td>
             <td>
-                <form method="post" th:action="@{'/retirarFondo/' + ${prof.id}}">
+                <form method="post" th:action="@{'/perfil/retirarFondo/' + ${prof.id}}">
                     <h4>Métodos de Pago</h4>
                     <label for="metodoPago" class="sr-only">Aceptamos los siguientes métodos de pago: </label>
                     <select name="metodoPago" id="cars">

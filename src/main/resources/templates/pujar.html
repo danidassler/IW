@@ -34,7 +34,7 @@
                 <!-- HABRIA QUE CONTROLAR QUE SI UN USUARIO YA TIENE UNA PUJA EN UN PRODUCTO, 
                 EN VEZ DE CREARSE UNA NUEVA PUJA, SE MODIFIQUE LA QUE TENIA, ya que un usuario 
                 solo puede tener 1 puja activa por un mismo producto a la vez-->
-                <form method="post" th:action="@{'/pujar/' + ${prod.id}}">
+                <form method="post" th:action="@{'/oferta/pujar/' + ${prod.id}}">
                     <h4>Información de la puja</h4>
                     <p>Ten en cuenta que al precio que establezcas se le sumarán el 9% de tasas y 10€ de envio</p>
                     <p>El dinero sera restado de tu saldo al realizar la puja, y devuelto si la cancelas.</p>

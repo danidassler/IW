@@ -1,5 +1,12 @@
 package com.example.iw.control;
 
+import java.util.Random;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.time.*;
+import org.json.*;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -229,7 +236,7 @@ public class UserController {
         return "modificarPerfil";                     
     }
 
-    @PostMapping("/modificarPerfil/{id}")
+    @PostMapping("modificarPerfil/{id}")
     @Transactional 
     public String modificarPerfil(@PathVariable long id, 
 		HttpServletResponse response,
@@ -264,5 +271,68 @@ public class UserController {
 			model.addAttribute("user", user);  
 		}   
         return "modificarPerfil";
+    }
+
+	@GetMapping("/depositarFondo/{id}")
+    public String depositarFondo(@PathVariable long id, Model model) {    
+        Usuario prof = entityManager.find(Usuario.class, id);
+        model.addAttribute("prof", prof);
+        return "depositarFondo";                     
+    }
+
+    @PostMapping("depositarFondo/{id}")
+    @Transactional 
+    public String depositarFondo(@PathVariable long id, 
+        @RequestParam BigDecimal saldo,
+        Model model, HttpSession session) {    
+
+        Usuario u = entityManager.find(Usuario.class, id);
+        Usuario prof = (Usuario)session.getAttribute("u");
+		if(u.getId() != prof.getId()){
+			//response.sendError(HttpServletResponse.SC_FORBIDDEN,  "Este no es tu perfil");
+			log.info("ESTE NO ES TU PERFIL.");
+			return "depositarFondo";
+		}
+        BigDecimal nuevoSaldo = prof.getSaldo().add(saldo);
+        prof.setSaldo(nuevoSaldo);
+        entityManager.merge(prof);
+        model.addAttribute("prof", prof);     
+        return "depositarFondo";                     
+    }
+
+    
+    @GetMapping("/retirarFondo/{id}")
+    public String retirarFondo(@PathVariable long id, Model model) {    
+        Usuario prof = entityManager.find(Usuario.class, id);
+        model.addAttribute("prof", prof);
+        return "retirarFondo";                     
+    }
+
+    @PostMapping("retirarFondo/{id}")
+    @Transactional 
+    public String retirarFondo(@PathVariable long id, 
+        @RequestParam BigDecimal saldo,
+        Model model, HttpSession session) {    
+
+        Usuario u = entityManager.find(Usuario.class, id);
+        Usuario prof = (Usuario)session.getAttribute("u");
+		if(u.getId() != prof.getId()){
+			//response.sendError(HttpServletResponse.SC_FORBIDDEN,  "Este no es tu perfil");
+			log.info("ESTE NO ES TU PERFIL.");
+			return "retirarFondo";
+		}
+
+        if(saldo.compareTo(prof.getSaldo()) == 1){ //PREGUNTAR AL PROFESOR POR QUÉ PETA 
+            // ERROR: Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, application/signed-exchange;v=b3;q=0.9, */*;q=0.8]
+			//response.sendError(HttpServletResponse.SC_FORBIDDEN,  "Este no es tu perfil");
+			log.info("NO PUEDES RETIRAR MAS DINERO DE LO QUE TIENES");
+            model.addAttribute("prof", prof);     
+			return "retirarFondo";
+        }
+        BigDecimal nuevoSaldo = prof.getSaldo().subtract(saldo);
+        prof.setSaldo(nuevoSaldo);
+        entityManager.merge(prof);
+        model.addAttribute("prof", prof);     
+        return "retirarFondo";                     
     }
 }
