@@ -25,8 +25,8 @@
 			</form>
         -->
         
-        <button class="btn btn-lg btn-primary btn-block" type="button" th:if="${session.u.hasRole(session.u.getRol())}" > <a th:href="@{/admin/adminProductos}">Administrar Producto </a></button>
-        <button class="btn btn-lg btn-primary btn-block" type="button" th:if="${session.u.hasRole(session.u.getRol())}"> <a th:href="@{/admin/formularioProducto}">Nuevo Producto </a></button>
+        <button class="btn btn-lg btn-primary btn-block" type="button" th:if="${session.u.hasRole('ADMIN')}" > <a th:href="@{/admin/adminProductos}">Administrar Producto </a></button>
+        <button class="btn btn-lg btn-primary btn-block" type="button" th:if="${session.u.hasRole('ADMIN')}"> <a th:href="@{/admin/formularioProducto}">Nuevo Producto </a></button>
     </p>
     <div>
         <p>
