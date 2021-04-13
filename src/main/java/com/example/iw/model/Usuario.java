@@ -1,22 +1,19 @@
 package com.example.iw.model;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Transient;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Transient;
+//import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +22,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
@@ -50,7 +48,7 @@ public class Usuario implements Transferable<Usuario.Transfer> {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@NotNull
+	@Column(nullable = false, unique = true)
 	private String username;
 
 	private String nombre;
@@ -59,7 +57,7 @@ public class Usuario implements Transferable<Usuario.Transfer> {
 
 	private String password;
 
-    @NotNull
+    @NonNull
     public enum Rol{
 		USER,
 		ADMIN,
@@ -69,7 +67,7 @@ public class Usuario implements Transferable<Usuario.Transfer> {
 
 	private byte enabled;
 
-    @NotNull
+    @Column(nullable = false)
     private BigDecimal saldo;
 
 	//Duda ManyToMany: dos usuarios en cada transacción (comprador y vendedor), un usuario puede tener muchas transacciones

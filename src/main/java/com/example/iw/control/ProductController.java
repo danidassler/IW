@@ -1,29 +1,28 @@
 package com.example.iw.control;
-import java.util.Random;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.*;
-import org.json.*;
 
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+
+import com.example.iw.model.Oferta;
+import com.example.iw.model.Producto;
+import com.example.iw.model.Usuario;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.ui.Model;
-import javax.transaction.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable;
-import java.time.LocalDateTime;
-
-import com.example.iw.model.*;
 
 @Controller()
 @RequestMapping("producto")
@@ -171,7 +170,7 @@ public class ProductController {
 
     @PostMapping("confirmacionProducto/{id}")
     @Transactional
-    public String confirmacionProductoC(
+    public String confirmacionProducto(
         @PathVariable long id,
         @RequestParam BigDecimal precio,
         @RequestParam BigDecimal precioFinal,
@@ -214,7 +213,7 @@ public class ProductController {
                 List<Oferta> pujasUser = entityManager.createNamedQuery("Oferta.pujasUser").setParameter("userId", user.getId()).getResultList(); //cogemos la lista de pujas actuales del usuario
                 for(Oferta p: pujasUser){ //si el usuario que compra tiene una puja activa por el producto que está comprando, esta puja se elimmina al haber comprado ya el producto por un precio asignado por un vendedor
                     if(p.getProducto().getId() == id){
-                        // AQUI FALTA EJECUTAR LA QUERY QUE ELIMINA UNA OFERTA
+                        int deleteCount = entityManager.createNamedQuery("Oferta.borrar").setParameter("idOferta", p.getId()).executeUpdate();
                     }
                 }
                 

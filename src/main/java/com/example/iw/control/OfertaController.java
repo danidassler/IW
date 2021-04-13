@@ -1,29 +1,24 @@
 package com.example.iw.control;
-import java.util.Random;
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.time.*;
-import org.json.*;
 
-import javax.servlet.http.HttpSession;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+
+import com.example.iw.model.Oferta;
+import com.example.iw.model.Producto;
+import com.example.iw.model.Usuario;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import javax.transaction.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable;
-import java.time.LocalDateTime;
-
-import com.example.iw.model.*;
 
 
 @Controller()
@@ -154,10 +149,10 @@ public class OfertaController {
             BigDecimal nuevoSaldo = u.getSaldo().add(aniadir);
             u.setSaldo(nuevoSaldo);
             entityManager.merge(u);
-            //AQUI FALTA EJECUTAR LA QUERY PARA ELIMINAR UNA OFERTA DE LA BBDD
+            int deleteCount = entityManager.createNamedQuery("Oferta.borrar").setParameter("idOferta", id).executeUpdate();
         }
         else{ // si es un precio solo hace falta borrar la oferta de la bbdd
-            //AQUI FALTA EJECUTAR LA QUERY PARA ELIMINAR UNA OFERTA DE LA BBDD
+            int deleteCount = entityManager.createNamedQuery("Oferta.borrar").setParameter("idOferta", id).executeUpdate();
         }
         
         model.addAttribute("idUser", u.getId());

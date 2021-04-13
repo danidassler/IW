@@ -1,20 +1,14 @@
 package com.example.iw.control;
 
-import java.util.Random;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.time.*;
-import org.json.*;
-
 import java.io.File;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+import com.example.iw.LocalData;
+import com.example.iw.model.Producto;
+import com.example.iw.model.Usuario;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,9 +21,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import com.example.iw.LocalData;
-import com.example.iw.model.*;
 
 /**
  * Admin-only controller

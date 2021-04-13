@@ -1,12 +1,5 @@
 package com.example.iw.control;
 
-import java.util.Random;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.time.*;
-import org.json.*;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -15,21 +8,30 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
+
+import com.example.iw.LocalData;
+import com.example.iw.model.Mensaje;
+import com.example.iw.model.Oferta;
+import com.example.iw.model.Usuario;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -44,17 +46,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-
-import java.lang.Object;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import com.example.iw.LocalData;
-import com.example.iw.model.*;
 
 /**
  * User-administration controller
@@ -248,12 +239,12 @@ public class UserController {
         Model model, HttpSession session) {    
 		
 		Usuario u = entityManager.find(Usuario.class, id);
-        Usuario user = entityManager.find(
-			Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+        Usuario user =(Usuario)session.getAttribute("u");
 
 		if(u.getId() != user.getId()){
 			//response.sendError(HttpServletResponse.SC_FORBIDDEN,  "Este no es tu perfil");
-			log.info("ESTE NO ES TU PERFIL.");
+			log.info("ESTE NO ES TU PERFIL."); //mostrar mensaje de error o crear pagina como errorPuja
+			model.addAttribute("user", u);
 			return "modificarPerfil";
 		}
 
@@ -264,12 +255,16 @@ public class UserController {
 			
 			user.setNombre(nombre);
 			user.setApellidos(apellidos);
-			if(newpassword != null){
+			if(newpassword != ""){
 				user.setPassword("{bcrypt}"+passwordEncoder.encode(newpassword));
+			}
+			else{
+				//mostrar mensaje de error o crear pagina como errorPuja
 			}
 			entityManager.merge(user);
 			model.addAttribute("user", user);  
 		}   
+		model.addAttribute("user", user);  
         return "modificarPerfil";
     }
 

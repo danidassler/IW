@@ -1,19 +1,12 @@
 package com.example.iw.model;
-import java.util.ArrayList;
-import java.util.List;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
@@ -46,7 +39,9 @@ import lombok.Data;
     @NamedQuery(name="Oferta.ventasUser", 
             query="SELECT o FROM Oferta o WHERE fechaTransaccion IS NOT NULL AND vendedor.id = :userId"),
     @NamedQuery(name="Oferta.transaction", 
-            query="SELECT o FROM Oferta o WHERE fechaTransaccion IS NOT NULL AND producto.id = :productoId ORDER BY fechaTransaccion DESC")
+            query="SELECT o FROM Oferta o WHERE fechaTransaccion IS NOT NULL AND producto.id = :productoId ORDER BY fechaTransaccion DESC"),
+    @NamedQuery(name="Oferta.borrar", 
+            query="DELETE FROM Oferta o WHERE o.id = :idOferta")
         
         })
             

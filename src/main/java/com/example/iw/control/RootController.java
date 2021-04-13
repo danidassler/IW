@@ -1,27 +1,21 @@
 package com.example.iw.control;
-import java.util.Random;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.*;
-import org.json.*;
 
-import javax.servlet.http.HttpSession;
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
+
+import com.example.iw.model.Mensaje;
+import com.example.iw.model.Usuario;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import javax.transaction.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable;
-import java.time.LocalDateTime;
-
-import com.example.iw.model.*;
 
 @Controller
 public class RootController {
