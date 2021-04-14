@@ -48,7 +48,7 @@
                     <input type="hidden" name="impuestos" th:value="${impuestos}">
                     <input type="hidden" name="envio" th:value="${envio}">
                     <input type="hidden" name="idOferta" th:value="${idOferta}">
-                    <button class="btn btn-lg btn-primary btn-block" type="submit">Confirmar Compra</button>
+                    <button class="btn btn-lg btn-primary btn-block" id="confirmarCompra" type="submit">Confirmar Compra</button>
                 </form>
                 <p th:if="${menorPrecio == 0}">Aun no puedes comprar este producto, espera a que un vendedor fije un precio o puedes realizar una puja aqui:
                     <button><a th:href="@{'/oferta/pujar/' + ${prod.id}}">Pujar</a></button>

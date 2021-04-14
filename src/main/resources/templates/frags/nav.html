@@ -14,7 +14,7 @@
 			<!--<a id="received" th:href="@{/message/}" th:text="${session.unread} ? '📬': '📪'">📫</a>	 /-->		
 			<button th:if="${session.u.hasRole('ADMIN')}" ><a th:href="@{/admin/adminUsuarios}">Administrar Usuarios</a></button>
 			<form th:action="@{/logout}" method="post">
-				<button type="submit">logout</button>
+				<button class="logout" type="submit">logout</button>
 			</form>
 			<a th:href="@{/perfil/{id}(id=${session.u.id})}">
 				<img class="userthumb" th:src="@{/perfil/{id}/photo(id=${session.u.id})}">

@@ -24,9 +24,9 @@
     <p>Talla: <span th:text="${prod.talla}"> T</span> EUR</p>
     <p th:if="${ultimaVenta != 0}">Ultima venta: <span th:text="${ultimaVenta}"> UV</span>€ <button><a th:href="@{'/oferta/listaVentas/' + ${prod.id}}">Ver todas las ventas</a></button></p>
     <p th:if="${ultimaVenta == 0}">Ultima venta: --- €</p>
-    <p th:if="${menorPrecio != 0}">Precio mas bajo: <span th:text="${menorPrecio}"> LA</span>€  <button><a th:href="@{'/producto/compra/' + ${prod.id}}">Comprar ya</a></button>  <button><a th:href="@{'/oferta/fijarPrecio/' + ${prod.id}}">Fijar Precio</a></button> <button><a th:href="@{'/oferta/listaPrecios/' + ${prod.id}}">Ver lista de precios</a></button></p>
+    <p th:if="${menorPrecio != 0}">Precio mas bajo: <span th:text="${menorPrecio}"> LA</span>€  <button><a class="productoComprarYa" th:href="@{'/producto/compra/' + ${prod.id}}">Comprar ya</a></button>  <button><a th:href="@{'/oferta/fijarPrecio/' + ${prod.id}}">Fijar Precio</a></button> <button><a th:href="@{'/oferta/listaPrecios/' + ${prod.id}}">Ver lista de precios</a></button></p>
     <p th:if="${menorPrecio == 0}">Precio mas bajo: --- €  <button><a th:href="@{'/oferta/fijarPrecio/' + ${prod.id}}">Fijar precio</a></button> </p>
-    <p th:if="${mejorPuja != 0}">Puja mas alta: <span th:text="${mejorPuja}"> HB</span>€  <button><a th:href="@{'/producto/venta/' + ${prod.id}}">Vender ya</a></button> <button><a th:href="@{'/oferta/pujar/' + ${prod.id}}">Pujar</a></button>   <button><a th:href="@{'/oferta/listaPujas/' + ${prod.id}}">Ver lista de pujas</a></button></p>
+    <p th:if="${mejorPuja != 0}">Puja mas alta: <span th:text="${mejorPuja}"> HB</span>€  <button><a th:href="@{'/producto/venta/' + ${prod.id}}">Vender ya</a></button> <button><a class="pujarProducto" th:href="@{'/oferta/pujar/' + ${prod.id}}">Pujar</a></button>   <button><a th:href="@{'/oferta/listaPujas/' + ${prod.id}}">Ver lista de pujas</a></button></p>
     <p th:if="${mejorPuja == 0}">Puja mas alta: --- €  <button><a th:href="@{'/oferta/pujar/' + ${prod.id}}">Pujar</a></button></p>
    <!-- ruta del proyecto  es/ucm/fdi/...
     hacer un getmapping por vista

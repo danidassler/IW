@@ -209,7 +209,12 @@
 					<arguments>
 						<!-- mete aqui una linea para cada feature a probar 
 						<argument>src/test/karate-ui/login.feature</argument> -->
-						<argument>src/test/karate-ui/message.feature</argument>						
+						<!--NOTA: si ejecutas estos features mas de una vez seguida sin vorver a ejecutar
+						la aplicación principal es posible que den error, ya que un usuario no puede pujar
+					    2 veces por el mismo producto, se han podido acabar las ofertas para poder comprar 
+						inmediatamente un producto, o el usuario se ha podido quedar sin saldo  -->
+						<argument>src/test/karate-ui/login-compra.feature</argument>
+						<argument>src/test/karate-ui/puja.feature</argument>					
 					</arguments>
 				</configuration>
 			</plugin>
