@@ -35,7 +35,7 @@
 
         <p><span th:text="${user.username}"></span></p>
         <img src="../static/img/ipsum.jpg" th:src="@{/img/ipsum.jpg}" alt="foto"/>
-        <p>Saldo: 
+        <p> <b>SALDO:</b> 
             <span th:text="${user.saldo}">saldo</span>€  
             <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:href="@{'/perfil/depositarFondo/' + ${user.id}}">Depositar fondo </a></button>
             <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:href="@{'/perfil/retirarFondo/' + ${user.id}}">Retirar fondo </a></button>
@@ -74,7 +74,7 @@
         
         <div>
             <p>
-                <b>Compras:</b> <button>Ver todo</button>
+                <b>Compras Realizadas:</b> <button>Ver todo</button>
                 <table>
                     <tr>
 
