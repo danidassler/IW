@@ -29,12 +29,12 @@
         </p>
 
         <p>
-            <h3>Perfil - <span th:text="${user.nombre}"></span> <span th:text="${user.apellidos}"></span> </h3>
+            <h3>Perfil - <span th:text="${user.nombre}"></span> <span th:text="${user.apellidos}"></span> - <span th:text="${user.username}"></span></h3>
             <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:href="@{'/perfil/modificarPerfil/' + ${user.id}}">Editar perfil </a></button>
         </p>
 
-        <p><span th:text="${user.username}"></span></p>
-        <img src="../static/img/ipsum.jpg" th:src="@{/img/ipsum.jpg}" alt="foto"/>
+        <!--<img src="../static/img/ipsum.jpg" th:src="@{/img/ipsum.jpg}" alt="foto"/>-->
+        <img th:src="@{/perfil/{id}/photo(id=${user.id})}"  width="350" height="400">
         <p> <b>SALDO:</b> 
             <span th:text="${user.saldo}">saldo</span>€  
             <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:href="@{'/perfil/depositarFondo/' + ${user.id}}">Depositar fondo </a></button>
@@ -55,7 +55,7 @@
                 </tr>
 
                 <tr th:each="p: ${pujas}">
-                    <td><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/></td>
+                    <td><img th:src="@{/producto/{id}/photo(id=${p.producto.id})}" alt="foto"/></td>
                     <td><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
                     <td th:text="${p.precio}">D</td>
                     <!--<td th:text="${p.mejorPuja}">D</td>
@@ -87,7 +87,7 @@
                     </tr>
                     <!-- MIRAR COMO HACER QUE LAS FECHAS QUEDEN EN UN FORMATO DECENTE -->
                     <tr th:each="p: ${tCompras}">
-                        <td><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/></td>
+                        <td><img th:src="@{/producto/{id}/photo(id=${p.producto.id})}" alt="foto"/></td>
                         <td><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
                         <td th:text="${p.precio}">D</td>
                         <td th:text="${p.estado}">C</td>
@@ -111,7 +111,7 @@
                         <th>Cancelar Antes</th>
                     </tr>
                     <tr th:each="p: ${precios}">
-                        <td><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/></td>
+                        <td><img th:src="@{/producto/{id}/photo(id=${p.producto.id})}" alt="foto"/></td>
                         <td><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
                         <td th:text="${p.precio}">D</td>
                         <!--<td th:text="${p.producto.highestBid}">D</td>
@@ -140,7 +140,7 @@
                         <th>Fecha de Intercambio</th>
                     </tr>
                     <tr th:each="p: ${tVentas}">
-                        <td><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/></td>
+                        <td><img th:src="@{/producto/{id}/photo(id=${p.producto.id})}" alt="foto" /></td>
                         <td><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
                         <td th:text="${p.precio}">D</td>
                         <td th:text="${p.estado}">C</td>

@@ -133,13 +133,14 @@ public class UserController {
 	
 	@GetMapping(value="/{id}/photo")
 	public StreamingResponseBody getPhoto(@PathVariable long id, Model model) throws IOException {		
-		File f = localData.getFile("usuario", ""+id);
+		File f = localData.getFile("img", "usuario"+id); //Preguntar profesor, lo más probable es un error con la ruta relativa
+		//File f = new File("static/img/ipsum.jpg");
 		InputStream in;
 		if (f.exists()) {
 			in = new BufferedInputStream(new FileInputStream(f));
 		} else {
 			in = new BufferedInputStream(getClass().getClassLoader()
-					.getResourceAsStream("static/img/ipsum.jpg"));
+					.getResourceAsStream("static/img/ipsum.jpg"));  //foto por defecto
 		}
 		return new StreamingResponseBody() {
 			@Override
@@ -204,7 +205,7 @@ public class UserController {
 		}
 		
 		log.info("Updating photo for user {}", id);
-		File f = localData.getFile("usuario", id);
+		File f = localData.getFile("img", "usuario"+id);
 		if (photo.isEmpty()) {
 			log.info("failed to upload photo: emtpy file?");
 		} else {

@@ -31,7 +31,7 @@
                 <p th:if="${mejorPuja != 0}">Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p> 
                 <p th:if="${mejorPuja == 0}">Puja mas alta: --- € </p>
                 <p><span th:text="${prod.talla}">N</span>EUR</p>
-                <p><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/></p>
+                <p><img th:src="@{/producto/{id}/photo(id=${prod.id})}" alt="foto"/></p>
             </td>
             <td>
                 <!-- <p><b>Revisión de la venta:</b></p> -->

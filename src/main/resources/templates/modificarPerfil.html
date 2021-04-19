@@ -23,12 +23,14 @@
         <tr>
             <td>
                 <p>Foto de perfil</p>
-                <img src="../static/img/ipsum.jpg" th:src="@{/img/ipsum.jpg}" alt="foto" width="350" height="400"/>
-                <p style="text-align: center;"><button>Seleccionar foto...</button ></p>
+                <!--<img src="../static/img/ipsum.jpg" th:src="@{/img/ipsum.jpg}" alt="foto" width="350" height="400"/>
+                <p style="text-align: center;"><button>Seleccionar foto...</button ></p>-->
+                <form th:action="@{/perfil/{id}/photo(id=${user.id})}" method="POST" enctype="multipart/form-data">
+                    Nueva foto <input type="file" name="photo"/>
+                <button type="submit">Actualizar</button>
+                </form>
             </td>
             <td>
-                <!-- PASA ALGO RARO CUANDO MODIFICAS EL MISMO PERFIL 2 VECES SEGUIDAS
-                MIRAR BIEN QUE PASA-->
                 <form method="post" th:action="@{'/perfil/modificarPerfil/' + ${user.id}}">
                     <h4>Información del perfil</h4>
                     <p>

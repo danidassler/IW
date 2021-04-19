@@ -43,7 +43,7 @@
                         <th>Opciones</th>
                     </tr>
                     <tr th:each="p: ${prods}">
-                        <td><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/></td>
+                        <td><img th:src="@{/producto/{id}/photo(id=${p.id})}" alt="foto" width="100" height="150"/></td>
                         <td><a class="productoTienda" th:href="@{'/producto/' + ${p.id}}" th:text="${p.nombre}">N</a></td>
                         <td th:text="${p.desc}">D</td>
                         <td th:text="${p.categorias}">C</td>

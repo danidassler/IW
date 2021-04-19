@@ -26,7 +26,7 @@
             <td>
                 <p><b><span th:text="${prod.nombre}">N</span></b></p>
                 <p>Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€  |  Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p>  
-                <p><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto" width="350" height="400"/></p>
+                <p><img th:src="@{/producto/{id}/photo(id=${prod.id})}" alt="foto" width="350" height="400"/></p>
             </td>
             <td>
                 <button>Hacer Puja</button>

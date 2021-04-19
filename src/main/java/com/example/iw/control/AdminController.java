@@ -1,9 +1,14 @@
 package com.example.iw.control;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import com.example.iw.LocalData;
@@ -21,6 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Admin-only controller
@@ -85,15 +91,36 @@ public class AdminController {
         @RequestParam String desc,
         @RequestParam String categorias,
         @RequestParam String talla,
-        Model model){
+        Model model, 
+        HttpServletResponse response,
+        @RequestParam("photo") MultipartFile photo,  
+        HttpSession session) throws IOException{
         
         //CONTROLAR QUE NO SE METE UN PRODUCTO YA EXISTENTE
+        //incluir el nuevo producto en la bbdd
         Producto prod = new Producto();
         prod.setNombre(nombre);
         prod.setDesc(desc);
         prod.setCategorias(categorias);
         prod.setTalla(talla);
         entityManager.persist(prod);
+
+        //para incluir la foto del nuevo producto en la carpeta
+        long id = prod.getId();
+        log.info("Including photo for product {}", id);
+		File f = localData.getFile("img", "producto"+id);
+		if (photo.isEmpty()) {
+			log.info("failed to upload photo: emtpy file?");
+		} else {
+			try (BufferedOutputStream stream =
+					new BufferedOutputStream(new FileOutputStream(f))) {
+				byte[] bytes = photo.getBytes();
+				stream.write(bytes);
+			} catch (Exception e) {
+				log.warn("Error uploading " + id + " ", e);
+			}
+			log.info("Successfully uploaded photo for {} into {}!", id, f.getAbsolutePath());
+		}
 
         return "formularioProducto";
     }

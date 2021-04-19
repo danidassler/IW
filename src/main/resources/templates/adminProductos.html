@@ -26,7 +26,7 @@
         </div>
         <div th:each="p: ${prods}">
             <div>
-                <img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto"/>
+                <img th:src="@{/producto/{id}/photo(id=${p.id})}" alt="foto"/>
                 <p> <span th:text="${p.nombre}"></span></p>
                 <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:href="@{'/admin/modificarProducto/' + ${p.id}}">Editar Producto </a></button>
             </div>

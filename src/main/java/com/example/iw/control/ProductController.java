@@ -1,13 +1,24 @@
 package com.example.iw.control;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
+import com.example.iw.LocalData;
 import com.example.iw.model.Oferta;
 import com.example.iw.model.Producto;
 import com.example.iw.model.Usuario;
@@ -18,11 +29,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 @Controller()
 @RequestMapping("producto")
@@ -31,6 +45,9 @@ public class ProductController {
 
 	@Autowired 
 	private EntityManager entityManager;
+
+    @Autowired
+	private LocalData localData;
 	
 	@GetMapping("/{id}") 
     @Transactional
@@ -244,5 +261,47 @@ public class ProductController {
 
         return "confirmacionProducto";
     }
+
+    @GetMapping(value="/{id}/photo")
+	public StreamingResponseBody getPhoto(@PathVariable long id, Model model) throws IOException {		
+        File f = localData.getFile("img", "producto"+id);
+		InputStream in;
+		if (f.exists()) {
+			in = new BufferedInputStream(new FileInputStream(f));
+		} else {
+			in = new BufferedInputStream(getClass().getClassLoader()
+					.getResourceAsStream("static/img/ipsum.jpg"));  //foto por defecto
+		}
+		return new StreamingResponseBody() {
+			@Override
+			public void writeTo(OutputStream os) throws IOException {
+				FileCopyUtils.copy(in, os);
+			}
+		};
+	}
+
+    @PostMapping("/{id}/photo")
+	public String postPhoto(
+			HttpServletResponse response,
+			@RequestParam("photo") MultipartFile photo,
+			@PathVariable("id") String id, Model model, HttpSession session) throws IOException {
+		
+		log.info("Updating photo for product {}", id);
+		File f = localData.getFile("img", "producto"+id);
+		if (photo.isEmpty()) {
+			log.info("failed to upload photo: emtpy file?");
+		} else {
+			try (BufferedOutputStream stream =
+					new BufferedOutputStream(new FileOutputStream(f))) {
+				byte[] bytes = photo.getBytes();
+				stream.write(bytes);
+			} catch (Exception e) {
+				log.warn("Error uploading " + id + " ", e);
+			}
+			log.info("Successfully uploaded photo for {} into {}!", id, f.getAbsolutePath());
+		}
+		return "perfil";
+	}
+
 
 }

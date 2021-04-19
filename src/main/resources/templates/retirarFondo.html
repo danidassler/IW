@@ -23,7 +23,7 @@
         <tr>
             <td>
                 <p>Información del usuario</p>
-                <img src="../static/img/ipsum.jpg" th:src="@{/img/ipsum.jpg}" alt="foto"/>
+                <img th:src="@{/perfil/{id}/photo(id=${prof.id})}" alt="foto"/>
                 <p><span th:text="${prof.nombre}"></span> <span th:text="${prof.apellidos}"></span></p>
                 <p>Saldo Actual: <span th:text="${prof.saldo}"></span> </p>
             </td>

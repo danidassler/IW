@@ -29,7 +29,7 @@
                 <p th:if="${menorPrecio == 0}">Precio mas bajo: --- €</p>
                 <p th:if="${mejorPuja != 0}">Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p> 
                 <p th:if="${mejorPuja == 0}">Puja mas alta: --- € </p>
-                <p><img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto" width="350" height="400"/></p>
+                <p><img th:src="@{/producto/{id}/photo(id=${prod.id})}" alt="foto" width="350" height="400"/></p>
             </td>
             <td>
                 <button><a th:href="@{'/oferta/pujar/' + ${prod.id}}">Pujar</a></button>

@@ -23,8 +23,12 @@
         <tr>
             <td>
                 <p>Foto del producto</p>
-                <img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto" width="350" height="400"/>
-                <p style="text-align: center;"><button>Seleccionar foto...</button ></p>
+                <!--<img src="../static/img/yeezy700.png" th:src="@{/img/yeezy700.png}" alt="foto" width="350" height="400"/>
+                <p style="text-align: center;"><button>Seleccionar foto...</button ></p> -->
+                <form th:action="@{/producto/{id}/photo(id=${prod.id})}" method="POST" enctype="multipart/form-data">
+                    Nueva foto <input type="file" name="photo"/>
+                <button type="submit">Actualizar</button>
+                </form>
             </td>
             <td>
                 <form method="post" th:action="@{'/admin/modificarProducto/' + ${prod.id}}">

@@ -23,7 +23,7 @@
         <tr>
             <td>
                 <p><b>Foto de perfil</b></p>
-                <img src="../static/img/ipsum.jpg" th:src="@{/img/ipsum.jpg}" alt="foto" width="350" height="400"/>
+                <img th:src="@{/perfil/{id}/photo(id=${user.id})}" alt="foto" width="350" height="400"/>
                 <p style="text-align: center;"><button style= "margin: 5px;">Banear</button><button style= "margin: 5px;">Eliminar</button><button style= "margin: 5px;">Mensaje</button></p>
             </td>
             <td>
