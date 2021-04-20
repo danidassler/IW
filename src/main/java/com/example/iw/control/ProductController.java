@@ -270,7 +270,7 @@ public class ProductController {
 			in = new BufferedInputStream(new FileInputStream(f));
 		} else {
 			in = new BufferedInputStream(getClass().getClassLoader()
-					.getResourceAsStream("static/img/ipsum.jpg"));  //foto por defecto
+					.getResourceAsStream("static/img/newChance.jpg"));  //foto por defecto
 		}
 		return new StreamingResponseBody() {
 			@Override

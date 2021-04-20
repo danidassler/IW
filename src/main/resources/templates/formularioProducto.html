@@ -25,7 +25,7 @@
                 <form th:action="@{/admin/formularioProducto}" method="POST" enctype="multipart/form-data">
                     <h4>Información del producto</h4>
                     <p>
-                        <label for="photo" class="sr-only">Foto del producto:</label> <input type="file" name="photo"/>
+                        <label for="photo" class="sr-only">Foto del producto:</label> <input required type="file" name="photo"/>
                     </p>
                     <p>
                         <label for="nombre" class="sr-only">Nombre producto: </label>

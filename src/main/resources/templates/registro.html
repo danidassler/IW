@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"></meta>
+    <title>Registrar Usuario</title>
+  </head>
+  <body>
+    <nav th:replace="frags/nav.html :: nav">
+		Nav goes here
+	</nav>
+    <div>
+        <th:block th:replace="frags/header.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+     <div class="container">
+      <form class="form-register" method="post" th:action="@{/registro}">
+        <h2 class="form-register-heading">Por favor, para poder pujar y comprar productos, registrese:</h2>
+        
+        <p>
+          <label for="username" class="sr-only">Nombre de usuario</label>
+          <input type="text" id="username" name="username" 
+            class="form-control" placeholder="Username" required="required"></input>
+        </p>
+        <p>
+          <label for="name" class="sr-only">Nombre</label>
+          <input type="text" id="name" name="name" 
+            class="form-control" placeholder="Name" required="required"></input>
+        </p>
+        <p>
+          <label for="surname" class="sr-only">Apellidos</label>
+          <input type="text" id="surname" name="surname" 
+            class="form-control" placeholder="Surname" required="required"></input>
+        </p>
+        <p>
+          <label for="password" class="sr-only">Contraseña</label>
+          <input type="password" id="password" name="password" 
+            class="form-control" placeholder="Password" required="required"></input>
+        </p>
+        <p>
+          <label for="password2" class="sr-only">Repite la Contraseña</label>
+          <input type="password" id="password2" name="password2" 
+            class="form-control" placeholder="password2" required="required"></input>
+        </p>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Registrarme</button>
+      </form>
+</div>
+<div>
+    <th:block th:replace="frags/pie.html">
+        Aqui va lo que hay en header, esto no se ve
+    </th:block>
+</div>
+</body></html>

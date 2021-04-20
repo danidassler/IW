@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import com.example.iw.model.Mensaje;
@@ -12,9 +13,11 @@ import com.example.iw.model.Usuario;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -91,6 +94,37 @@ public class RootController {
             
         return "chat";                     
     }
+	@GetMapping("/registro") 
+	public String registro(Model model){
+		return "registro";                     
+	}
 
+	@PostMapping("/registro")
+    @Transactional 
+	public String registro(HttpServletResponse response,
+	@RequestParam String username, 
+	@RequestParam String name, 
+	@RequestParam String surname,
+	@RequestParam String password,
+	@RequestParam String password2,
+	Model model) {  
+        byte enabled = 1;
+		Usuario user = new Usuario();
+		user.setUsername(username);
+		user.setNombre(name);
+        user.setSaldo(new BigDecimal("0"));
+		user.setApellidos(surname);
+        user.setRol("USER");
+        user.setEnabled(enabled);
+
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		if(password.equals(password2)){
+			user.setPassword("{bcrypt}"+passwordEncoder.encode(password));
+        }else{
+			return "registro";//mostrar mensaje de error o crear pagina como errorPuja
+		}   
+        entityManager.persist(user);
+		return "login";
+	}
 
 }  

@@ -25,7 +25,8 @@
                 <p>Foto de perfil</p>
                 <!--<img src="../static/img/ipsum.jpg" th:src="@{/img/ipsum.jpg}" alt="foto" width="350" height="400"/>
                 <p style="text-align: center;"><button>Seleccionar foto...</button ></p>-->
-                <form th:action="@{/perfil/{id}/photo(id=${user.id})}" method="POST" enctype="multipart/form-data">
+                    <img th:src="@{/perfil/{id}/photo(id=${user.id})}"  width="350" height="400">
+                    <form th:action="@{/perfil/{id}/photo(id=${user.id})}" method="POST" enctype="multipart/form-data">
                     Nueva foto <input type="file" name="photo"/>
                 <button type="submit">Actualizar</button>
                 </form>

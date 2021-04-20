@@ -140,7 +140,7 @@ public class UserController {
 			in = new BufferedInputStream(new FileInputStream(f));
 		} else {
 			in = new BufferedInputStream(getClass().getClassLoader()
-					.getResourceAsStream("static/img/ipsum.jpg"));  //foto por defecto
+					.getResourceAsStream("static/img/user-unknown.jpg"));  //foto por defecto
 		}
 		return new StreamingResponseBody() {
 			@Override
@@ -221,6 +221,7 @@ public class UserController {
 		return "perfil";
 	}
 	
+
 	@GetMapping("/modificarPerfil/{id}") 
     public String modificarPerfil(@PathVariable long id, Model model) {    
         Usuario user = entityManager.find(Usuario.class, id);
