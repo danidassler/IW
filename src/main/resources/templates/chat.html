@@ -32,7 +32,7 @@
 		<select id="idOfTarget">
 			<option th:each="user: ${users}" th:value="${user.id}" th:text="${user.username}">mfreire</option>
 		</select>
-		<textarea id="mensaje" placeholder="escribe al usuario seleccionado" rows="4" cols="20"></textarea>
+		<textarea id="men" placeholder="escribe al usuario seleccionado" rows="4" cols="20"></textarea>
 		<button id="sendmsg" type="submit">Enviar</button>
 		</form>
 	</div>
@@ -48,7 +48,7 @@
 	let dt = new simpleDatatables.DataTable(
 		'#datatable', { 
 		    ajax: {
-		        url: config.rootUrl + "message/received", // empieza siempre por config.rootUrl
+		        url: config.rootUrl + "chat/received", // empieza siempre por config.rootUrl
 		        load: function(xhr) {
 		        	let data = JSON.parse(xhr.responseText);
 		        	for (let i=0; i<data.length; i++) {
@@ -73,8 +73,8 @@
 			let url = b.parentNode.action.replace("idOfTarget", idOfTarget);
 			e.preventDefault();
 			console.log(b, b.parentNode)
-			go(url, 'POST', {message: 
-					document.getElementById("mensaje").value})
+			go(url, 'POST', {men: 
+					document.getElementById("men").value})
 				.then(d => console.log("happy", d))
 				.catch(e => console.log("sad", e))
 		}

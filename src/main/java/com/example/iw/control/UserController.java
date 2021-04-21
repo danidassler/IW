@@ -157,7 +157,7 @@ public class UserController {
 			@RequestBody JsonNode o, Model model, HttpSession session) 
 		throws JsonProcessingException {
 		
-		String text = o.get("mensaje").asText();
+		String text = o.get("men").asText();
 		Usuario u = entityManager.find(Usuario.class, id);
 		Usuario sender = (Usuario)session.getAttribute("u");
 		model.addAttribute("user", u);
