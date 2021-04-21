@@ -33,10 +33,6 @@
                     <input type="hidden" name="idUSer" th:value="${user.id}">
                     <input type="submit" value="Activar Usuario" style= "margin: 5px;">
                 </form>  
-                <form method="post" th:action="@{'/admin/eliminarUsuario/' + ${user.id}}">
-                    <input type="hidden" name="idUSer" th:value="${user.id}">
-                    <input type="submit" value="Eliminar" style= "margin: 5px;">
-                </form>
                     <button style= "margin: 5px;">Mensaje</button>
                 </p>
             </td>

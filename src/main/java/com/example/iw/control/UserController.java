@@ -159,8 +159,7 @@ public class UserController {
 		
 		String text = o.get("mensaje").asText();
 		Usuario u = entityManager.find(Usuario.class, id);
-		Usuario sender = entityManager.find(
-			Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+		Usuario sender = (Usuario)session.getAttribute("u");
 		model.addAttribute("user", u);
 		
 		// construye mensaje, lo guarda en BD

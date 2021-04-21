@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.iw.model.*;
@@ -24,19 +25,19 @@ import com.example.iw.model.*;
  * @author mfreire
  */
 @Controller()
-@RequestMapping("message")
-public class MessageController {
+@RequestMapping("chat")
+public class MensajeController {
 	
-	private static final Logger log = LogManager.getLogger(MessageController.class);
+	private static final Logger log = LogManager.getLogger(MensajeController.class);
 	
 	@Autowired 
 	private EntityManager entityManager;
 		
-	@GetMapping("/")
-	public String getMessages(Model model, HttpSession session) {
+	@GetMapping("/{id}")
+	public String getMessages(@PathVariable long id, Model model, HttpSession session) {
 		model.addAttribute("users", entityManager.createQuery(
 			"SELECT u FROM Usuario u").getResultList());
-		return "messages";
+		return "chat";
 	}
 
 	@GetMapping(path = "/received", produces = "application/json")

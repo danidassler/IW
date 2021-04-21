@@ -212,13 +212,4 @@ public class AdminController {
             return "administrarUsuario";
     }
 
-    @PostMapping("eliminarUsuario/{id}")
-    @Transactional
-    public String eliminarUsuario(
-        @PathVariable long id,
-        Model model){
-            Usuario user = entityManager.find(Usuario.class, id);
-            int result = entityManager.createNamedQuery("Usuario.deleteUser").setParameter("id", user.getId()).executeUpdate();//Aqui se necesita pujas altas
-            return "adminUsuarios";
-    }
 }
