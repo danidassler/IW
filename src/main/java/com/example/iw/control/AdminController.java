@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import com.example.iw.LocalData;
+import com.example.iw.model.Oferta;
 import com.example.iw.model.Producto;
 import com.example.iw.model.Usuario;
 
@@ -170,7 +171,11 @@ public class AdminController {
     public String administrarUsuario(@PathVariable long id, Model model) {    
             
         Usuario user = entityManager.find(Usuario.class, id); 
+        List<Oferta> pujas = entityManager.createNamedQuery("Oferta.pujasUser").setParameter("userId", id).getResultList(); //Aqui se necesita pujas altas
+		List<Oferta> precios = entityManager.createNamedQuery("Oferta.preciosUser").setParameter("userId", id).getResultList();
 
+        model.addAttribute("pujas", pujas); 
+        model.addAttribute("precios", precios); 
         model.addAttribute("user", user); 
             
         return "administrarUsuario";                     
@@ -185,5 +190,35 @@ public class AdminController {
         model.addAttribute("prods", prods); 
             
         return "adminProductos";                     
+    }
+
+    @PostMapping("banearUsuario/{id}")
+    @Transactional
+    public String banearUsuario(
+        @PathVariable long id,
+        Model model){
+            Usuario user = entityManager.find(Usuario.class, id); 
+            if(user.getEnabled() == 1){ //aun esta activo
+                user.setEnabled((byte)0);
+                entityManager.merge(user);
+            }
+            else{ //esta baneado
+                user.setEnabled((byte)1);
+                entityManager.merge(user);
+            }
+            
+            model.addAttribute("user", user);
+
+            return "administrarUsuario";
+    }
+
+    @PostMapping("eliminarUsuario/{id}")
+    @Transactional
+    public String eliminarUsuario(
+        @PathVariable long id,
+        Model model){
+            Usuario user = entityManager.find(Usuario.class, id);
+            int result = entityManager.createNamedQuery("Usuario.deleteUser").setParameter("id", user.getId()).executeUpdate();//Aqui se necesita pujas altas
+            return "adminUsuarios";
     }
 }
