@@ -182,7 +182,7 @@ public class UserController {
 		
 		log.info("Sending a message to {} with contents '{}'", id, json);
 
-		messagingTemplate.convertAndSend("/usuario/"+u.getUsername()+"/queue/updates", json);
+		messagingTemplate.convertAndSend("/user/"+u.getUsername()+"/queue/updates", json);
 		return "{\"result\": \"message sent.\"}";
 	}	
 	
