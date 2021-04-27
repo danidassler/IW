@@ -117,13 +117,19 @@ public class RootController {
         user.setRol("USER");
         user.setEnabled(enabled);
 
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		if(password.equals(password2)){
-			user.setPassword("{bcrypt}"+passwordEncoder.encode(password));
-        }else{
-			return "registro";//mostrar mensaje de error o crear pagina como errorPuja
-		}   
-        entityManager.persist(user);
+        long n = (long) entityManager.createNamedQuery("Usuario.hasUsername").setParameter("username", username).getSingleResult();
+        if(n > 0){ //ya existe el username en la base de datos
+            return "registro"; //FALTA QUE SI EL USUARIO NO SE PUEDE REGISTRAR LE LLEVE A UNA PÁGINA DE ERROR
+        }
+        else{ //el usuario no existe en la base de datos
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            if(password.equals(password2)){
+                user.setPassword("{bcrypt}"+passwordEncoder.encode(password));
+            }else{
+                return "registro"; //mostrar mensaje de error o crear pagina como errorPuja
+            }
+            entityManager.persist(user);
+        }
 		return "login";
 	}
 

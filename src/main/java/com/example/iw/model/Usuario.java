@@ -32,7 +32,7 @@ import lombok.Setter;
 			query="SELECT u FROM Usuario u "
 					+ "WHERE u.username = :username AND u.enabled = 1"),
 	@NamedQuery(name="Usuario.hasUsername",
-			query="SELECT COUNT(u) "
+			query="SELECT COUNT(username) "
 					+ "FROM Usuario u "
 					+ "WHERE u.username = :username")
 })

@@ -14,8 +14,24 @@ body {
 	display: flex;
 	flex-direction: column;
 }
+.sitename{
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+	border: none;
+	color: black;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	-webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+	-moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+	-o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+	transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
 
+}
+.footer{
 
+	color: #19f;
+}
 /* for debugging purposes - remove borders for a cleaner look */
 div, nav, footer {
 	border-top: 1px solid gray;

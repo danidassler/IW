@@ -21,17 +21,17 @@ import lombok.Data;
     @NamedQuery(name="Oferta.mejorPuja",
             /*query="SELECT o FROM Oferta o " + 
             "WHERE o.precio = (SELECT MAX(precio) FROM Oferta WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId*/
-            query="SELECT MAX(o.precio) FROM Oferta o WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId"),
-        @NamedQuery(name="Oferta.mPuja",
+            query="SELECT MAX(o.precio) FROM Oferta o WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId AND NOT o.comprador.id =:userId"),
+    @NamedQuery(name="Oferta.mPuja",
             query="SELECT o FROM Oferta o " + 
-            "WHERE o.precio = (SELECT MAX(precio) FROM Oferta WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId)"),
+            "WHERE o.precio = (SELECT MAX(precio) FROM Oferta WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId AND NOT comprador.id =:userId)"),
     @NamedQuery(name="Oferta.menorPrecio",
             /*query="SELECT o FROM Oferta o " + 
             "WHERE o.precio = (SELECT MIN(precio) FROM Oferta WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId*/
-            query="SELECT MIN(o.precio) FROM Oferta o WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId"),
-        @NamedQuery(name="Oferta.mPrecio",
+            query="SELECT MIN(o.precio) FROM Oferta o WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId AND NOT o.vendedor.id =:userId"),
+    @NamedQuery(name="Oferta.mPrecio",
             query="SELECT o FROM Oferta o " + 
-            "WHERE o.precio = (SELECT MIN(precio) FROM Oferta WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId)"),
+            "WHERE o.precio = (SELECT MIN(precio) FROM Oferta WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId AND NOT vendedor.id =:userId)"),
     @NamedQuery(name="Oferta.pujas",
             query="SELECT o FROM Oferta o WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId ORDER BY precio DESC"),
     @NamedQuery(name="Oferta.precios", 

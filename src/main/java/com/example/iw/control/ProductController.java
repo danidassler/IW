@@ -51,7 +51,7 @@ public class ProductController {
 	
 	@GetMapping("/{id}") 
     @Transactional
-    public String producto(@PathVariable long id, Model model) {
+    public String producto(@PathVariable long id, Model model, HttpSession session) {
         //@RequestParam long id
         Producto prod = entityManager.find(Producto.class, id);
         BigDecimal ultimaVenta = new BigDecimal("0");
@@ -60,9 +60,14 @@ public class ProductController {
         if(trans.size() > 0){
             ultimaVenta = trans.get(0).getPrecio();
         }
-        
-        BigDecimal mejorPuja = obtenerMejorPuja(id);
-        BigDecimal menorPrecio = obtenerMenorPrecio(id);
+
+        Usuario user = new Usuario();        
+        if(session.getAttribute("u") != null){ // En caso de no estar logueado
+            user = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+
+        }
+        BigDecimal mejorPuja = obtenerMejorPuja(id, user);
+        BigDecimal menorPrecio = obtenerMenorPrecio(id, user);
 
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
@@ -73,15 +78,17 @@ public class ProductController {
 
 	@GetMapping("/venta/{id}")
     @Transactional 
-    public String venta(@PathVariable long id, Model model) {    
+    public String venta(@PathVariable long id, Model model, HttpSession session) {    
         Producto prod = entityManager.find(Producto.class, id);
         BigDecimal mejorPuja = new BigDecimal("0");
         long idOferta = -1L;
+
+        Usuario user = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
         
-        BigDecimal menorPrecio = obtenerMenorPrecio(id);
+        BigDecimal menorPrecio = obtenerMenorPrecio(id, user);
         
         //necesitamos coger la lista de ofertas de mejores puja, para coger la primera, tanto su id como su precio
-        List<Oferta> mejPuja = entityManager.createNamedQuery("Oferta.mPuja").setParameter("productoId", id).getResultList();
+        List<Oferta> mejPuja = entityManager.createNamedQuery("Oferta.mPuja").setParameter("productoId", id).setParameter("userId", user.getId()).getResultList();
         if((mejPuja.size() > 0)){
             mejorPuja = mejPuja.get(0).getPrecio();
             idOferta = mejPuja.get(0).getId();
@@ -113,15 +120,17 @@ public class ProductController {
 
     @GetMapping("/compra/{id}")
     @Transactional 
-    public String compra(@PathVariable long id, Model model) {    
+    public String compra(@PathVariable long id, Model model, HttpSession session) {    
         Producto prod = entityManager.find(Producto.class, id);
         BigDecimal menorPrecio = new BigDecimal("0");
         long idOferta = -1L;
 
-        BigDecimal mejorPuja = obtenerMejorPuja(id);
+        Usuario user = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+
+        BigDecimal mejorPuja = obtenerMejorPuja(id, user);
 
         //necesitamos coger las ofertas con los menores precios y coger del primero tanto su id como su precio
-        List<Oferta> minPrecio = entityManager.createNamedQuery("Oferta.mPrecio").setParameter("productoId", id).getResultList(); 
+        List<Oferta> minPrecio = entityManager.createNamedQuery("Oferta.mPrecio").setParameter("productoId", id).setParameter("userId", user.getId()).getResultList(); 
         if((minPrecio.size() > 0)){
             menorPrecio = minPrecio.get(0).getPrecio();
             idOferta = minPrecio.get(0).getId();
@@ -285,8 +294,8 @@ public class ProductController {
 
     
     //funciones para obtener los precios mas bajos y pujas mas altas de los productos
-    public BigDecimal obtenerMejorPuja(long id){
-        BigDecimal mejorPuja = (BigDecimal)entityManager.createNamedQuery("Oferta.mejorPuja").setParameter("productoId", id).getSingleResult();
+    public BigDecimal obtenerMejorPuja(long id, Usuario user){
+        BigDecimal mejorPuja = (BigDecimal)entityManager.createNamedQuery("Oferta.mejorPuja").setParameter("productoId", id).setParameter("userId", user.getId()).getSingleResult();
         
         if(mejorPuja == null){
             mejorPuja = new BigDecimal("0");
@@ -295,8 +304,8 @@ public class ProductController {
         return mejorPuja;
     }
 
-    public BigDecimal obtenerMenorPrecio(long id){
-        BigDecimal menorPrecio = (BigDecimal)entityManager.createNamedQuery("Oferta.menorPrecio").setParameter("productoId", id).getSingleResult();
+    public BigDecimal obtenerMenorPrecio(long id, Usuario user){
+        BigDecimal menorPrecio = (BigDecimal)entityManager.createNamedQuery("Oferta.menorPrecio").setParameter("productoId", id).setParameter("userId", user.getId()).getSingleResult();
                
         if(menorPrecio == null){
             menorPrecio = new BigDecimal("0");

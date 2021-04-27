@@ -21,7 +21,7 @@ const ws = {
 	 * Attempts to establish communication with the specified
 	 * web-socket endpoint. If successfull, will call 
 	 */
-	initialize: (endpoint, subs = []) => {
+	initialize: (endpoint, subs = []) => {	
 		try {
 			ws.stompClient = Stomp.client(endpoint);
 			ws.stompClient.reconnect_delay = 2000;

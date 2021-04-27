@@ -17,7 +17,8 @@
             Aqui va lo que hay en header, esto no se ve
         </th:block>
     </div>
-    <p>
+    <p sec:authorize="isAuthenticated()">
+        <!--th:if="${!session.isEmpty()}"-->
         <!-- También es viable de esta forma: (Elegir en el futuro cuál es preferible)
 
             <form th:action="@{/logout}" method="post">
@@ -25,7 +26,7 @@
 			</form>
         -->
         
-        <button class="adminProductos" type="button" th:if="${session.u.hasRole('ADMIN')}" > <a th:href="@{/admin/adminProductos}">Administrar Producto </a></button>
+        <button class="adminProductos" type="button" th:if="${session.u.hasRole('ADMIN')}" > <a class="adminProductos" th:href="@{/admin/adminProductos}">Administrar Producto </a></button>
         <button class="btn btn-lg btn-primary btn-block" type="button" th:if="${session.u.hasRole('ADMIN')}"> <a th:href="@{/admin/formularioProducto}">Nuevo Producto </a></button>
     </p>
     <div>

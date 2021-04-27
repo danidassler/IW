@@ -17,7 +17,7 @@
 
     <b><p th:text="${prod.nombre}">Producto</p></b>
 
-    <p><button th:if="${session.u.hasRole(session.u.getRol())}" type="button"> <a th:href="@{'/admin/modificarProducto/' + ${prod.id}}">Editar Producto </a></button></p>
+    <p sec:authorize="isAuthenticated()"><button th:if="${session.u.hasRole(session.u.getRol())}" type="button"> <a th:href="@{'/admin/modificarProducto/' + ${prod.id}}">Editar Producto </a></button></p>
     <img th:src="@{/producto/{id}/photo(id=${prod.id})}" alt="foto" width=200px/>
     <p th:text="${prod.desc}"> Descripción</p>
     <p th:text="${prod.categorias}"> Categoria</p>
