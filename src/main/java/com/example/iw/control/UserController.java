@@ -117,7 +117,7 @@ public class UserController {
 		Usuario target = entityManager.find(Usuario.class, id);
 		model.addAttribute("user", target);
 		
-		Usuario requester = (Usuario)session.getAttribute("u");
+		Usuario requester = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
 		if (requester.getId() != target.getId() &&
 				! requester.hasRole(Usuario.Rol.ADMIN)) {
 			throw new NoEsTuPerfilException();
@@ -159,7 +159,7 @@ public class UserController {
 		
 		String text = o.get("men").asText();
 		Usuario u = entityManager.find(Usuario.class, id);
-		Usuario sender = (Usuario)session.getAttribute("u");
+		Usuario sender = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
 		model.addAttribute("user", u);
 		
 		// construye mensaje, lo guarda en BD
@@ -195,7 +195,7 @@ public class UserController {
 		model.addAttribute("user", target);
 		
 		// check permissions
-		Usuario requester = (Usuario)session.getAttribute("u");
+		Usuario requester = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
 		if (requester.getId() != target.getId() &&
 				! requester.hasRole(Usuario.Rol.ADMIN)) {
 			response.sendError(HttpServletResponse.SC_FORBIDDEN, 
@@ -283,7 +283,7 @@ public class UserController {
         Model model, HttpSession session) {    
 
         Usuario u = entityManager.find(Usuario.class, id);
-        Usuario prof = (Usuario)session.getAttribute("u");
+        Usuario prof = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
 		if(u.getId() != prof.getId()){
 			//response.sendError(HttpServletResponse.SC_FORBIDDEN,  "Este no es tu perfil");
 			log.info("ESTE NO ES TU PERFIL.");
@@ -311,7 +311,7 @@ public class UserController {
         Model model, HttpSession session) {    
 
         Usuario u = entityManager.find(Usuario.class, id);
-        Usuario prof = (Usuario)session.getAttribute("u");
+        Usuario prof = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
 		if(u.getId() != prof.getId()){
 			//response.sendError(HttpServletResponse.SC_FORBIDDEN,  "Este no es tu perfil");
 			log.info("ESTE NO ES TU PERFIL.");

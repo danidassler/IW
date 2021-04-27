@@ -22,7 +22,7 @@
         <div>
             <b>Lista de productos:</b>
             <button>Filtro</button>
-            <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:if="${session.u.hasRole(session.u.getRol())}" th:href="@{/formularioProducto}">Nuevo Producto </a></button>
+            <button class="newProduct" type="button"> <a th:if="${session.u.hasRole(session.u.getRol())}" th:href="@{/formularioProducto}">Nuevo Producto </a></button>
         </div>
         <div th:each="p: ${prods}">
             <div>

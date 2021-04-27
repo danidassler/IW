@@ -19,9 +19,17 @@ import lombok.Data;
 			query="SELECT o FROM Oferta o "
 					+ "WHERE o.comprador.id = :userId OR o.vendedor.id = :userId"),
     @NamedQuery(name="Oferta.mejorPuja",
+            /*query="SELECT o FROM Oferta o " + 
+            "WHERE o.precio = (SELECT MAX(precio) FROM Oferta WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId*/
+            query="SELECT MAX(o.precio) FROM Oferta o WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId"),
+        @NamedQuery(name="Oferta.mPuja",
             query="SELECT o FROM Oferta o " + 
             "WHERE o.precio = (SELECT MAX(precio) FROM Oferta WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId)"),
     @NamedQuery(name="Oferta.menorPrecio",
+            /*query="SELECT o FROM Oferta o " + 
+            "WHERE o.precio = (SELECT MIN(precio) FROM Oferta WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId*/
+            query="SELECT MIN(o.precio) FROM Oferta o WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId"),
+        @NamedQuery(name="Oferta.mPrecio",
             query="SELECT o FROM Oferta o " + 
             "WHERE o.precio = (SELECT MIN(precio) FROM Oferta WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId)"),
     @NamedQuery(name="Oferta.pujas",
@@ -39,9 +47,7 @@ import lombok.Data;
     @NamedQuery(name="Oferta.ventasUser", 
             query="SELECT o FROM Oferta o WHERE fechaTransaccion IS NOT NULL AND vendedor.id = :userId"),
     @NamedQuery(name="Oferta.transaction", 
-            query="SELECT o FROM Oferta o WHERE fechaTransaccion IS NOT NULL AND producto.id = :productoId ORDER BY fechaTransaccion DESC"),
-    @NamedQuery(name="Oferta.borrar", 
-            query="DELETE FROM Oferta o WHERE o.id = :idOferta")
+            query="SELECT o FROM Oferta o WHERE fechaTransaccion IS NOT NULL AND producto.id = :productoId ORDER BY fechaTransaccion DESC")
         
         })
             

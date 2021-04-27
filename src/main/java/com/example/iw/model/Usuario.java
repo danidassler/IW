@@ -34,9 +34,7 @@ import lombok.Setter;
 	@NamedQuery(name="Usuario.hasUsername",
 			query="SELECT COUNT(u) "
 					+ "FROM Usuario u "
-					+ "WHERE u.username = :username"),
-	@NamedQuery(name="Usuario.deleteUser",
-			query="DELETE FROM Usuario u WHERE u.id = :id")
+					+ "WHERE u.username = :username")
 })
 public class Usuario implements Transferable<Usuario.Transfer> {
 
