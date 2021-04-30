@@ -6,6 +6,7 @@
         td, th { border: 1px solid grey; text-align: center; border-spacing: 10px;}
         table { padding: 0; }
     </style>
+    <link rel="stylesheet" th:href="@{/css/error.css}" href="css/error.css" type="text/css"/>
     <title>Formulario para un producto</title>
 </head>
 <body>
@@ -50,6 +51,11 @@
                 
                     <button class="btn btn-lg btn-primary btn-block" id="addProducto" type="submit">Agregar Producto</button>
                 </form>
+                <div class="error">
+                    <div class="errorbody">
+                      <p th:if="${errorP==1}">ERROR: El producto ya existe.</p>
+                    </div>
+                </div>
             </td>
         </tr>
     </table>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" th:href="@{/css/error.css}" href="css/error.css" type="text/css"/>
+    <title>Confirmación</title>
+</head>
+<body>
+    <nav th:replace="frags/nav.html :: nav">
+		Nav goes here
+	</nav>
+    <div>
+        <th:block th:replace="frags/header.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+    <div class="error">
+        <div class="errorbody">
+            <h2 th:if="${userDiferente==1}">ERROR: No puedes acceder o realizar operaciones en un perfil que no es el tuyo.</h2>
+            <p>Acceda a su perfil: <button><a th:href="@{'/perfil/' + ${idUser}}">Perfil</a></button></p>
+        </div>
+    </div>
+    <div>
+        <th:block th:replace="frags/pie.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+</body>
+</html>

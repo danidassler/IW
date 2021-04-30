@@ -6,6 +6,7 @@
         td, th { border: 1px solid grey; text-align: center; border-spacing: 10px;}
         table { padding: 0; }
     </style>
+        <link rel="stylesheet" th:href="@{/css/error.css}" href="css/error.css" type="text/css"/>
     <title>Retirar fondo</title>
 </head>
 <body>
@@ -23,7 +24,7 @@
         <tr>
             <td>
                 <p>Información del usuario</p>
-                <img th:src="@{/perfil/{id}/photo(id=${prof.id})}" alt="foto"/>
+                <img th:src="@{/perfil/{id}/photo(id=${prof.id})}" alt="foto" width="350" height="400"/>
                 <p><span th:text="${prof.nombre}"></span> <span th:text="${prof.apellidos}"></span></p>
                 <p>Saldo Actual: <span th:text="${prof.saldo}"></span> </p>
             </td>
@@ -77,6 +78,11 @@
                 
                     <button class="btn btn-lg btn-primary btn-block" type="submit">Retirar Saldo</button>
                 </form>
+                <div class="error">
+                    <div class="errorbody">
+                        <p th:if="${errorRF==1}">ERROR: No puedes retirar mas dinero del que tienes.</p>
+                    </div>
+                </div>
             </td>
         </tr>
     </table>

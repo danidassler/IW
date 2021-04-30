@@ -2,9 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <style>
-        table {border: 1px solid grey;}
-    </style>
+    <link rel="stylesheet" th:href="@{/css/error.css}" href="css/error.css" type="text/css"/>
     <title>Confirmación</title>
 </head>
 <body>
@@ -16,18 +14,21 @@
             Aqui va lo que hay en header, esto no se ve
         </th:block>
     </div>
-
-    <h2 th:if="${errorCompra==0}">HA HABIDO UN ERROR AL REALIZAR LA PUJA </h2>
-    <h2 th:if="${errorCompra==1}">HA HABIDO UN ERROR AL REALIZAR LA COMPRA </h2> 
-    <p th:if="${errorCompra==0}">Comprueba que tienes saldo suficiente para realizar la puja o que no tienes una puja ya activa por el mismo producto</p>
-    <p th:if="${errorCompra==1}">Comprueba que tienes saldo suficiente para comprar el producto.</p>
-    <p th:if="${puedeP == 0}"> Ha sido por tener una puja activa en el producto</p>
-    <p th:if="${puedeS == 0}"> Ha sido por no tener suficiente saldo</p>
-    <p>Compruebalo en tu perfil: <button><a th:href="@{'/perfil/' + ${idUser}}">Perfil</a></button></p>
-    <div>
-        <th:block th:replace="frags/pie.html">
-            Aqui va lo que hay en header, esto no se ve
-        </th:block>
+    <div class="error">
+        <div class="errorbody">
+            <h2 th:if="${errorCompra==0}">HA HABIDO UN ERROR AL REALIZAR LA PUJA </h2>
+            <h2 th:if="${errorCompra==1}">HA HABIDO UN ERROR AL REALIZAR LA COMPRA </h2> 
+            <p th:if="${errorCompra==0}">Comprueba que tienes saldo suficiente para realizar la puja o que no tienes una puja ya activa por el mismo producto</p>
+            <p th:if="${errorCompra==1}">Comprueba que tienes saldo suficiente para comprar el producto.</p>
+            <p th:if="${puedeP == 0}"> Ha sido por tener una puja activa en el producto</p>
+            <p th:if="${puedeS == 0}"> Ha sido por no tener suficiente saldo</p>
+            <p>Compruebalo en tu perfil: <button><a th:href="@{'/perfil/' + ${idUser}}">Perfil</a></button></p>
+            <div>
+                <th:block th:replace="frags/pie.html">
+                    Aqui va lo que hay en header, esto no se ve
+                </th:block>
+            </div>
+        </div>
     </div>
 </body>
 </html>

@@ -4,6 +4,8 @@
     <meta charset="utf-8"></meta>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"></meta>
     <title>Registrar Usuario</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}" href="css/login.css" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/error.css}" href="css/error.css" type="text/css"/>
   </head>
   <body>
     <nav th:replace="frags/nav.html :: nav">
@@ -14,41 +16,49 @@
             Aqui va lo que hay en header, esto no se ve
         </th:block>
     </div>
-     <div class="container">
-      <form class="form-register" method="post" th:action="@{/registro}">
-        <h2 class="form-register-heading">Por favor, para poder pujar y comprar productos, registrese:</h2>
-        
-        <p>
-          <label for="username" class="sr-only">Nombre de usuario</label>
-          <input type="text" id="username" name="username" 
-            class="form-control" placeholder="Username" required="required"></input>
-        </p>
-        <p>
-          <label for="name" class="sr-only">Nombre</label>
-          <input type="text" id="name" name="name" 
-            class="form-control" placeholder="Name" required="required"></input>
-        </p>
-        <p>
-          <label for="surname" class="sr-only">Apellidos</label>
-          <input type="text" id="surname" name="surname" 
-            class="form-control" placeholder="Surname" required="required"></input>
-        </p>
-        <p>
-          <label for="password" class="sr-only">Contraseña</label>
-          <input type="password" id="password" name="password" 
-            class="form-control" placeholder="Password" required="required"></input>
-        </p>
-        <p>
-          <label for="password2" class="sr-only">Repite la Contraseña</label>
-          <input type="password" id="password2" name="password2" 
-            class="form-control" placeholder="password2" required="required"></input>
-        </p>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Registrarme</button>
-      </form>
-</div>
-<div>
+     <div class="login">
+       <div class="login-header">
+        <h2>Por favor, para poder pujar y comprar productos, registrese:</h2>
+        <form class="login-form" method="post" th:action="@{/registro}">
+          <h3>
+            <label for="username">Nombre de usuario</label>
+            <input type="text" id="username" name="username" 
+              class="form-control" placeholder="Username" required="required"></input>
+          </h3>
+          <h3>
+            <label for="name" >Nombre</label>
+            <input type="text" id="name" name="name" 
+              class="form-control" placeholder="Name" required="required"></input>
+          </h3>
+          <h3>
+            <label for="surname" >Apellidos</label>
+            <input type="text" id="surname" name="surname" 
+              class="form-control" placeholder="Surname" required="required"></input>
+          </h3>
+          <h3>
+            <label for="password" >Contraseña</label>
+            <input type="password" id="password" name="password" 
+              class="form-control" placeholder="Password" required="required"></input>
+          </h3>
+          <h3>
+            <label for="password2" >Repite la Contraseña</label>
+            <input type="password" id="password2" name="password2" 
+              class="form-control" placeholder="password2" required="required"></input>
+          </h3>
+          <button type="submit">Registrarme</button>
+        </form>
+        <p>¿Ya estas registrado?</p><a th:href="@{/login}" href="/login">Haz login aqui</a>
+      </div>
+    </div>
+      <div class="error">
+        <div class="errorbody">
+          <p th:if="${errorRU==1}">ERROR: El nombre de usuario ya existe, por favor, elige otro</p>
+          <p th:if="${errorRC==1}">ERROR: Las contraseñas no coinciden.</p>
+        </div>
+     </div>
+  <div>
     <th:block th:replace="frags/pie.html">
         Aqui va lo que hay en header, esto no se ve
     </th:block>
-</div>
+  </div>
 </body></html>
