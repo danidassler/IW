@@ -14,7 +14,7 @@ const ws = {
 	receive: (text) => {
 		console.log(text);
 	},
-	
+
 	headers: {'X-CSRF-TOKEN' : config.csrf.value},
 	
 	/**
@@ -43,7 +43,8 @@ const ws = {
 	subscribe: (sub) => {
         try {
 	        ws.stompClient.subscribe(sub, 
-	        		(m) => ws.receive(JSON.parse(m.body))); 	// falla si no recibe JSON!
+				(m) => ws.receive(JSON.parse(m.body))); 	// falla si no recibe JSON!
+
         	console.log("Hopefully subscribed to " + sub);
         } catch (e) {
         	console.log("Error, could not subscribe to " + sub);

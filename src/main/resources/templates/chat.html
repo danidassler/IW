@@ -27,12 +27,20 @@
 	</div>
 	</div>	
 
-	<div class="sidebar">
+	<div class="sidebar" th:if="${session.u.hasRole('ADMIN')}">
 		<form th:action="@{/perfil/idOfTarget/msg}" method="POST">
-		<select id="idOfTarget">
+
+		<select id="idOfTarget" th:if="${session.u.hasRole('ADMIN')}">
 			<option th:each="user: ${users}" th:value="${user.id}" th:text="${user.username}">mfreire</option>
 		</select>
-		<textarea id="men" placeholder="escribe al usuario seleccionado" rows="4" cols="20"></textarea>
+		<textarea id="men" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea>
+		<button id="sendmsg" type="submit">Enviar</button>
+		</form>
+	</div>
+
+	<div class="sidebar" th:if="${session.u.hasRole('USER')}">
+		<form th:action="@{/perfil/msg}" method="POST">
+		<textarea id="men" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea>
 		<button id="sendmsg" type="submit">Enviar</button>
 		</form>
 	</div>
@@ -58,7 +66,6 @@
 		        			row.received = formatDate(row.received);
 		        		}
 		        	}
-		        	
 		        	return JSON.stringify(data);
 		        }
 		    }
@@ -68,15 +75,33 @@
 	// envío de mensajes vía AJAX, sin recargar la página
 	document.addEventListener("DOMContentLoaded", () => {
 		let b = document.getElementById("sendmsg");
-		b.onclick = (e) => {
-			let idOfTarget = document.getElementById("idOfTarget").value;
-			let url = b.parentNode.action.replace("idOfTarget", idOfTarget);
-			e.preventDefault();
-			console.log(b, b.parentNode)
-			go(url, 'POST', {men: 
-					document.getElementById("men").value})
-				.then(d => console.log("happy", d))
-				.catch(e => console.log("sad", e))
+		console.log(b);
+		if(b.includes("idOfTarget")){
+			alert("Hola");
+			b.onclick = (e) => {
+				let idOfTarget = document.getElementById("idOfTarget").value;
+				let url = b.parentNode.action.replace("idOfTarget", idOfTarget);
+				console.log(url);
+				e.preventDefault();
+				console.log(b, b.parentNode)
+				dt.rows().add(["TheRealJin", "danidassler", formatDate(new Date().toISOString()), "", document.getElementById("men").value, idOfTarget]);
+				go(url, 'POST', {men: 
+						document.getElementById("men").value})
+					.then(d => console.log("happy", d))
+					.catch(e => console.log("sad", e))
+			}
+		}
+		else{
+			alert("MUNDO");
+			b.onclick = (e) => {
+				e.preventDefault();
+				console.log(b, b.parentNode)
+				dt.rows().add(["TheRealJin", "danidassler", formatDate(new Date().toISOString()), "", document.getElementById("men").value, "0"]);
+				go("/perfil/msg", 'POST', {men: 
+						document.getElementById("men").value})
+					.then(d => console.log("happy", d))
+					.catch(e => console.log("sad", e))
+			}
 		}
 	});
 

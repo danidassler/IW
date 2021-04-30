@@ -190,6 +190,44 @@ public class UserController {
 		messagingTemplate.convertAndSend("/user/"+u.getUsername()+"/queue/updates", json);
 		return "{\"result\": \"message sent.\"}";
 	}	
+
+
+	@PostMapping("/msg")
+	@ResponseBody
+	@Transactional
+	public String postMsg2( 
+			@RequestBody JsonNode o, Model model, HttpSession session) 
+		throws JsonProcessingException {
+		
+		String text = o.get("men").asText();
+		Usuario sender = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+		
+		// construye mensaje, lo guarda en BD
+		List<Usuario> listUsuario = entityManager.createNamedQuery("Usuario.findAdmin", Usuario.class).getResultList();
+		for(Usuario u: listUsuario){
+			Mensaje m = new Mensaje();
+			m.setReceptor(u);
+			m.setEmisor(sender);
+			m.setFechaEnvio(LocalDateTime.now());
+			m.setMensaje(text);
+			entityManager.persist(m);
+			entityManager.flush(); // to get Id before commit
+			
+			// construye json
+			ObjectMapper mapper = new ObjectMapper();
+			ObjectNode rootNode = mapper.createObjectNode();
+			rootNode.put("from", sender.getUsername());
+			rootNode.put("to", u.getUsername());
+			rootNode.put("text", text);
+			rootNode.put("id", m.getId());
+			String json = mapper.writeValueAsString(rootNode);
+	
+			messagingTemplate.convertAndSend("/user/"+u.getUsername()+"/queue/updates", json);
+		}
+
+		return "{\"result\": \"message sent.\"}";
+	}	
+
 	
 	@PostMapping("/{id}/photo")
 	public String postPhoto(

@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import java.util.ArrayList;
 import com.example.iw.model.*;
-
+import java.util.Collection;
 /**
  * User-administration controller
  * 
@@ -39,7 +39,6 @@ public class MensajeController {
 			"SELECT u FROM Usuario u").getResultList());
 		return "chat";
 	}
-
 	@GetMapping(path = "/received", produces = "application/json")
 	@Transactional // para no recibir resultados inconsistentes
 	@ResponseBody  // para indicar que no devuelve vista, sino un objeto (jsonizado)
@@ -48,10 +47,18 @@ public class MensajeController {
 		Usuario u = entityManager.find(Usuario.class, userId);
 		log.info("Generating message list for user {} ({} messages)", 
 				u.getUsername(), u.getMensajesRecibidos().size());
-		return  u.getMensajesRecibidos().stream().map(Transferable::toTransfer).collect(Collectors.toList());
+		//List<Mensaje.Transfer> mensajes = Stream.concat(u.getMensajesRecibidos().stream().map(Transferable::toTransfer), u.getMensajesEnviados().stream().map(Transferable::toTransfer)).collect(Collectors.toList());
+		
+		List<Mensaje.Transfer> mensajes = new ArrayList<>();
+		mensajes.addAll(u.getMensajesRecibidos().stream().map(Transferable::toTransfer).collect(Collectors.toList()));
+		mensajes.addAll(u.getMensajesEnviados().stream().map(Transferable::toTransfer).collect(Collectors.toList()));
+
+
+		return  mensajes;
 	}	
-	
-	/*@GetMapping(path = "/unread", produces = "application/json")
+
+	/*
+	@GetMapping(path = "/unread", produces = "application/json")
 	@ResponseBody
 	public String checkUnread(HttpSession session) {
 		long userId = ((Usuario)session.getAttribute("u")).getId();		
