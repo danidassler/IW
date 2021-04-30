@@ -119,6 +119,7 @@ public class RootController {
 
         long n = (long) entityManager.createNamedQuery("Usuario.hasUsername").setParameter("username", username).getSingleResult();
         if(n > 0){ //ya existe el username en la base de datos
+            
             return "registro"; //FALTA QUE SI EL USUARIO NO SE PUEDE REGISTRAR LE LLEVE A UNA PÁGINA DE ERROR
         }
         else{ //el usuario no existe en la base de datos

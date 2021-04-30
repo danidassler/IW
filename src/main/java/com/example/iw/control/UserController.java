@@ -75,6 +75,11 @@ public class UserController {
 		model.addAttribute("user", u);
 		Usuario user = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
 
+		if (u.getId() != user.getId() &&
+			! user.hasRole(Usuario.Rol.ADMIN)) {
+			throw new NoEsTuPerfilException();
+		}
+
         List<Oferta> pujas = entityManager.createNamedQuery("Oferta.pujasUser").setParameter("userId", id).getResultList(); //Aqui se necesita pujas altas
 		List<Oferta> precios = entityManager.createNamedQuery("Oferta.preciosUser").setParameter("userId", id).getResultList();
 
@@ -280,12 +285,12 @@ public class UserController {
     @Transactional 
     public String depositarFondo(@PathVariable long id, 
         @RequestParam BigDecimal saldo,
-        Model model, HttpSession session) {    
+        Model model, HttpSession session, HttpServletResponse response) {    
 
         Usuario u = entityManager.find(Usuario.class, id);
         Usuario prof = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
 		if(u.getId() != prof.getId()){
-			//response.sendError(HttpServletResponse.SC_FORBIDDEN,  "Este no es tu perfil");
+			model.addAttribute("prof", prof); 
 			log.info("ESTE NO ES TU PERFIL.");
 			return "depositarFondo";
 		}
@@ -315,6 +320,7 @@ public class UserController {
 		if(u.getId() != prof.getId()){
 			//response.sendError(HttpServletResponse.SC_FORBIDDEN,  "Este no es tu perfil");
 			log.info("ESTE NO ES TU PERFIL.");
+			model.addAttribute("prof", prof);  
 			return "retirarFondo";
 		}
 

@@ -14,7 +14,13 @@ body {
 	display: flex;
 	flex-direction: column;
 }
+@font-face{
+	font-family:Xolonium;
+	src: url(Xolonium-Regular.ttf);
+}
 .sitename{
+	font-family:Xolonium;
+	text-shadow: 2px 2px 0px rgba(17, 189, 255, 1);
 	-webkit-box-sizing: content-box;
 	-moz-box-sizing: content-box;
 	box-sizing: content-box;
@@ -31,6 +37,13 @@ body {
 .footer{
 
 	color: #19f;
+}
+ul.header-top{
+	background: #7db9e8;
+	background: -moz-linear-gradient(top, #7db9e8 0%, #2989d8 77%, #1e5799 100%);
+	background: -webkit-linear-gradient(top, #7db9e8 0%,#2989d8 77%,#1e5799 100%);
+	background: linear-gradient(to bottom, #7db9e8 0%,#2989d8 77%,#1e5799 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7db9e8', endColorstr='#1e5799',GradientType=0 );
 }
 /* for debugging purposes - remove borders for a cleaner look */
 div, nav, footer {
