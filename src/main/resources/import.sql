@@ -6,6 +6,13 @@ INSERT INTO Usuario VALUES (5, 'Peng Zhou' , 1, 'JinTao', '{bcrypt}$2a$10$xLFtBI
 
 INSERT INTO Producto VALUES (1, 'Zapatillas', 'Nuevas zapatillas colaboracion con Kanye West.', 'Adidas Yeezy 700', '42.5');
 INSERT INTO Producto VALUES (2, 'Zapatillas', 'Nuevas zapatillas con un disenio rompedor', 'Adidas Yeezy 500', '45');
+INSERT INTO Producto VALUES (3, 'Zapatillas', 'Colaboración entre BAPE y adidas', 'Adidas NMD Bape Camo', '39');
+INSERT INTO Producto VALUES (4, 'Streetwear', 'Colaboracion entre las conocidas marcas de Supreme y The North Face', 'TNF Mountain Parka', 'L');
+INSERT INTO Producto VALUES (5, 'Accesorios', 'Oso de peluche hecho en alemania', 'Supreme Teddy Bear', 'Unica');
+INSERT INTO Producto VALUES (6, 'Relojes', 'Reloj ROLEX iconico y super limitado, solo 500 unidades en todo el mundo', 'Rolex GTM-Master II "Batman"', 'Unica');
+INSERT INTO Producto VALUES (7, 'Electronica', 'Consola de uktima generacion', 'Sony Play Station 5', '1 TB');
+
+
 
 INSERT INTO Oferta VALUES (1, 0,'2021-10-10', '2021-10-01', NULL, 470, 0, 1, 1, NULL); -- puja dani 470 p1 --
 INSERT INTO Oferta VALUES (2, 0,'2021-11-15', '2021-11-05', NULL, 500, 1, NULL, 1, 2); -- precio sergio 500 p1 --

@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -47,10 +48,23 @@ public class RootController {
     @GetMapping("/tienda") 
     public String tienda(Model model) {   
         
-        List<BigDecimal> menorPrecio = new ArrayList<>();
-        List<BigDecimal> mejorPuja = new ArrayList<>();
+        /*List<BigDecimal> menorPrecio = new ArrayList<>();
+        List<BigDecimal> mejorPuja = new ArrayList<>();*/
         List<?> prods = new ArrayList<>();
         prods = entityManager.createQuery("SELECT p FROM Producto p").getResultList();
+        
+        model.addAttribute("prods", prods);
+            
+        return "tienda";                     
+    }
+
+    @GetMapping("/tienda/{categoria}") 
+    public String tiendaF(Model model, @PathVariable String categoria) {   
+        
+        /*List<BigDecimal> menorPrecio = new ArrayList<>();
+        List<BigDecimal> mejorPuja = new ArrayList<>();*/
+        List<?> prods = new ArrayList<>();
+        prods = entityManager.createQuery("SELECT p FROM Producto p WHERE p.categorias LIKE '%" + categoria + "%'").getResultList();
         
         model.addAttribute("prods", prods);
             

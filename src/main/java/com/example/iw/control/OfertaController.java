@@ -258,7 +258,7 @@ public class OfertaController {
 
     //funciones para obtener los precios mas bajos y pujas mas altas de los productos
     public BigDecimal obtenerMejorPuja(long id, Usuario user){
-        BigDecimal mejorPuja = (BigDecimal)entityManager.createNamedQuery("Oferta.mejorPuja").setParameter("productoId", id).setParameter("userId", user.getId()).getSingleResult();
+        BigDecimal mejorPuja = (BigDecimal)entityManager.createNamedQuery("Oferta.mejorPuja").setParameter("productoId", id).getSingleResult();
         
         if(mejorPuja == null){
             mejorPuja = new BigDecimal("0");
@@ -268,7 +268,7 @@ public class OfertaController {
     }
 
     public BigDecimal obtenerMenorPrecio(long id, Usuario user){
-        BigDecimal menorPrecio = (BigDecimal)entityManager.createNamedQuery("Oferta.menorPrecio").setParameter("productoId", id).setParameter("userId", user.getId()).getSingleResult();
+        BigDecimal menorPrecio = (BigDecimal)entityManager.createNamedQuery("Oferta.menorPrecio").setParameter("productoId", id).getSingleResult();
                
         if(menorPrecio == null){
             menorPrecio = new BigDecimal("0");

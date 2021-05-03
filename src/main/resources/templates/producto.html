@@ -17,11 +17,11 @@
 
     <b><p th:text="${prod.nombre}">Producto</p></b>
 
-    <p sec:authorize="isAuthenticated()"><button th:if="${session.u.hasRole(session.u.getRol())}" type="button"> <a th:href="@{'/admin/modificarProducto/' + ${prod.id}}">Editar Producto </a></button></p>
+    <p sec:authorize="isAuthenticated()"><button th:if="${session.u.hasRole('ADMIN')}" type="button"> <a th:href="@{'/admin/modificarProducto/' + ${prod.id}}">Editar Producto </a></button></p>
     <img th:src="@{/producto/{id}/photo(id=${prod.id})}" alt="foto" width=200px/>
     <p th:text="${prod.desc}"> Descripción</p>
     <p th:text="${prod.categorias}"> Categoria</p>
-    <p>Talla: <span th:text="${prod.talla}"> T</span> EUR</p>
+    <p>Talla: <span th:text="${prod.talla}"> T</span></p>
     <p th:if="${ultimaVenta != 0}">Ultima venta: <span th:text="${ultimaVenta}"> UV</span>€ <button><a th:href="@{'/oferta/listaVentas/' + ${prod.id}}">Ver todas las ventas</a></button></p>
     <p th:if="${ultimaVenta == 0}">Ultima venta: --- €</p>
     <p th:if="${menorPrecio != 0}">Precio mas bajo: <span th:text="${menorPrecio}"> LA</span>€  <button><a class="productoComprarYa" th:href="@{'/producto/compra/' + ${prod.id}}">Comprar ya</a></button>  <button><a class="precioProducto" th:href="@{'/oferta/fijarPrecio/' + ${prod.id}}">Fijar Precio</a></button> <button><a th:href="@{'/oferta/listaPrecios/' + ${prod.id}}">Ver lista de precios</a></button></p>
