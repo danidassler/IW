@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="css/main.css" type="text/css"/>
     <meta charset="UTF-8"/>
     <style>
         td, th { border: 1px solid grey; text-align: center;}
@@ -29,10 +30,10 @@
         <button class="adminProductos" type="button" th:if="${session.u.hasRole('ADMIN')}" > <a class="adminProductos" th:href="@{/admin/adminProductos}">Administrar Producto </a></button>
         <button class="btn btn-lg btn-primary btn-block" type="button" th:if="${session.u.hasRole('ADMIN')}"> <a th:href="@{/admin/formularioProducto}">Nuevo Producto </a></button>
     </p>
-    <div>
+    <div class="div_tienda_tabla">
         <p>
             <b>Productos:</b>
-               <table>
+               <table class="tabla_productos">
                     <tr>
                         <th>Imagen</th>
                         <th>Nombre</th>

@@ -15,11 +15,11 @@ body {
 	flex-direction: column;
 }
 @font-face{
-	font-family:Xolonium;
-	src: url(Xolonium-Regular.ttf);
+	font-family:"Xolonium";
+	src: url("/css/Xolonium-Regular.ttf");
 }
 .sitename{
-	font-family:Xolonium;
+	font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif ;
 	text-shadow: 2px 2px 0px rgba(17, 189, 255, 1);
 	-webkit-box-sizing: content-box;
 	-moz-box-sizing: content-box;
@@ -38,6 +38,10 @@ body {
 
 	color: #19f;
 }
+.div_tienda_tabla{
+	vertical-align: middle;
+	align-items: center;
+}
 ul.header-top{
 	background: #7db9e8;
 	background: -moz-linear-gradient(top, #7db9e8 0%, #2989d8 77%, #1e5799 100%);
@@ -46,7 +50,7 @@ ul.header-top{
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7db9e8', endColorstr='#1e5799',GradientType=0 );
 }
 /* for debugging purposes - remove borders for a cleaner look */
-div, nav, footer {
+nav, footer {
 	border-top: 1px solid gray;
 	border-bottom: 1px solid gray;
 }

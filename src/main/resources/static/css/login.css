@@ -13,7 +13,6 @@ body{
 .login-header {
   color:#fff;
   text-align:center;
-  font-size:300%;
 }
 /* .login-header h1 {
    text-shadow: 0px 5px 15px #000; */
@@ -41,19 +40,19 @@ body{
 }
 .login input[type="text"],
 .login input[type="password"],
-.login input[type="nombrecompleto"],
-.login input[type="email"],
-.login input[type="number"],
-.login input[type="apodo"] {
+.login input[type="password2"],
+.login input[type="name"],
+.login input[type="surname"],
+.login input[type="username"] {
   max-width:400px;
 	width: 80%;
   line-height:3em;
   font-family: 'Ubuntu', sans-serif;
-  margin:1em 2em;
+  margin:1em 0em;
   border-radius:5px;
   border:2px solid #f2f2f2;
   outline:none;
-  padding-left:10px;
+  padding-left:5px;
 }
 
 .login input[type="radio"] {
@@ -79,18 +78,4 @@ body{
   margin-left:-70%;
   cursor:pointer;
   text-decoration:underline;
-}
-
-/*Media Querie*/
-@media only screen and (min-width : 150px) and (max-width : 530px){
-  .login-form h3 {
-    text-align:center;
-    margin:0;
-  }
-  .sign-up, .no-access {
-    margin:10px 0;
-  }
-  .login-button {
-    margin-bottom:10px;
-  }
 }

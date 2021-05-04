@@ -7,6 +7,14 @@
     <link rel="stylesheet" th:href="@{/css/login.css}" href="css/login.css" type="text/css"/>
   </head>
   <body>
+    <nav th:replace="frags/nav.html :: nav">
+      Nav goes here
+    </nav>
+    <div>
+      <th:block th:replace="frags/header.html">
+          Aqui va lo que hay en header, esto no se ve
+      </th:block>
+    </div>
      <div class="login">
        <div class="login-header">
         <h1>Please log in</h1>
@@ -17,7 +25,7 @@
               placeholder="Username" required="required"></input>
           </h3>
           <h3>
-            <label for="password" id="password">Password</label>
+            <label for="password">Password</label>
             <input type="password" id="password" name="password" 
               placeholder="Password" required="required"></input>
           </h3>
@@ -25,5 +33,10 @@
         </form>
         <p>¿Aun no estas registrado?</p><a th:href="@{/registro}" href="/registro">Registrate Aqui</a>
       </div>
+    </div>
+    <div>
+      <th:block th:replace="frags/pie.html">
+         Aqui va lo que hay en header, esto no se ve
+      </th:block>
     </div>
 </body></html>
