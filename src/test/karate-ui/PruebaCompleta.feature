@@ -21,7 +21,7 @@ Scenario: ADMIN: login, add product | User 1: login & place price | User 2: logi
   * match html('title') contains 'Administrador Productos'
   * driver.screenshot()
 
-  # Pulsamos el botón de "Producto Nuevo" Para acceder al formulario de crear un producto nuevo
+  # Pulsamos el botón de "Nuevo Producto" Para acceder al formulario de crear un producto nuevo
   * click("a[class=newProduct]")
   * match html('title') contains 'Formulario para un producto'
   * driver.screenshot()
@@ -39,12 +39,12 @@ Scenario: ADMIN: login, add product | User 1: login & place price | User 2: logi
   * click("button[class=logout]")
   * match html('title') contains 'Login'
   
-  #----------------------------- USUARIO 1 (Sergiom23) ----------------------------------------------------
+  #----------------------------- USUARIO 1 (Alvaro09) ----------------------------------------------------
 
-  # Sergiom23 fija un precio nuevo 
+  # Alvaro09 fija un precio nuevo 
   * call read('precio.feature')
 
   #----------------------------- USUARIO 2 (danidassler) --------------------------------------------------
 
-  #Danidassler realiza una compra con el precio fijado por Sergiom23
+  #Danidassler realiza una compra con el precio fijado por Alvaro09
   * call read('compra.feature')

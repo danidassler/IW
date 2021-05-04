@@ -31,7 +31,7 @@ Scenario: login & puja & confirm
   * driver.screenshot()
 
   # Incluimos la cantidad de dinero a pujar, el campo de "Tiempo de expiración" lo dejamos por defecto a 1 dia
-  * input('#precio', '480')
+  * input('#precio', '450')
 
   # Pulsamos el boton para realizar la puja, comprobamos que nos ha redirigido a la misma página.
   # Si nuestra puja es la mejor, aparecerá en la informacion de la parte izquierda de la pagina.

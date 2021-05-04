@@ -9,7 +9,7 @@
 
 		<h1>New Chance</h1>
 		
-		<h2>Fecha 03-04-2021</h2>
+		<h2>Fecha 04-05-2021 --- La explicación de las pruebas se encuentra debajo de las vistas</h2>
 
 		<p>Enumeración de las vistas:</p>
 		<p>Todas las vistas tendrán un header y un pie como fragmentos</p>
@@ -42,8 +42,15 @@
 
 		<h2> Pruebas: </h2>
 			<ul>
-				<li><b>compra.feature:</b> El objetivo de la prueba es realizar una de las principales actividades de la web, comprar un producto. En este feature hacemos login en la aplicación con el usuario "danidassler" llamando a login-danidassler.feature, después accedemos a la tienda y pinchamos en el primer producto. Una vez en la página del producto, seleccionamos el botón de "comprar ya" y llegaremos a la página de confirmación de compra donde al pulsar el boton de "finalizar compra" habremos realizado la operación al completo. Para comprobar que nuestro saldo se ha reducido y la operación sale en nuestro perfil, accedemos a la pagina del perfil del usuario.</li>
+				<li><b>login-Admin.feature:</b>El objetivo de esta prueba es simplemente hacer login en la aplicacion con un usuario ADMIN, mas concretamente con el usuario "TheRealJin". </li>
+				<li><b>login-danidassler.feature:</b> El objetivo de esta prueba es hacer login en la aplicacion con un usuario de tipo USER, mas concretamente con el usuario "danidassler".</li>
+				<li><b>login-alvaro09.feature:</b> El objetivo de esta prueba es hacer login en la aplicacion con un usuario de tipo USER, mas concretamente con el usuario "alvaro09".</li>
+				<li><b>login-sergiom23.feature:</b>  El objetivo de esta prueba es hacer login en la aplicacion con un usuario de tipo USER, mas concretamente con el usuario "sergiom23".</li>
+				<li><b>compra.feature:</b> El objetivo de la prueba es realizar una de las principales actividades de la web, comprar un producto.  En este feature hacemos login en la aplicación con el usuario "danidassler" llamando a login-danidassler.feature, después accedemos a la tienda y pinchamos en el primer producto. Una vez en la página del producto, seleccionamos el botón de "comprar ya" y llegaremos a la página de confirmación de compra donde al pulsar el boton de "finalizar compra" habremos realizado la operación al completo. Para comprobar que nuestro saldo se ha reducido y la operación sale en nuestro perfil, accedemos a la pagina del perfil del usuario.</li>
 				<li><b>puja.feature:</b> El objetivo de la prueba es realizar una de las principales actividades de la web, pujar por un producto. En este feature hacemos login en la aplicación con el usuario "sergiom23" llamando a login-sergiom23.feature, después accedemos a la tienda y pinchamos en el primer producto. Una vez en la página del producto, seleccionamos el botón de "pujar" y llegaremos a la página de puja donde rellenaremos los campos del formulario necesarios para pujar y pulsaremos el boton "pujar", despues de esto, habremos realizado la operación al completo. Para comprobar que nuestro saldo se ha reducido y la operación sale en nuestro perfil, accedemos a la pagina del perfil del usuario.</li>
+				<li><b>precio.feature:</b> El objetivo de esta prueba es realizar otra de las actividades principales de la pagina web, fijar un precio por un producto que quieres vender. Para ello hacemos login con un usuario tipo USER (alvaro09) y accedemos al primer producto de la tienda (Yeezy 700). Pinchamos en el boton "fijar precio" el cual nos llevara a una pagina con un pequeño formulario donde incluiremos el precio que deseemos. Para comprobar que se ha fijado el precio por nuestro producto nos redirigimos al perfil donde debe aparecer una nueva fila con la informacion en la tabla de "Productos que estas vendiendo". Despues hacemos logout. </li>
+				<li><b>PruebaCompleta.feature </b>: El objetivo de esta prueba e sprobar el funcionamiento de la aplicacion probando todas sus principales funciones (usando las pruebas descritas anteriormente). Primero hacemos login con el usuario tipo ADMIN (login-Admin.feature). Despues el admin se encarga de incluir un nuevo producto en la tienda pinchando en el boton de "Nuevo Producto" dentro de la pagina "Administrar Productos". Al pulsar en el boton accedemos a una pagina con un formulario donde rellenaremos los datos obligatorios. Despues de incluir el producto hacemos logout. A continuación llamamos a la prueba de <b>"precio.feature"</b> donde el usuario alvaro09 fijara un precio por el primer producto de la tienda. Despues llamaremos a <b>"compra.feature"</b> donde el usuario danidassler comprará directamente el primer producto de la tienda aceptand el precio incluido por Alvaro09.  </li>
+				<li><b>restaura.feature: </b>POR HACER (cuando se solucione el problema). El objetivo de esta prueba es añadir saldos y eliminar las pujas que se han hecho en los anteriores pruebas con la finalidad de dejar el estado de la aplicacion similar al estado inicial de esta, para que las prueba de "PruebaCompleta" se pueda volver a ajecutar directamente sin tener que estar reiniciando la ejecucion de la aplicacion.</b> </li>
 			</ul>
 
 
