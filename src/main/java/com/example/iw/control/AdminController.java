@@ -212,4 +212,11 @@ public class AdminController {
             return "administrarUsuario";
     }
 
+    @GetMapping("/adminChat/{id}")
+    public String adminChat(@PathVariable long id, Model model, HttpSession session) {
+        model.addAttribute("users", entityManager.createQuery(
+            "SELECT u FROM Usuario u").getResultList());
+        return "adminChat";
+}
+
 }

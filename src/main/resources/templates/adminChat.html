@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html 
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+	<title>Mensajes</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+	<script th:src="@{/js/simple-datatables-2.1.10.min.js}"></script>
+	<link th:href="@{/css/simple-datatables-2.1.10.css}" rel="stylesheet">
+</head>
+<body>
+    <nav th:replace="frags/nav.html :: nav">
+		Nav goes here
+	</nav>
+    <div>
+        <th:block th:replace="frags/header.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+	
+	<div class="container">
+        <div class="main">
+        <h1>Mensajes recibidos</h1>
+        
+        <table class="datatable" id="datatable"></table>
+        
+        </div>
+	</div>	
+
+	<div class="sidebar">
+		<form th:action="@{/perfil/idOfTarget/msg}" method="POST">
+
+		<select id="idOfTarget" onchange="changeFunc();">
+            <option>Atención al Cliente</option>
+			<option th:each="user: ${users}" th:value="${user.id}" th:text="${user.username}">mfreire</option>
+		</select>
+		<textarea id="men" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea>
+		<button id="sendmsg" type="submit">Enviar</button>
+		</form>
+	</div>
+
+	<script>
+
+	function formatDate(d) {
+		// 2020-03-23T10:48:11.074 => 23/3/2020@10:48:18
+		return new Date(d).toLocaleString("es-ES").split(" ").join("@")
+	}
+
+    function changeFunc() {
+    var selectBox = document.getElementById("idOfTarget");
+    var selectedValue = selectBox.options[selectBox.selectedIndex].text;
+	console.log(dt);
+    var dt2 = $("#datatable").dataTable(
+        { 
+		    ajax: {
+		        url: config.rootUrl + "chat/received", // empieza siempre por config.rootUrl
+		        load: function(xhr) {
+		        	let data = JSON.parse(xhr.responseText);
+		        	for (let i=0; i<data.length; i++) {
+		        		let row = data[i];
+		        		row.sent = formatDate(row.sent);
+		        		if (row.received) {
+		        			row.received = formatDate(row.received);
+		        		}
+		        	}
+		        	return JSON.stringify(data);
+		        }
+		    }
+		}
+	);
+    dt = dt2;
+   }
+
+   var dt = new simpleDatatables.DataTable(
+		'#datatable', { 
+		    ajax: {
+		        url: config.rootUrl + "chat/received", // empieza siempre por config.rootUrl
+		        load: function(xhr) {
+		        	let data = JSON.parse(xhr.responseText);
+		        	for (let i=0; i<data.length; i++) {
+		        		let row = data[i];
+		        		row.sent = formatDate(row.sent);
+		        		if (row.received) {
+		        			row.received = formatDate(row.received);
+		        		}
+		        	}
+		        	return JSON.stringify(data);
+		        }
+		    }
+		}
+	);
+	// mostrando una tabla dinámica con datos cargados del servidor vía AJAX
+
+	// envío de mensajes vía AJAX, sin recargar la página
+	document.addEventListener("DOMContentLoaded", () => {
+		let b = document.getElementById("sendmsg");
+		b.onclick = (e) => {
+			let idOfTarget = document.getElementById("idOfTarget").value;
+			let url = b.parentNode.action.replace("idOfTarget", idOfTarget);
+			console.log(url);
+			e.preventDefault();
+			console.log(b, b.parentNode)
+			dt.rows().add(["TheRealJin", "danidassler", formatDate(new Date().toISOString()), "", document.getElementById("men").value, idOfTarget]);
+			go(url, 'POST', {men: 
+					document.getElementById("men").value})
+				.then(d => console.log("happy", d))
+				.catch(e => console.log("sad", e))
+		}
+	});
+
+	// sobreescribid esta funcion para especificar qué sucede cuando recibes un mensaje
+	// aquí estoy metiendo el mensaje al final de la tabla
+	ws.receive = (m) => {
+		dt.rows().add([m.from, m.to, formatDate(new Date().toISOString()), "", m.text, m.id]);		
+	}
+	
+	</script>
+</body>
+</html>

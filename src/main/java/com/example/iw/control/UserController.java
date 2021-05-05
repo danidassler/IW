@@ -228,7 +228,39 @@ public class UserController {
 		return "{\"result\": \"message sent.\"}";
 	}	
 
+	@PostMapping("/chatconadmin")
+	@ResponseBody
+	@Transactional
+	public String postMsg3( 
+			@RequestBody JsonNode o, Model model, HttpSession session) 
+		throws JsonProcessingException {
+		
+		String text = o.get("men").asText();
+		Usuario sender = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+		
+		// construye mensaje, lo guarda en BD
+		List<Usuario> listUsuario = entityManager.createNamedQuery("Usuario.findAdmin", Usuario.class).getResultList();
+		Mensaje m = new Mensaje();
+		m.setReceptor(null); 
+		m.setEmisor(sender);
+		m.setFechaEnvio(LocalDateTime.now());
+		m.setMensaje(text);
+		entityManager.persist(m);
+		entityManager.flush(); // to get Id before commit
+			
+			// construye json
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode rootNode = mapper.createObjectNode();
+		rootNode.put("from", sender.getUsername());
+		rootNode.put("to", "");
+		rootNode.put("text", text);
+		rootNode.put("id", m.getId());
+		String json = mapper.writeValueAsString(rootNode);
 	
+		messagingTemplate.convertAndSend("/topic/admin", json);
+
+		return "{\"result\": \"message sent.\"}";
+	}	
 	@PostMapping("/{id}/photo")
 	public String postPhoto(
 			HttpServletResponse response,
