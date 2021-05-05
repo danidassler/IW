@@ -1,81 +1,72 @@
-.contenidoLogin{
-	padding: 20px;
+.login-dark {
+  height: 821px;
+  background:#30d9ff url(../../assets/img/star-sky.jpg);
+  background-size:cover;
+  position:relative;
 }
-body{
-  background-image: url("/img/fondoCuenta.jpg");
-  background-size: cover;
-}
-.login {
-  margin:0 auto;
-  max-width:500px;
-  font-family: 'Ubuntu', sans-serif;
-}
-.login-header {
+
+.login-dark form {
+  max-width:320px;
+  width:90%;
+  background-color:#1e2833;
+  padding:40px;
+  border-radius:4px;
+  transform:translate(-50%, -50%);
+  position:absolute;
+  top:50%;
+  left:50%;
   color:#fff;
-  text-align:center;
+  box-shadow:3px 3px 4px rgba(0,0,0,0.2);
 }
-/* .login-header h1 {
-   text-shadow: 0px 5px 15px #000; */
 
-.login-form {
-  border:.5px solid #fff;
-  background:#4facff;
-  border-radius:10px;
-  box-shadow:0px 0px 10px #000;
-}
-.login-form h3 {
-  text-align:left;
-  margin-left:40px;
-  color:rgb(22, 59, 184);
-}
-.login-form p{
-  color: rgb(22, 59, 184);
-}
-.login-form {
-  box-sizing:border-box;
-  padding-top:15px;
-	padding-bottom:10%;
-  margin:5% auto;
+.login-dark .illustration {
   text-align:center;
+  padding:15px 0 20px;
+  font-size:100px;
+  color:#2980ef;
 }
-.login input[type="text"],
-.login input[type="password"],
-.login input[type="password2"],
-.login input[type="name"],
-.login input[type="surname"],
-.login input[type="username"] {
-  max-width:400px;
-	width: 80%;
-  line-height:3em;
-  font-family: 'Ubuntu', sans-serif;
-  margin:1em 0em;
-  border-radius:5px;
-  border:2px solid #f2f2f2;
+
+.login-dark form .form-control {
+  background:none;
+  border:none;
+  border-bottom:1px solid #434a52;
+  border-radius:0;
+  box-shadow:none;
   outline:none;
-  padding-left:5px;
+  color:inherit;
 }
 
-.login input[type="radio"] {
-  max-width:400px;
-  width: 10%;
+.login-dark form .btn-primary {
+  background:#214a80;
+  border:none;
+  border-radius:4px;
+  padding:11px;
+  box-shadow:none;
+  margin-top:26px;
+  text-shadow:none;
+  outline:none;
 }
 
-.login-form button {
-  height:30px;
-  width:100px;
-  background:#fff;
-  border:2px 2px solid #f2f2f2;
-  border-bottom: 2px;
-  border-top: 2px;
-  border-radius:20px;
-  color: slategrey;
-  text-transform:uppercase;
-  font-family: 'Ubuntu', sans-serif;
-  cursor:pointer;
+.login-dark form .btn-primary:hover, .login-dark form .btn-primary:active {
+  background:#214a80;
+  outline:none;
 }
-.sign-up{
-  color:#f2f2f2;
-  margin-left:-70%;
-  cursor:pointer;
-  text-decoration:underline;
+
+.login-dark form .forgot {
+  display:block;
+  text-align:center;
+  font-size:12px;
+  color:#6f7a85;
+  opacity:0.9;
+  text-decoration:none;
+}
+
+.login-dark form .forgot:hover, .login-dark form .forgot:active {
+  opacity:1;
+  text-decoration:none;
+  text-align: center;
+}
+
+.login-dark form .btn-primary:active {
+  transform:translateY(1px);
 }

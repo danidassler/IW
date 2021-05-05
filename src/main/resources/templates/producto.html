@@ -2,37 +2,93 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Producto</title>
 </head>
 <body>
     <nav th:replace="frags/nav.html :: nav">
 		Nav goes here
 	</nav>
+    
     <div>
         <th:block th:replace="frags/header.html">
             Aqui va lo que hay en header, esto no se ve
         </th:block>
     </div>
 
+    <div class="container-fluid">
+        <div class="row align-items-center mt-5 ml-5 mr-5 mb-1 border rounded p-3">
+          <div class="col-4 text-center img-fluid">
+            <img class="rounded p-2" th:src="@{/producto/{id}/photo(id=${prod.id})}" alt="foto" width=300px/>
+            <p sec:authorize="isAuthenticated()" th:if="${session.u.hasRole('ADMIN')}"><a class="btn btn-dark p-2 mt-3" th:href="@{'/admin/modificarProducto/' + ${prod.id}}" role="button">Editar Producto </a></p>
+          </div>    
+          <div class="col-8 text-center border-left">
+            <div class="row align-items-center m-4">
+                <div class="col-12">
+                    <p class="h1" th:text="${prod.nombre}"><b>Producto</b></p>
+                </div>
+            </div>
+            <div class="row align-items-center border-bottom pb-4">
+                <div class="col-6">
+                    <p class="h6">Talla: <span th:text="${prod.talla}"> T</span></p>
+                </div>
+                <div class="col-6">
+                    <p class="h6" th:if="${ultimaVenta == 0}">Ultima venta: --- €</p>
+                    <p class="h6" th:if="${ultimaVenta != 0}">Ultima venta: <span th:text="${ultimaVenta}"> UV</span>€ </p>
+                </div>
+            </div>
 
-    <b><p th:text="${prod.nombre}">Producto</p></b>
+            <div class="row align-items-center pt-4">
+                <div class="col-6 h3 text-right">
+                    <p th:if="${menorPrecio != 0}"> 
+                        <a class="productoComprarYa btn btn-success btn-xs col-lg-12" th:href="@{'/producto/compra/' + ${prod.id}}" role="button"  style="margin-bottom:4px;white-space: normal;">Comprar ya
+                            <br><span th:text="${menorPrecio}"> LA</span>€
+                        </a></p>
+                    <p th:if="${menorPrecio == 0}"> <a class="productoComprarYa btn btn-success disabled btn-xs col-lg-12" th:href="@{'/producto/compra/' + ${prod.id}}" role="button" aria-disabled="true"  style="margin-bottom:4px;white-space: normal;">Comprar ya
+                        <br>--- €
+                    </a> </p>
+                </div>
+                <div class="col-6 h3 text-left">
+                    <p th:if="${mejorPuja != 0}">
+                        <a class="btn btn-danger btn-xs col-lg-12" th:href="@{'/producto/venta/' + ${prod.id}}" role="button"  style="margin-bottom:4px;white-space: normal;">Vender ya
+                            <br><span th:text="${mejorPuja}"> HB</span>€  
+                        </a></p>
+                    <p th:if="${mejorPuja == 0}"> 
+                        <a class="btn btn-danger disabled btn-xs col-lg-12" th:href="@{'/oferta/pujar/' + ${prod.id}}" role="button" aria-disabled="true"  style="margin-bottom:4px;white-space: normal;">Vender ya <br>--- € </a></p>
+                </div>
+            </div>
+            <div class="row align-items-center pb-4 border-bottom">
+                <div class="col-6 h3 text-right">
+                    <a class="pujarProducto btn btn-outline-success col-lg-12" th:href="@{'/oferta/pujar/' + ${prod.id}}" role="button">Pujar</a>  
 
-    <p sec:authorize="isAuthenticated()"><button th:if="${session.u.hasRole('ADMIN')}" type="button"> <a th:href="@{'/admin/modificarProducto/' + ${prod.id}}">Editar Producto </a></button></p>
-    <img th:src="@{/producto/{id}/photo(id=${prod.id})}" alt="foto" width=200px/>
-    <p th:text="${prod.desc}"> Descripción</p>
-    <p th:text="${prod.categorias}"> Categoria</p>
-    <p>Talla: <span th:text="${prod.talla}"> T</span></p>
-    <p th:if="${ultimaVenta != 0}">Ultima venta: <span th:text="${ultimaVenta}"> UV</span>€ <button><a th:href="@{'/oferta/listaVentas/' + ${prod.id}}">Ver todas las ventas</a></button></p>
-    <p th:if="${ultimaVenta == 0}">Ultima venta: --- €</p>
-    <p th:if="${menorPrecio != 0}">Precio mas bajo: <span th:text="${menorPrecio}"> LA</span>€  <button><a class="productoComprarYa" th:href="@{'/producto/compra/' + ${prod.id}}">Comprar ya</a></button>  <button><a class="precioProducto" th:href="@{'/oferta/fijarPrecio/' + ${prod.id}}">Fijar Precio</a></button> <button><a th:href="@{'/oferta/listaPrecios/' + ${prod.id}}">Ver lista de precios</a></button></p>
-    <p th:if="${menorPrecio == 0}">Precio mas bajo: --- €  <button><a th:href="@{'/oferta/fijarPrecio/' + ${prod.id}}">Fijar precio</a></button> </p>
-    <p th:if="${mejorPuja != 0}">Puja mas alta: <span th:text="${mejorPuja}"> HB</span>€  <button><a th:href="@{'/producto/venta/' + ${prod.id}}">Vender ya</a></button> <button><a class="pujarProducto" th:href="@{'/oferta/pujar/' + ${prod.id}}">Pujar</a></button>   <button><a th:href="@{'/oferta/listaPujas/' + ${prod.id}}">Ver lista de pujas</a></button></p>
-    <p th:if="${mejorPuja == 0}">Puja mas alta: --- €  <button><a th:href="@{'/oferta/pujar/' + ${prod.id}}">Pujar</a></button></p>
-   <!-- ruta del proyecto  es/ucm/fdi/...
-    hacer un getmapping por vista
-    hacer en resources templates un html por vista
-    el getmapping hace un return que es el nombre del templates
-    Tenemos que tener fragmentos - por ejemplo productos en caso de tiendas -->
+                </div>
+                <div class="col-6 h3 text-left">
+                    <a class="precioProducto btn btn-outline-danger col-lg-12" th:href="@{'/oferta/fijarPrecio/' + ${prod.id}}" role="button">Fijar Precio</a>
+                </div>
+            </div>
+            <div class="row align-items-center p-4">
+                <div class="col">
+                    <a class="btn btn-outline-primary" th:href="@{'/oferta/listaPujas/' + ${prod.id}}" role="button">Ver lista de pujas</a>
+                </div>
+                <div class="col">
+                    <a class="btn btn-outline-primary" th:href="@{'/oferta/listaPrecios/' + ${prod.id}}" role="button">Ver lista de precios</a>
+
+                </div>
+                <div class="col">
+                    <a class="btn btn-outline-primary" th:if="${ultimaVenta != 0}" th:href="@{'/oferta/listaVentas/' + ${prod.id}}" role="button">Ver todas las ventas</a>
+                    <a class="btn btn-outline-primary disabled" th:if="${ultimaVenta == 0}" th:href="@{'/oferta/listaVentas/' + ${prod.id}}" role="button" aria-disabled="true">Ver todas las ventas</a>
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="row align-items-center m-2 p-3">
+            <div class="col-12 text-center">
+                <p class="h4"> Descripción </p>
+                <p class="h5 text-secondary" th:text="${prod.desc}"></p>
+            </div>
+        </div>
+    </div>
+
     <th:block th:replace="frags/pie.html">
         Aqui va lo que hay en header, esto no se ve
     </th:block>
