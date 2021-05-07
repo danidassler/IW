@@ -1,19 +1,31 @@
 package com.example.iw.model;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-
-import lombok.AllArgsConstructor;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import java.time.format.DateTimeFormatter;
 import lombok.Data;
 import lombok.Getter;
+import lombok.AllArgsConstructor;
+
 
 @Entity
 @Data
+@NamedQueries({
+	@NamedQuery(name="Mensaje.recibidos",
+			query="SELECT m FROM Mensaje m "
+					+ "WHERE m.emisor.id = :clienteId AND m.receptor.id = :userId"),
+	@NamedQuery(name="Mensaje.enviados",
+			query="SELECT m FROM Mensaje m "
+					+ "WHERE m.emisor.id = :userId AND m.receptor.id = :clienteId")
+
+        })
 public class Mensaje implements Transferable<Mensaje.Transfer>{
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

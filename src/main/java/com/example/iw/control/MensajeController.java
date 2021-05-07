@@ -54,18 +54,18 @@ public class MensajeController {
 
 		return  mensajes;
 	}	
-	@GetMapping(path = "/received/{id}", produces = "application/json") //Recibe id de un cliente, se creará 2 queries para recibir todos los mensajes recibidos y enviados entre el admin y ese user
+	@GetMapping(path = "/received/{clientId}", produces = "application/json") //Recibe id de un cliente, se creará 2 queries para recibir todos los mensajes recibidos y enviados entre el admin y ese user
 	@Transactional
 	@ResponseBody
-	public List<Mensaje.Transfer> messagesFromId(HttpSession session) {
-		long userId = ((Usuario)session.getAttribute("u")).getId();		
-		Usuario u = entityManager.find(Usuario.class, userId);
-		log.info("Generating message list for user {} ({} messages)", 
-				u.getUsername(), u.getMensajesRecibidos().size());		
-		List<Mensaje.Transfer> mensajes = new ArrayList<>();
-		mensajes.addAll(u.getMensajesRecibidos().stream().map(Transferable::toTransfer).collect(Collectors.toList()));
-		mensajes.addAll(u.getMensajesEnviados().stream().map(Transferable::toTransfer).collect(Collectors.toList()));
-
+	public List<Mensaje.Transfer> messagesFromId(@PathVariable long clientId, HttpSession session) {
+		List<Mensaje.Transfer> mensajes = new ArrayList<>(); //Ordenar por sent para que tenga coherencia
+		if(clientId != 0){
+			long userId = ((Usuario)session.getAttribute("u")).getId();		
+			List<Mensaje> mensajesRecibidos = entityManager.createNamedQuery("Mensaje.recibidos").setParameter("userId", userId).setParameter("clienteId", clientId).getResultList();
+			List<Mensaje> mensajesEnviados = entityManager.createNamedQuery("Mensaje.enviados").setParameter("userId", userId).setParameter("clienteId", clientId).getResultList();
+			mensajes.addAll(mensajesRecibidos.stream().map(Transferable::toTransfer).collect(Collectors.toList()));
+			mensajes.addAll(mensajesEnviados.stream().map(Transferable::toTransfer).collect(Collectors.toList()));
+		}
 
 		return  mensajes;
 	}	

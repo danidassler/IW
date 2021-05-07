@@ -31,7 +31,7 @@
 		<form th:action="@{/perfil/idOfTarget/msg}" method="POST">
 
 		<select id="idOfTarget" onchange="changeFunc();">
-            <option>Atención al Cliente</option>
+            <option value="0">Canal Admin</option>
 			<option th:each="user: ${users}" th:value="${user.id}" th:text="${user.username}">mfreire</option>
 		</select>
 		<textarea id="men" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea>
@@ -48,35 +48,30 @@
 
     function changeFunc() {
     var selectBox = document.getElementById("idOfTarget");
-    var selectedValue = selectBox.options[selectBox.selectedIndex].text;
+    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
 	console.log(dt);
-    var dt2 = $("#datatable").dataTable(
-        { 
-		    ajax: {
-		        url: config.rootUrl + "chat/received", // empieza siempre por config.rootUrl
-		        load: function(xhr) {
-		        	let data = JSON.parse(xhr.responseText);
-		        	for (let i=0; i<data.length; i++) {
-		        		let row = data[i];
-		        		row.sent = formatDate(row.sent);
-		        		if (row.received) {
-		        			row.received = formatDate(row.received);
-		        		}
-		        	}
-		        	return JSON.stringify(data);
-		        }
+	dt.rows().remove("all");
+
+	$.get(config.rootUrl + "chat/received/" + selectedValue, function(data){
+		for (let i=0; i<data.length; i++) {
+		    let row = data[i];
+		    row.sent = formatDate(row.sent);
+		    if (row.received) {
+		        row.received = formatDate(row.received);
 		    }
+			dt.rows().add([row.from, row.to, formatDate(new Date().toISOString()), "", row.text, row.id])
 		}
-	);
-    dt = dt2;
+	})
    }
 
-   var dt = new simpleDatatables.DataTable(
+   let dt = new simpleDatatables.DataTable(
 		'#datatable', { 
 		    ajax: {
-		        url: config.rootUrl + "chat/received", // empieza siempre por config.rootUrl
+		        url: config.rootUrl + "chat/received/" + document.getElementById("idOfTarget").value, // empieza siempre por config.rootUrl
 		        load: function(xhr) {
+					console.log(xhr);
 		        	let data = JSON.parse(xhr.responseText);
+					console.log(data)
 		        	for (let i=0; i<data.length; i++) {
 		        		let row = data[i];
 		        		row.sent = formatDate(row.sent);
