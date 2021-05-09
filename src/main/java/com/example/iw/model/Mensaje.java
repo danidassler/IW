@@ -23,7 +23,10 @@ import lombok.AllArgsConstructor;
 					+ "WHERE m.emisor.id = :clienteId AND m.receptor.id = :userId"),
 	@NamedQuery(name="Mensaje.enviados",
 			query="SELECT m FROM Mensaje m "
-					+ "WHERE m.emisor.id = :userId AND m.receptor.id = :clienteId")
+					+ "WHERE m.emisor.id = :userId AND m.receptor.id = :clienteId"),
+	@NamedQuery(name="Mensaje.findNullMsg",
+			query="SELECT m FROM Mensaje m "
+					+ "WHERE m.emisor.id = :receptorId AND m.receptor.id is NULL")
 
         })
 public class Mensaje implements Transferable<Mensaje.Transfer>{

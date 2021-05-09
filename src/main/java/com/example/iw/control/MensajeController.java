@@ -69,16 +69,4 @@ public class MensajeController {
 
 		return  mensajes;
 	}	
-
-	/*
-	@GetMapping(path = "/unread", produces = "application/json")
-	@ResponseBody
-	public String checkUnread(HttpSession session) {
-		long userId = ((Usuario)session.getAttribute("u")).getId();		
-		long unread = entityManager.createNamedQuery("Mensaje.countUnread", Long.class)
-			.setParameter("userId", userId)
-			.getSingleResult();
-		session.setAttribute("unread", unread);
-		return "{\"unread\": " + unread + "}";
-	}*/
 }

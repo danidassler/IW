@@ -34,8 +34,8 @@
             <option value="0">Canal Admin</option>
 			<option th:each="user: ${users}" th:value="${user.id}" th:text="${user.username}">mfreire</option>
 		</select>
-		<textarea id="men" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea>
-		<button id="sendmsg" type="submit">Enviar</button>
+		<textarea id="men" style="display:none;" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea>
+		<button id="sendmsg" style="display:none;" type="submit">Enviar</button>
 		</form>
 	</div>
 
@@ -51,6 +51,14 @@
     var selectedValue = selectBox.options[selectBox.selectedIndex].value;
 	console.log(dt);
 	dt.rows().remove("all");
+	if(selectedValue == "0"){
+		document.getElementById('men').style.display = "none";
+		document.getElementById('sendmsg').style.display = "none";
+	}
+	else{
+		document.getElementById('men').style.display = "block";
+		document.getElementById('sendmsg').style.display = "block";
+	}
 
 	$.get(config.rootUrl + "chat/received/" + selectedValue, function(data){
 		for (let i=0; i<data.length; i++) {
@@ -59,7 +67,7 @@
 		    if (row.received) {
 		        row.received = formatDate(row.received);
 		    }
-			dt.rows().add([row.from, row.to, formatDate(new Date().toISOString()), "", row.text, row.id])
+			dt.rows().add([formatDate(new Date().toISOString()), row.text])
 		}
 	})
    }
@@ -95,7 +103,7 @@
 			console.log(url);
 			e.preventDefault();
 			console.log(b, b.parentNode)
-			dt.rows().add(["TheRealJin", "danidassler", formatDate(new Date().toISOString()), "", document.getElementById("men").value, idOfTarget]);
+			dt.rows().add([formatDate(new Date().toISOString()), document.getElementById("men").value]);
 			go(url, 'POST', {men: 
 					document.getElementById("men").value})
 				.then(d => console.log("happy", d))
@@ -106,7 +114,10 @@
 	// sobreescribid esta funcion para especificar qué sucede cuando recibes un mensaje
 	// aquí estoy metiendo el mensaje al final de la tabla
 	ws.receive = (m) => {
-		dt.rows().add([m.from, m.to, formatDate(new Date().toISOString()), "", m.text, m.id]);		
+		console.log(m);
+		if(document.getElementById("idOfTarget").value == m.to || (document.getElementById("idOfTarget").value == m.from && m.to != "0")){
+			dt.rows().add([formatDate(new Date().toISOString()), m.text]);
+		}		
 	}
 	
 	</script>

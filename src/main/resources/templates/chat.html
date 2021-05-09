@@ -32,7 +32,7 @@
 	</div>
 
 	<div class="sidebar" th:if="${session.u.hasRole('USER')}">
-		<form th:action="@{/perfil/msg}" method="POST">
+		<form th:action="@{/perfil/chatconadmin}" method="POST">
 		<textarea id="men" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea>
 		<button id="sendmsg2" type="submit">Enviar</button>
 		</form>
@@ -70,7 +70,7 @@
 		b.onclick = (e) => {
 			e.preventDefault();
 			console.log(b, b.parentNode)
-			dt.rows().add(["TheRealJin", "danidassler", formatDate(new Date().toISOString()), "", document.getElementById("men").value, "0"]);
+			dt.rows().add([formatDate(new Date().toISOString()), document.getElementById("men").value]);
 			go("/perfil/chatconadmin", 'POST', {men: 
 					document.getElementById("men").value})
 				.then(d => console.log("happy", d))
@@ -81,7 +81,7 @@
 	// sobreescribid esta funcion para especificar qué sucede cuando recibes un mensaje
 	// aquí estoy metiendo el mensaje al final de la tabla
 	ws.receive = (m) => {
-		dt.rows().add([m.from, m.to, formatDate(new Date().toISOString()), "", m.text, m.id]);		
+		dt.rows().add([formatDate(new Date().toISOString()), m.text]);		
 	}
 	
 	</script>

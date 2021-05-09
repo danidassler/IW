@@ -163,31 +163,36 @@ public class UserController {
 		throws JsonProcessingException {
 		
 		String text = o.get("men").asText();
-		Usuario u = entityManager.find(Usuario.class, id);
+		Usuario receiver = entityManager.find(Usuario.class, id);
 		Usuario sender = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
-		model.addAttribute("user", u);
-		
+		model.addAttribute("user", receiver);
+		//En caso de haber un mensaje con Receptor null, se queda el mensaje TODO
+		/*List<Mensaje> mNull = entityManager.createNamedQuery("Mensaje.findNullMsg", Usuario.class).setParameter("receptorId", receiver.id).getResultList();
+		for (Mensaje mn : mNull){
+
+		}
+		*/
 		// construye mensaje, lo guarda en BD
 		Mensaje m = new Mensaje();
-		m.setReceptor(u);
+		m.setReceptor(receiver);
 		m.setEmisor(sender);
 		m.setFechaEnvio(LocalDateTime.now());
 		m.setMensaje(text);
 		entityManager.persist(m);
-		entityManager.flush(); // to get Id before commit
+		entityManager.flush();
 		
 		// construye json
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode rootNode = mapper.createObjectNode();
-		rootNode.put("from", sender.getUsername());
-		rootNode.put("to", u.getUsername());
+		rootNode.put("from", sender.getId());
+		rootNode.put("to", receiver.getId());
 		rootNode.put("text", text);
 		rootNode.put("id", m.getId());
 		String json = mapper.writeValueAsString(rootNode);
 		
 		log.info("Sending a message to {} with contents '{}'", id, json);
 
-		messagingTemplate.convertAndSend("/user/"+u.getUsername()+"/queue/updates", json);
+		messagingTemplate.convertAndSend("/user/"+receiver.getUsername()+"/queue/updates", json);
 		return "{\"result\": \"message sent.\"}";
 	}	
 
@@ -239,7 +244,6 @@ public class UserController {
 		Usuario sender = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
 		
 		// construye mensaje, lo guarda en BD
-		List<Usuario> listUsuario = entityManager.createNamedQuery("Usuario.findAdmin", Usuario.class).getResultList();
 		Mensaje m = new Mensaje();
 		m.setReceptor(null); 
 		m.setEmisor(sender);
@@ -251,10 +255,9 @@ public class UserController {
 			// construye json
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode rootNode = mapper.createObjectNode();
-		rootNode.put("from", sender.getUsername());
-		rootNode.put("to", "");
+		rootNode.put("from", sender.getId());
+		rootNode.put("to", "0");
 		rootNode.put("text", text);
-		rootNode.put("id", m.getId());
 		String json = mapper.writeValueAsString(rootNode);
 	
 		messagingTemplate.convertAndSend("/topic/admin", json);
