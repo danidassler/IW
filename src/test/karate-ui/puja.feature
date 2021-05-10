@@ -1,19 +1,12 @@
 Feature: login, acceso a tienda, pujar en el primer producto, comprobación en el perfil y logout.
 
-Background:
-  # para escribir tus propias pruebas, lee https://github.com/intuit/karate/tree/master/karate-core
-  # driver: chromium bajo linux; si usas google-chrome, puedes quitar executable (que es lo que usaría por defecto)
-  * configure driver = { type: 'chrome', showDriverLog: true }
-    
-
-
 Scenario: login & puja & confirm
 
   #IMPORTANTE: no repetir la ejecucion de los features sin volver a ejecutar la app.
   #estan hechos para que funcionen con los datos iniciales, ya que por ejemplo, un usuario no puede pujar 2 veces por el mismo producto y te redirige a diferentes paginas.
 
   # Hacemos login en la aplicacion con el usuario "sergiom23" y nos redirecciona al perfil del usuario
-  * call read('login-sergiom23.feature')
+  * call read('logins.feature@sergio')
 
   # Accedemos a la tienda
   * click("a[class=tienda]")
@@ -43,7 +36,3 @@ Scenario: login & puja & confirm
   * click("a[class=perfilUser]")
   * match html('title') contains 'Perfil'
   * driver.screenshot()
-
-  # Hacemos logout despues de realizar la puja.
-  * click("button[class=logout]")
-  * match html('title') contains 'Login'
