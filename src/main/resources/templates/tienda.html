@@ -16,20 +16,22 @@
             Aqui va lo que hay en header, esto no se ve
         </th:block>
     </div>
-    <p sec:authorize="isAuthenticated()">
-        <!--th:if="${!session.isEmpty()}"-->
-        <!-- También es viable de esta forma: (Elegir en el futuro cuál es preferible)
+    <div class="text-center mt-3">
+        <p sec:authorize="isAuthenticated()">
+            <!--th:if="${!session.isEmpty()}"-->
+            <!-- También es viable de esta forma: (Elegir en el futuro cuál es preferible)
 
-            <form th:action="@{/logout}" method="post">
-				<button type="submit">logout</button>
-			</form>
-        -->
-        
-        <button class="adminProductos" type="button" th:if="${session.u.hasRole('ADMIN')}" > <a class="adminProductos" th:href="@{/admin/adminProductos}">Administrar Producto </a></button>
-        <button class="btn btn-lg btn-primary btn-block" type="button" th:if="${session.u.hasRole('ADMIN')}"> <a th:href="@{/admin/formularioProducto}">Nuevo Producto </a></button>
-    </p>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit">logout</button>
+                </form>
+            -->
+            
+            <a class="btn btn-primary btn-xs adminProductos m-2" role="button" th:if="${session.u.hasRole('ADMIN')}" th:href="@{/admin/adminProductos}">Administrar Producto </a>
+            <a class="btn btn-primary btn-xs m-2" th:if="${session.u.hasRole('ADMIN')}" role="button" th:href="@{/admin/formularioProducto}">Nuevo Producto </a>
+        </p>
+    </div>
     <div class="div_tienda_tabla">
-    <table class="tabla_productos table table-borderless table-hover text-center container-fluid">
+    <table class="tabla_productos table align-middle table-borderless table-hover text-center container-fluid">
         <thead>
             <tr class="d-flex m-3">
                 <th class="col-3" scope="col">Imagen</th>
@@ -43,8 +45,8 @@
         </thead>
         <tbody>
             <tr class="d-flex m-3 p-3" th:each="p: ${prods}">
-                <td class="col-3 align-middle align-items-center"><img th:src="@{/producto/{id}/photo(id=${p.id})}" alt="foto" width="150" height="150"/></td>
-                <td class="col-3 align-middle align-items-center"><a class="productoTienda" th:href="@{'/producto/' + ${p.id}}" th:text="${p.nombre}">N</a></td>
+                <td class="col-3"><img class="img_tienda_producto"th:src="@{/producto/{id}/photo(id=${p.id})}" alt="foto" width="150" height="150"/></td>
+                <td class="col-3 align-middle align-items-center"><a class="productoTienda align-middle" th:href="@{'/producto/' + ${p.id}}" th:text="${p.nombre}">N</a></td>
                 <td class="col-2 align-middle align-items-center" th:text="${p.categorias}">C</td>
                 <td class="col-1 align-middle align-items-center" th:text="${p.talla} ">T</td>
                 <!--<td th:text="${mp}">MP</td>

@@ -5,7 +5,6 @@
     <style>
         td { padding: 1em; }
         table { padding: 1em; }
-        .in_table {border: 1px solid grey; text-align: center;}
     </style>
     <title>Puja de un producto</title>
 </head>
@@ -15,7 +14,59 @@
             Aqui va lo que hay en header, esto no se ve
         </th:block>
     </div>
-    <h4>Puja:</h4>
+
+    <div class="container-fluid">
+        <div class="row align-items-center mt-5 ml-5 mr-5 mb-4 border rounded p-3">
+            <div class="col-4 text-center img-fluid border-right">
+                <p class="font-weight-bold h3"><span th:text="${prod.nombre}">N</span></p>
+
+                <img class="rounded p-2" th:src="@{/producto/{id}/photo(id=${prod.id})}" alt="foto" width="300"/>
+            </div>
+            <div class="col-8">
+                <div class="row border-bottom">
+                    <div class="col border m-3">
+                        <table class="">
+                            <thead> 
+                                <td>
+                                    <p>Talla</p>
+                                </td>
+                                <td>
+                                    <p>Puja</p>
+                                </td>
+                            </thead>
+                            <tbody>
+                            <tr th:each="p: ${pujas}">    
+                                <td>
+                                    <span th:text="${prod.talla}">N</span>
+                                </td>
+                                <td>
+                                   <span th:text="${p.precio}">N</span>€
+                                </td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>
+                </div>    
+                <div class="row m-3">
+                    <div class="col">
+                        <p th:if="${mejorPuja != 0}">
+                            <a class="btn btn-danger btn-xs col-lg-12" th:href="@{'/producto/venta/' + ${prod.id}}" role="button"  style="margin-bottom:4px;white-space: normal;">Vender ya
+                                <br><span th:text="${mejorPuja}"> HB</span>€  
+                            </a></p>
+                        <p th:if="${mejorPuja == 0}"> 
+                            <a class="btn btn-danger disabled btn-xs col-lg-12" th:href="@{'/oferta/pujar/' + ${prod.id}}" role="button" aria-disabled="true"  style="margin-bottom:4px;white-space: normal;">Vender ya <br>--- € </a></p>
+                    </div>
+                    <div class="col">
+
+                    <a class="precioProducto btn btn-outline-danger col-lg-12" th:href="@{'/oferta/fijarPrecio/' + ${prod.id}}" role="button">Fijar Precio</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--<h4>Puja:</h4>
     <div>Esta vista mostrará el historial de las pujas que tiene un producto específico</div>
     <div>Será muy parecida al de mostrar los precios marcados por los vendedores sobre este producto</div>
     <table>
@@ -61,7 +112,7 @@
                 <p>Saldo disponible: 800 €</p>
             </td>
         </tr>
-    </table>
+    </table>-->
 
     <th:block th:replace="frags/pie.html">
         Aqui va lo que hay en header, esto no se ve

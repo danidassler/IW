@@ -80,7 +80,9 @@ nav>*{
 .logx form, .logx img {
 	display: inline;
 }
-
+img.img_tienda_producto{
+	vertical-align: baseline;
+}
 /* setup main container */
 div.container {
 	display: flex;
