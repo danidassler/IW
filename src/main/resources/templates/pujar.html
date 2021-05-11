@@ -17,7 +17,7 @@
     </div>
 
     <div class="container-fluid">
-        <div class="row align-items-center mt-5 ml-5 mr-5 mb-1 border rounded pb-3 mb-5">
+        <div class="row align-items-center m-5 border rounded pb-3">    
             <div class="col-4 text-center img-fluid p-3">
                 <div class="col-12 pb-2">
                     <p th:if="${menorPrecio != 0}">Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€</p>
@@ -30,40 +30,52 @@
             <div class="col-8 text-center border-left justify-content-center">
                 <div class="row align-items-center m-4">
                     <div class="col-12">
-                        <p class="h1" th:text="${prod.nombre}"><b>Producto</b></p>
+                        <p class="h1 font-monospace fw-bold" th:text="${prod.nombre}"><b>Producto</b></p>
                     </div>
                     <div class="col-12">
                         <p>Talla: <span th:text="${prod.talla}">N</span></p>
                     </div>
                 </div>
                 <form class="justify-content-center" method="post" th:action="@{'/oferta/pujar/' + ${prod.id}}">
-                    <div class="col-12">
-                        <h4>Información de la puja</h4>
-                    </div>
-                    <div class="col-12">
-                        <p>Ten en cuenta que al precio que establezcas se le sumarán el 9% de tasas y 10€ de envio
-                        El dinero sera restado de tu saldo al realizar la puja, y devuelto si la cancelas.</p>
-                    </div>
-                    <div class="col-12 row justify-content-center pb-2">
-                        <div class="input-group align-items-center">
-                            <label for="precio" class="sr-only">Precio de puja: </label>
-                            <input type="text" id="precio" name="precio" 
-                            class="form-control" placeholder="Precio" required="required"></input>
+                    <div class="row">
+                        <div class="col-12">
+                            <h4>Información de la puja</h4>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <p>Ten en cuenta que al precio que establezcas se le sumarán el 9% de tasas y 10€ de envio
+                            El dinero sera restado de tu saldo al realizar la puja, y devuelto si la cancelas.</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col row justify-content-center pb-2">
+                            <div class="input-group align-items-center">
+                                <label for="precio" class="sr-only">Precio de puja: </label>
+                                <input type="text" id="precio" name="precio" 
+                                class="form-control" placeholder="Precio" required="required"></input>
+                            </div>
+                        </div>
+                        <div class="col"></div>
+                    </div>
 
-                        <p>
-                            <label for="tiempoExpiracion" >Tiempo de expiración (dias): </label>
-                            <select name="tiempoExpiracion" class="form-select" aria-label="Default select example">
-                                <option value="1">1</option>
-                                <option value="3">3</option>
-                                <option selected value="7">7</option>
-                                <option value="14">14</option>
-                                <option value="30">30</option>
-                                <option value="60">60</option>
-                            </select>
-                        </p>
-                        <button class="btn btn-lg btn-primary btn-xs" id="pujaProducto" type="submit">Pujar</button>  
+                    <div class="row">
+                        <div class="col"></div>
+                            <div class="col row justify-content-center pb-2">
+                                <label for="tiempoExpiracion" >Tiempo de expiración (dias): </label>
+                                <select name="tiempoExpiracion" class="form-select" aria-label="Default select example">
+                                    <option value="1">1</option>
+                                    <option value="3">3</option>
+                                    <option selected value="7">7</option>
+                                    <option value="14">14</option>
+                                    <option value="30">30</option>
+                                    <option value="60">60</option>
+                                </select>
+                            </div>
+                        <div class="col"></div>
+                    </div>
+                        <button class="btn btn-primary btn-xs" id="pujaProducto" type="submit">Pujar</button>  
                 </form>
             </div>
         </div>  

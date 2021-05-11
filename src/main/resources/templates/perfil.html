@@ -20,15 +20,15 @@
         <div class="col-12 align-items-center">
             <button th:if="${session.u.hasRole('ADMIN')}" class="btn btn-dark p-2 mt-3" >Administrar Usuario</button> <button th:if="${session.u.hasRole('ADMIN')}" class="btn btn-dark p-2 mt-3" >Administrar Productos</button>
         </div>
-        <div class="row align-items-center mt-5 ml-5 mr-5 mb-1 border rounded p-3">
+        <div class="row align-items-center mt-5 ms-5 me-5 mb-1 border rounded p-3">
           <div class="col-4 text-center img-fluid">
             <img th:src="@{/perfil/{id}/photo(id=${user.id})}"  width="250" height="300">
-            <p> <a class="btn btn-dark p-2 mt-3" th:href="@{'/perfil/modificarPerfil/' + ${user.id}}">Editar perfil </a></p>
+            <p> <a class="btn btn-primary p-2 mt-3" th:href="@{'/perfil/modificarPerfil/' + ${user.id}}">Editar perfil </a></p>
           </div>    
-          <div class="col-8 text-center border-left">
+          <div class="col-8 text-center border-start">
             <div class="row align-items-center m-4">
                 <div class="col-12">
-                    <p class="h1" th:text="${user.username}">Nombre de usuario:</p> 
+                    <p class="h1 font-monospace" th:text="${user.username}">Nombre de usuario:</p> 
                 </div>
             </div>
             <div class="row align-items-center border-bottom pb-4">
@@ -74,109 +74,135 @@
             <button class="btn btn-outline-primary" type="button"> <a th:href="@{'/perfil/depositarFondo/' + ${user.id}}">Depositar fondo </a></button>
             <button class="btn btn-outline-primary" type="button"> <a th:href="@{'/perfil/retirarFondo/' + ${user.id}}">Retirar fondo </a></button>
         </p> -->
-        <div>
+        <div class="text-center  mt-5 ml-5 mr-5 mb-1 border rounded pb-3 mb-5">
         <p>
-            <b class="align-items-center">Pujas Activas:</b> <button class="btn btn-success btn-xs tiendaCompraAhora">Ver todo</button>
+            <b class="font-monospace fs-4 align-items-center">Pujas Activas:</b> <!--<button class="btn btn-success btn-xs tiendaCompraAhora">Ver todo</button>-->
             <table class="tabla_productos table align-left table-borderless table-hover text-center container-fluid">
-                <tr class="d-flex m-3">
-                    <th class="col-2">Imagen</th>
-                    <th class="col-2">Nombre Producto</th>
-                    <th class="col-2">Puja(€)</th>
-                    <!--<th>Puja más alta(€)</th>
-                    <th>Precio más bajo(€)</th>-->
-                    <th class="col-2">Expiración(Días)</th>
-                    <th class="col-2">Cancelar Antes</th>
-                </tr>
-
-                <tr class="d-flex m-3 p-3 align-middle" th:each="p: ${pujas}">
-                    <td class="col-2 align-middle align-items-center"><img th:src="@{/producto/{id}/photo(id=${p.producto.id})}" alt="foto" width="100" height="150"/></td>
-                    <td class="col-2 align-middle align-items-center"><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
-                    <td class="col-2 align-middle align-items-center" th:text="${p.precio}">D</td>
-                    <!--<td th:text="${p.mejorPuja}">D</td>
-                    <td th:text="${p.menorPrecio}">D</td>-->
-                    <td class="col-2 align-middle align-items-center" th:text="${p.fechaExpiracion}">C</td>
-                    <td class="col-2 align-middle align-items-center"><form method="post" th:action="@{'/oferta/eliminarOferta/' + ${p.id}}">
-                        <input type="hidden" name="precio" th:value="${p.precio}">
-                        <input type="hidden" name="idOferta" th:value="${p.id}">
-                        <button class="btn btn-danger btn-xs tiendaCompraAhora" type="submit">Cancelar Ahora</button>
-                    </form>
-                    </td>
-                </tr>
-            </table>
-        </p>
-        </div>
-        <div>
-            <p>
-                <b>Compras Realizadas:</b> <button class="btn btn-success btn-xs tiendaCompraAhora">Ver todo</button>
-                <table class="tabla_productos table align-middle table-borderless table-hover text-center container-fluid">
+               <thead>
                     <tr class="d-flex m-3">
+                        <th class="col-1"></th>
                         <th class="col-2">Imagen</th>
                         <th class="col-2">Nombre Producto</th>
-                        <th class="col-2">Venta(€)</th>
-                        <th class="col-2">Estado</th>
-                        <th class="col-2">Fecha de Intercambio</th>
-                    </tr>
-                    <!-- MIRAR COMO HACER QUE LAS FECHAS QUEDEN EN UN FORMATO DECENTE -->
-                    <tr class="d-flex m-3 p-3 align-middle"  th:each="p: ${tCompras}">
-                        <td class="col-2 align-middle align-items-center"><img th:src="@{/producto/{id}/photo(id=${p.producto.id})}" alt="foto" width="100" height="150"/></td>
-                        <td class="col-2 align-middle align-items-center"><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
-                        <td class="col-2 align-middle align-items-center" th:text="${p.precio}">D</td>
-                        <td class="col-2 align-middle align-items-center" th:text="${p.estado}">C</td>
-                        <td class="col-2 align-middle align-items-center" th:text="${p.fechaTransaccion}">F</td>
-                    </tr>
-                </table>
-            </p>
-        </div>
-
-        <div>
-            <p>
-                <b>Productos que estas vendiendo:</b> <button class="btn btn-success btn-xs tiendaCompraAhora">Ver todo</button>
-                <table class="tabla_productos table align-middle table-borderless table-hover text-center container-fluid">
-                    <tr class="d-flex m-3">
-                        <th class="col-2">Imagen</th>
-                        <th class="col-2">Nombre Producto</th>
-                        <th class="col-2">Venta(€)</th>
-                       <!-- <th>Puja más alta(€)</th>
+                        <th class="col-2">Puja(€)</th>
+                        <!--<th>Puja más alta(€)</th>
                         <th>Precio más bajo(€)</th>-->
                         <th class="col-2">Expiración(Días)</th>
                         <th class="col-2">Cancelar Antes</th>
+                        <th class="col-1"></th>
                     </tr>
-                    <tr class="d-flex m-3 p-3 align-middle" th:each="p: ${precios}">
-                        <td class="col-2 align-middle align-items-center"><img th:src="@{/producto/{id}/photo(id=${p.producto.id})}" alt="foto" width="100" height="150"/></td>
+                </thead>
+                <tbody>
+                    <tr class="d-flex m-3 p-3 align-middle" th:each="p: ${pujas}">
+                        <td class="col-1"></td>
+                        <td class="col-2 align-middle align-items-center"><img th:src="@{/producto/{id}/photo(id=${p.producto.id})}" alt="foto" width="150" height="150"/></td>
                         <td class="col-2 align-middle align-items-center"><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
                         <td class="col-2 align-middle align-items-center" th:text="${p.precio}">D</td>
-                        <!--<td th:text="${p.producto.highestBid}">D</td>
-                        <td th:text="${p.producto.lowestAsk}">D</td>-->
-                        <td class="col-2 align-middle align-items-center" th:text="${p.fechaExpiracion}">F</td>
+                        <!--<td th:text="${p.mejorPuja}">D</td>
+                        <td th:text="${p.menorPrecio}">D</td>-->
+                        <td class="col-2 align-middle align-items-center" th:text="${p.fechaExpiracion}">C</td>
                         <td class="col-2 align-middle align-items-center"><form method="post" th:action="@{'/oferta/eliminarOferta/' + ${p.id}}">
                             <input type="hidden" name="precio" th:value="${p.precio}">
                             <input type="hidden" name="idOferta" th:value="${p.id}">
                             <button class="btn btn-danger btn-xs tiendaCompraAhora" type="submit">Cancelar Ahora</button>
                         </form>
                         </td>
+                        <td class="col-1"></td>
                     </tr>
+                </tbody>
+            </table>
+        </p>
+        </div>
+        <div class="text-center  mt-5 ml-5 mr-5 mb-1 border rounded pb-3 mb-5">
+            <p>
+                <b class="font-monospace fs-4 align-items-center">Compras Realizadas:</b> <!--<button class="btn btn-success btn-xs tiendaCompraAhora">Ver todo</button>-->
+                <table class="tabla_productos table align-middle table-borderless table-hover text-center container-fluid">
+                    <thead>
+                        <tr class="d-flex m-3">
+                            <th class="col-2">Imagen</th>
+                            <th class="col-2">Nombre Producto</th>
+                            <th class="col-2">Venta(€)</th>
+                            <th class="col-3">Estado</th>
+                            <th class="col-3">Fecha de Intercambio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    <!-- MIRAR COMO HACER QUE LAS FECHAS QUEDEN EN UN FORMATO DECENTE -->
+                        <tr class="d-flex m-3 p-3 align-middle"  th:each="p: ${tCompras}">
+                            <td class="col-2 align-middle align-items-center"><img th:src="@{/producto/{id}/photo(id=${p.producto.id})}" alt="foto" width="150" height="150"/></td>
+                            <td class="col-2 align-middle align-items-center"><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
+                            <td class="col-2 align-middle align-items-center" th:text="${p.precio}">D</td>
+                            <td class="col-3 align-middle align-items-center" th:text="${p.estado}">C</td>
+                            <td class="col-3 align-middle align-items-center" th:text="${p.fechaTransaccion}">F</td>
+                        </tr>
+                    </tbody>
+
                 </table>
             </p>
         </div>
 
-        <div>
+        <div class="text-center  mt-5 ml-5 mr-5 mb-1 border rounded pb-3 mb-5">
             <p>
-                <b>Productos Vendidos:</b> <button class="btn btn-success btn-xs tiendaCompraAhora">Ver todo</button>
+                <b class="font-monospace fs-4 align-items-center">Productos que estas vendiendo:</b> <!--<button class="btn btn-success btn-xs tiendaCompraAhora">Ver todo</button>-->
                 <table class="tabla_productos table align-middle table-borderless table-hover text-center container-fluid">
-                    <tr class="d-flex m-3">
-                        <th class="col-2">Imagen</th>
-                        <th class="col-2">Nombre Producto</th>
-                        <th class="col-2">Venta(€)</th>
-                        <th class="col-2">Estado</th>
-                        <th class="col-2">Fecha de Intercambio</th>
-                    </tr>
-                    <tr class="d-flex m-3 p-3 align-middle" th:each="p: ${tVentas}">
-                        <td class="col-2 align-middle align-items-center"><img th:src="@{/producto/{id}/photo(id=${p.producto.id})}" alt="foto" width="100" height="150"/></td>
-                        <td class="col-2 align-middle align-items-center"><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
-                        <td class="col-2 align-middle align-items-center" th:text="${p.precio}">D</td>
-                        <td class="col-2 align-middle align-items-center" th:text="${p.estado}">C</td>
-                        <td class="col-2 align-middle align-items-center" th:text="${p.fechaTransaccion}">F</td>
-                    </tr>
+                    <thead>
+                        <tr class="d-flex m-3">
+                            <th class="col-1"></th>
+                            <th class="col-2">Imagen</th>
+                            <th class="col-2">Nombre Producto</th>
+                            <th class="col-2">Venta(€)</th>
+                        <!-- <th>Puja más alta(€)</th>
+                            <th>Precio más bajo(€)</th>-->
+                            <th class="col-2">Expiración(Días)</th>
+                            <th class="col-2">Cancelar Antes</th>
+                            <th class="col-1"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="d-flex m-3 p-3 align-middle" th:each="p: ${precios}">
+                            <td class="col-1"></td>
+                            <td class="col-2 align-middle align-items-center"><img th:src="@{/producto/{id}/photo(id=${p.producto.id})}" alt="foto" width="150" height="150"/></td>
+                            <td class="col-2 align-middle align-items-center"><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
+                            <td class="col-2 align-middle align-items-center" th:text="${p.precio}">D</td>
+                            <!--<td th:text="${p.producto.highestBid}">D</td>
+                            <td th:text="${p.producto.lowestAsk}">D</td>-->
+                            <td class="col-2 align-middle align-items-center" th:text="${p.fechaExpiracion}">F</td>
+                            <td class="col-2 align-middle align-items-center"><form method="post" th:action="@{'/oferta/eliminarOferta/' + ${p.id}}">
+                                <input type="hidden" name="precio" th:value="${p.precio}">
+                                <input type="hidden" name="idOferta" th:value="${p.id}">
+                                <button class="btn btn-danger btn-xs tiendaCompraAhora" type="submit">Cancelar Ahora</button>
+                            </form>
+                            </td>
+                            <td class="col-1"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </p>
+        </div>
+
+        <div class="text-center  mt-5 ml-5 mr-5 mb-1 border rounded pb-3 mb-5">
+            <p>
+                <b class="font-monospace fs-4 align-items-center">Productos Vendidos:</b> <!--<button class="btn btn-success btn-xs tiendaCompraAhora">Ver todo</button>-->
+                <table class="tabla_productos table align-middle table-borderless table-hover text-center container-fluid">
+                    <thead>
+                        <tr class="d-flex m-3">
+                            <th class="col-2">Imagen</th>
+                            <th class="col-2">Nombre Producto</th>
+                            <th class="col-2">Venta(€)</th>
+                            <th class="col-3">Estado</th>
+                            <th class="col-3">Fecha de Intercambio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="d-flex m-3 p-3 align-middle" th:each="p: ${tVentas}">
+                            <td class="col-2 align-middle align-items-center"><img th:src="@{/producto/{id}/photo(id=${p.producto.id})}" alt="foto" width="150" height="150"/></td>
+                            <td class="col-2 align-middle align-items-center"><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
+                            <td class="col-2 align-middle align-items-center" th:text="${p.precio}">D</td>
+                            <td class="col-3 align-middle align-items-center" th:text="${p.estado}">C</td>
+                            <td class="col-3 align-middle align-items-center" th:text="${p.fechaTransaccion}">F</td>
+                        </tr>
+                    </tbody>
+
                 </table>
             </p>
         </div>
