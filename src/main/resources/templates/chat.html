@@ -44,7 +44,13 @@
 		// 2020-03-23T10:48:11.074 => 23/3/2020@10:48:18
 		return new Date(d).toLocaleString("es-ES").split(" ").join("@")
 	}
+    function asignarAdmin(from) {
+		admin = from;
+		console.log(from);
+   }
 
+   let admin = 0; //Variable global
+   
 	// mostrando una tabla dinámica con datos cargados del servidor vía AJAX
 	let dt = new simpleDatatables.DataTable(
 		'#datatable', { 
@@ -69,12 +75,22 @@
 		let b = document.getElementById("sendmsg2");
 		b.onclick = (e) => {
 			e.preventDefault();
-			console.log(b, b.parentNode)
 			dt.rows().add([formatDate(new Date().toISOString()), document.getElementById("men").value]);
-			go("/perfil/chatconadmin", 'POST', {men: 
-					document.getElementById("men").value})
-				.then(d => console.log("happy", d))
-				.catch(e => console.log("sad", e))
+			if(admin == 0){
+				console.log(b, b.parentNode)
+				go("/perfil/chatconadmin", 'POST', {men: 
+						document.getElementById("men").value})
+					.then(d => console.log("happy", d))
+					.catch(e => console.log("sad", e))
+			}
+			else{
+				console.log(b, b.parentNode)
+				let url = "/perfil/" + admin + "/msg";
+				go(url, 'POST', {men: 
+						document.getElementById("men").value})
+					.then(d => console.log("happy", d))
+					.catch(e => console.log("sad", e))
+			}
 		}
 	});
 
@@ -82,6 +98,9 @@
 	// aquí estoy metiendo el mensaje al final de la tabla
 	ws.receive = (m) => {
 		dt.rows().add([formatDate(new Date().toISOString()), m.text]);		
+		if(admin != m.from && admin == 0){ //Le asignara los mensajes al primer admin que le hable
+			asignarAdmin(m.from);
+		}
 	}
 	
 	</script>

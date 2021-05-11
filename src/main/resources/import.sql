@@ -16,8 +16,3 @@ INSERT INTO Oferta VALUES (5, 0,'2021-04-17', '2021-04-10', NULL, 510, 1, NULL, 
 INSERT INTO Oferta VALUES (6, 1,'2021-10-15', '2021-10-01', '2021-10-09', 405, 0, 1, 2, 3); -- Transaccion dani 405 p2 --
 INSERT INTO Oferta VALUES (7, 1,'2021-04-02', '2021-03-22', '2021-04-01', 490, 1, 5, 1, 4); -- Transaccion sergio 405 p1 --
 INSERT INTO Oferta VALUES (8, 1,'2021-04-02', '2021-03-22', '2021-04-02', 550, 1, 5, 1, 4); -- Transaccion sergio 405 p1 --
-
-INSERT INTO Mensaje VALUES (1, '2021-05-10', 'Donde esta mi pedido', 1, 3); -- usuario 1 emisor --
-INSERT INTO Mensaje VALUES (2, '2021-05-10', 'Su pedido esta en camino, relajese', 3, 1); -- usuario 1 receptor --
-INSERT INTO Mensaje VALUES (3, '2021-05-22', 'Sabes si puedo devolver las yeezy?', 2, 4); -- usuario 2 emisor, 4 receptor --
-INSERT INTO Mensaje VALUES (4, '2021-05-10', 'Si claro, si aun no has abierto el paquete', 4, 2); -- usuario 4 emisor, 2 receptor --
