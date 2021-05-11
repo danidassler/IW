@@ -14,7 +14,7 @@ Scenario: ADMIN: login, add product | User 1: login & place price | User 2: logi
   * driver.screenshot()
 
   # Pulsamos el botón de "Administrar Productos" Para acceder a la vista del admin
-  * click("a[class=adminProductos]")
+  * click("a[class~="adminProductos]")
   * match html('title') contains 'Administrador Productos'
   * driver.screenshot()
 

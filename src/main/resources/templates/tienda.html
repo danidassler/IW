@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" th:href="@{/css/main.css}" href="css/main.css" type="text/css"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <meta charset="UTF-8"/>
     <style>
         td, th { border: 1px solid grey; text-align: center; align-items: center;}
@@ -26,7 +25,7 @@
                 </form>
             -->
             
-            <a class="btn btn-primary btn-xs adminProductos m-2" role="button" th:if="${session.u.hasRole('ADMIN')}" th:href="@{/admin/adminProductos}">Administrar Producto </a>
+            <a class="adminProductos btn btn-primary btn-xs m-2" role="button" th:if="${session.u.hasRole('ADMIN')}" th:href="@{/admin/adminProductos}">Administrar Producto </a>
             <a class="btn btn-primary btn-xs m-2" th:if="${session.u.hasRole('ADMIN')}" role="button" th:href="@{/admin/formularioProducto}">Nuevo Producto </a>
         </p>
     </div>

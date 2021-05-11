@@ -56,10 +56,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	    http
 	        .authorizeRequests()
 	            .antMatchers(
-					"/css/**", "/fonts/**", "/js/**", "/img/**", 
+					"/css/**", "/fonts/**", "/js/**", "/img/**", "data/img/**",
 					"/", "/error", "/tienda", 
 					"/tienda/**", 
-					"/producto/*", "/producto/*/photo", 
+					"/producto/**", "/producto/*/photo", "/perfil/*/photo",
 					"/registro").permitAll()
 	            .antMatchers("/admin/**").hasRole("ADMIN")		  // <-- administration
 	            .anyRequest().authenticated()

@@ -289,7 +289,7 @@ public class ProductController {
 			}
 			log.info("Successfully uploaded photo for {} into {}!", id, f.getAbsolutePath());
 		}
-		return "perfil";
+		return "producto";
 	}
 
     
