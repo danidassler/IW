@@ -32,9 +32,10 @@
 </th:block>-->
 
 <!DOCTYPE html>
-<html 
-	xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
+<<<<<<< HEAD
 	<title>IW 2019-20</title>
 	<th:block th:fragment="header">
 	<meta charset="utf-8">
@@ -60,73 +61,113 @@
 	<script th:src="@{/js/stomp.js}" src="js/stomp.js" type="text/javascript"></script>
 	<script th:src="@{/js/iwclient.js}" src="js/iwclient.js" type="text/javascript"></script>
 	</th:block>
+=======
+    <title>IW 2019-20</title>
+    <th:block th:fragment="header">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" type="text/css" />
+        <link rel="stylesheet" th:href="@{/css/ionicons.min.css}" type="text/css" />
+        <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" />
+
+        <script type="text/javascript">
+            const config = {
+                socketUrl: "[[${session.ws}?:'']]", // vacío indica falso
+                rootUrl: "[[${session.ws}?@{/}:'']]",
+                csrf: {
+                    name: "[[${_csrf.parameterName}]]",
+                    value: "[[${_csrf.token}]]"
+                },
+                admin: [
+                    [$ {
+                        session.u != null && session.u.hasRole('ADMIN')
+                    } ? true : false]
+                ],
+                userId: [
+                    [$ {
+                        session.u != null
+                    } ? $ {
+                        session.u.id
+                    } : -1]
+                ]
+            };
+        </script>
+        <script th:src="@{/js/stomp.js}" type="text/javascript"></script>
+        <script th:src="@{/js/iwclient.js}" type="text/javascript"></script>
+    </th:block>
+>>>>>>> main
 </head>
+
 <body>
-	<th:block th:fragment="head">
-    <style>
-        li { display: inline; padding: 1em;}
-    </style>
-    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-        <a class="logo" href="" th:href="@{/}"></a>
-		<span class="sitename">NewChance</span>
-        <ul>
-            <li>
-                <span> <a class="tienda" th:href="@{/tienda}"> <b>Tienda</b> </a></span>
-            </li>
-            <li>
-                <span><a class="tienda" th:href="@{/tienda/Zapatillas}"><b>Zapatillas</b></a></span>
-            </li>
-            <li> 
-                <span> <a class="tienda" th:href="@{/tienda/Streetwear}"><b>Streetwear</b></a></span>
-            </li>
-            <li>
-                <span><a class="tienda" th:href="@{/tienda/Accesorios}"><b>Accesorios</b></a></span>
-            </li>
-            <li>
-                <span><a class="tienda" th:href="@{/tienda/Electronica}"><b>Electrónica</b></a></span>
-            </li>
-            <li>
-                <span><a class="tienda" th:href="@{/tienda/Relojes}"><b>Relojes</b></a></span>
-            </li>
-            <!--<li>
+    <th:block th:fragment="nav">
+        <style>
+            li {
+                display: inline;
+                padding: 1em;
+            }
+        </style>
+        <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+            <a class="logo" href="" th:href="@{/}"></a>
+            <span class="sitename">NewChance</span>
+            <ul>
+                <li>
+                    <span> <a class="tienda" th:href="@{/tienda}"> <b>Tienda</b> </a></span>
+                </li>
+                <li>
+                    <span><a class="tienda" th:href="@{/tienda/Zapatillas}"><b>Zapatillas</b></a></span>
+                </li>
+                <li>
+                    <span> <a class="tienda" th:href="@{/tienda/Streetwear}"><b>Streetwear</b></a></span>
+                </li>
+                <li>
+                    <span><a class="tienda" th:href="@{/tienda/Accesorios}"><b>Accesorios</b></a></span>
+                </li>
+                <li>
+                    <span><a class="tienda" th:href="@{/tienda/Electronica}"><b>Electrónica</b></a></span>
+                </li>
+                <li>
+                    <span><a class="tienda" th:href="@{/tienda/Relojes}"><b>Relojes</b></a></span>
+                </li>
+                <!--<li>
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </li>-->
-        </ul>
-        <div class="logx" th:if="${session.u}">
-			<!--<a id="received" th:href="@{/message/}" th:text="${session.unread} ? '📬': '📪'">📫</a>	 /-->		
-			<a th:if="${session.u.hasRole('ADMIN')}"  class="btn btn-outline-primary" th:href="@{/admin/adminUsuarios}">Administrar Usuarios</a>
-			<form th:action="@{/logout}" method="post">
-				<button class="btn btn-outline-primary" type="submit">logout</button>
-			</form>
-				<a class="perfilUser" th:href="@{/perfil/{id}(id=${session.u.id})}">
-				<img class="userthumb" th:src="@{/perfil/{id}/photo(id=${session.u.id})}" width="350" height="400">
-				<span th:text="${session.u.username}">Pepe</span>
-			</a>						
-		</div>
-        <div class="logx" th:unless="${session.u}">
-			<a class="btn btn-outline-primary" th:href="@{/login}" href="/login">Login</a>
-			<a class="btn btn-outline-primary" th:href="@{/registro}" href="/registro">Registro</a>
-			<!--/*
+            </ul>
+            <div class="logx" th:if="${session.u}">
+                <!--<a id="received" th:href="@{/message/}" th:text="${session.unread} ? '📬': '📪'">📫</a>	 /-->
+                <a th:if="${session.u.hasRole('ADMIN')}" class="btn btn-outline-primary" th:href="@{/admin/adminUsuarios}">Administrar Usuarios</a>
+                <form th:action="@{/logout}" method="post">
+                    <button class="btn btn-outline-primary" id="logout" type="submit">logout</button>
+                </form>
+                <a class="perfilUser" th:href="@{/perfil/{id}(id=${session.u.id})}">
+                    <img class="userthumb" th:src="@{/perfil/{id}/photo(id=${session.u.id})}" width="350" height="400">
+                    <span th:text="${session.u.username}">Pepe</span>
+                </a>
+            </div>
+            <div class="logx" th:unless="${session.u}">
+                <a class="btn btn-outline-primary" th:href="@{/login}" href="/login">Login</a>
+                <a class="btn btn-outline-primary" th:href="@{/registro}" href="/registro">Registro</a>
+                <!--/*
 				Esto es un comentario "thymeleaf" - no se verá en el HTML
 				El bloque de "debug" sólo está activado si application.properties tiene debug a "true"
 				(ver StartupConfig.java para ver cómo se lee el atributo y se pone en ${application.debug})
 			*/-->
-			<div class="debug" th:if="${application.debug}">
-				<form th:action="@{/login}" method="post">
-					<input type="hidden" name="username" value="TheRealJin">
-					<input type="hidden" name="password" value="aa">
-					<button type="submit">a</button>
-  				</form>				
-				<form th:action="@{/login}" method="post">
-					<input type="hidden" name="username" value="danidassler">
-					<input type="hidden" name="password" value="aa">
-					<button type="submit">b</button>
-  				</form>
-  			</div>
-		</div>
-</nav>
+                <div class="debug" th:if="${application.debug}">
+                    <form th:action="@{/login}" method="post">
+                        <input type="hidden" name="username" value="TheRealJin">
+                        <input type="hidden" name="password" value="aa">
+                        <button type="submit">a</button>
+                    </form>
+                    <form th:action="@{/login}" method="post">
+                        <input type="hidden" name="username" value="danidassler">
+                        <input type="hidden" name="password" value="bb">
+                        <button type="submit">b</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
 
-</th:block>
+    </th:block>
 </body>
+
 </html>
