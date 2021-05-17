@@ -1,7 +1,7 @@
 /**
  * WebSocket API, which only works once initialized
  */
-const ws = {
+const ws = {		
 
 	/**
 	 * Number of retries if connection fails
@@ -47,49 +47,50 @@ const ws = {
 
         	console.log("Hopefully subscribed to " + sub);
         } catch (e) {
-            console.log("Error, could not subscribe to " + sub);
+        	console.log("Error, could not subscribe to " + sub);
         }
-    }
-}
+	}
+} 
 
 /**
  * Sends an ajax request using fetch
  */
 //envía json, espera json de vuelta; lanza error si status != 200
 function go(url, method, data = {}) {
-    let params = {
-        method: method, // POST, GET, POST, PUT, DELETE, etc.
-        headers: {
-            "Content-Type": "application/json; charset=utf-8",
-        },
-        body: JSON.stringify(data)
-    };
-    if (method === "GET") {
-        delete params.body;
-    } else {
-        params.headers["X-CSRF-TOKEN"] = config.csrf.value;
-    }
-    console.log("sending", url, params)
-    return fetch(url, params)
-        .then(response => {
-            if (response.ok) {
-                return response.json(); // esto lo recibes con then(d => ...)
-            } else {
-                throw response.text(); // esto lo recibes con catch(d => ...)
-            }
-        })
+  let params = {
+    method: method, // POST, GET, POST, PUT, DELETE, etc.
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+    },
+    body: JSON.stringify(data)
+  };
+  if (method === "GET") {
+	  delete params.body;
+  } else {
+      params.headers["X-CSRF-TOKEN"] = config.csrf.value; 
+  }  
+  console.log("sending", url, params)
+  return fetch(url, params)
+  	.then(response => {
+	    if (response.ok) {
+	        return response.json(); // esto lo recibes con then(d => ...)
+	    } else {
+	    	throw response.text();  // esto lo recibes con catch(d => ...)
+	    }
+  	})
 }
 
 /**
  * Actions to perform once the page is fully loaded
  */
 document.addEventListener("DOMContentLoaded", () => {
-    if (config.socketUrl) {
-        let subs = config.admin ? ["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
-        ws.initialize(config.socketUrl, subs);
-    }
-
-    // add your after-page-loaded JS code here; or even better, call 
-    // 	 document.addEventListener("DOMContentLoaded", () => { /* your-code-here */ });
-    //   (assuming you do not care about order-of-execution, all such handlers will be called correctly)
+	if (config.socketUrl) {
+		let subs = config.admin ? 
+				["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
+		ws.initialize(config.socketUrl, subs);
+	}
+	
+	// add your after-page-loaded JS code here; or even better, call 
+	// 	 document.addEventListener("DOMContentLoaded", () => { /* your-code-here */ });
+	//   (assuming you do not care about order-of-execution, all such handlers will be called correctly)
 });

@@ -9,60 +9,55 @@
     <title>Finalizar Venta</title>
 </head>
 <body>
+    <nav th:replace="frags/nav.html :: nav">
+		Nav goes here
+	</nav>
     <div>
         <th:block th:replace="frags/header.html">
             Aqui va lo que hay en header, esto no se ve
         </th:block>
     </div>
-    <div class="container-fluid">
-        <div class="row align-items-center mt-5 ml-5 mr-5 mb-1 border rounded p-3 mb-5">
-            <div class="col-4 text-center img-fluid">
-                <img th:src="@{/producto/{id}/photo(id=${prod.id})}" alt="foto"  width="350" height="400"/>
-            </div>
-            <div class="col-8 text-center border-left">
-                <div class="row align-items-center m-4">
-                    <div class="col-12">
-                        <p class="h1 font-monospace fw-bold" th:text="${prod.nombre}"><b>Producto</b></p>
-                    </div>
-                </div>
-                <div class="row align-items-center border-bottom pb-4">
-                    <div class="col-6">
-                        <p class="h6">Talla: <span th:text="${prod.talla}"> T</span></p>
-                    </div>
-                    <div class="col-6">   
-                        <p th:if="${menorPrecio != 0}">Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€</p>
-                        <p th:if="${menorPrecio == 0}">Precio mas bajo: --- €</p>
-                        <p th:if="${mejorPuja != 0}">Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p> 
-                        <p th:if="${mejorPuja == 0}">Puja mas alta: --- € </p>
-                    </div>
-                    <div class="row align-items-center pb-4 p-3">
-                        <div class="col-12">
-                            <h4> Resumen de la venta </h4>
-                        </div>
-                        <div class="col-6">
-                            <p>Precio de venta: <span th:text="${precio}">LA</span>€</p>
-                            <p>Impuestos (9%): - <span th:text="${impuestos}">I</span>€</p>
-                            <p>Envio: - <span th:text="${envio}">I</span>€</p>
-                            <p>Pago final: <b><span th:text="${precioFinal}">I</span>€</b></p>
-                        </div>
-                        <div class="col-6">
-                            <form th:if="${mejorPuja!=0}" method="post" th:action="@{'/producto/confirmacionProducto/' + ${prod.id}}">
-                                <p><input type="checkbox" id="cb" required="required"><label for="cb" >Confirmo que mi articulo es nuevo y original.</label></p>
-                                <p><input type="checkbox" id="cb2" required="required"><label for="cb2" >Confirmo que enviare mi producto en dos dia hábiles.</label></p>
-                                <input type="hidden" name="precio" th:value="${precio}">
-                                <input type="hidden" name="precioFinal" th:value="${precioFinal}">
-                                <input type="hidden" name="impuestos" th:value="${impuestos}">
-                                <input type="hidden" name="envio" th:value="${envio}">
-                                <input type="hidden" name="idOferta" th:value="${idOferta}">
-                                <button class="btn btn-success btn-xs" type="submit">Confirmar Venta</button>
-                            </form>
-                            <p th:if="${mejorPuja == 0}">Aun no puedes vender este producto, espera a que un comprador realice una puja o puedes pedir un precio por tu producto aqui:
-                            <a th:href="@{'/oferta/fijarPrecio/' + ${prod.id}}">Fijar precio</a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <p><b>Esta pantalla será similar a la de compra, cambiando los botones checkbox finales.</b></p>
+    <h4>Finalizar venta:</h4>
+    <table>
+        <tr>
+            <td><b><span th:text="${prod.nombre}">N</span></b></td>
+            <td><b>Revisión de la venta:</b></td>
+        </tr>
+        <tr>
+            <td>
+                <!--<p><b><span th:text="${prod.nombre}">N</span></b></p>-->
+                <p th:if="${menorPrecio != 0}">Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€</p>
+                <p th:if="${menorPrecio == 0}">Precio mas bajo: --- €</p>
+                <p th:if="${mejorPuja != 0}">Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p> 
+                <p th:if="${mejorPuja == 0}">Puja mas alta: --- € </p>
+                <p><span th:text="${prod.talla}">N</span>EUR</p>
+                <p><img th:src="@{/producto/{id}/photo(id=${prod.id})}" alt="foto" width="350" height="400"/></p>
+            </td>
+            <td>
+                <!-- <p><b>Revisión de la venta:</b></p> -->
+                <p>Precio de venta: <span th:text="${precio}">LA</span>€</p>
+                <p>Impuestos (9%): - <span th:text="${impuestos}">I</span>€</p>
+                <p>Envio: - <span th:text="${envio}">I</span>€</p>
+                <p>Pago final: <b><span th:text="${precioFinal}">I</span>€</b></p>
+            </td>
+            <td>
+                <form th:if="${mejorPuja!=0}" method="post" th:action="@{'/producto/confirmacionProducto/' + ${prod.id}}">
+                    <p><input type="checkbox" id="cb" required="required"><label for="cb" >Confirmo que mi articulo es nuevo y original.</label></p>
+                    <p><input type="checkbox" id="cb2" required="required"><label for="cb2" >Confirmo que enviare mi producto en dos dia hábiles para evitar las multas.</label></p>
+                    <input type="hidden" name="precio" th:value="${precio}">
+                    <input type="hidden" name="precioFinal" th:value="${precioFinal}">
+                    <input type="hidden" name="impuestos" th:value="${impuestos}">
+                    <input type="hidden" name="envio" th:value="${envio}">
+                    <input type="hidden" name="idOferta" th:value="${idOferta}">
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Confirmar Venta</button>
+                </form>
+                <p th:if="${mejorPuja == 0}">Aun no puedes vender este producto, espera a que un comprador realice una puja o puedes pedir un precio por tu producto aqui:
+                <button><a th:href="@{'/oferta/fijarPrecio/' + ${prod.id}}">Fijar precio</a></button></p>
+            </td>
+
+        </tr>
+    </table>
 
     <th:block th:replace="frags/pie.html">
         Aqui va lo que hay en header, esto no se ve

@@ -8,24 +8,18 @@
     <title>Confirmación</title>
 </head>
 <body>
+    <nav th:replace="frags/nav.html :: nav">
+		Nav goes here
+	</nav>
     <div>
         <th:block th:replace="frags/header.html">
             Aqui va lo que hay en header, esto no se ve
         </th:block>
     </div>
 
-    <div class="container-fluid text-center align-middle align-items-center">
-        <div class="row m-5 pb-3 border border-success border-5 rounded">
-            <div class="col-12 mt-3 mb-3">
-                <h2 class="font-monospace">OFERTA ELIMINADA CORRECTAMENTE</h2>
-            </div>
-                        
-            <div class="col-12">
-                <p>Compruebalo en tu perfil: <a class="btn btn-xs btn-outline-primary" th:href="@{'/perfil/' + ${idUser}}">Perfil</a></p>
-            </div>
-        </div>
-    </div>
-    
+    <h2>OFERTA ELIMINADA CORRECTAMENTE</h2>
+
+    <p>Compruebalo en tu perfil: <button><a th:href="@{'/perfil/' + ${idUser}}">Perfil</a></button></p>
     <div>
         <th:block th:replace="frags/pie.html">
             Aqui va lo que hay en header, esto no se ve

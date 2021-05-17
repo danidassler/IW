@@ -1,5 +1,10 @@
 Feature: login, acceso a perfil, acceso a tienda y compra del primer producto
 
+Background:
+  # para escribir tus propias pruebas, lee https://github.com/intuit/karate/tree/master/karate-core
+  # driver: chromium bajo linux; si usas google-chrome, puedes quitar executable (que es lo que usaría por defecto)
+  * configure driver = { type: 'chrome', showDriverLog: true }
+    
 Scenario: login & buy
 
   Given driver 'http://localhost:8080/login'

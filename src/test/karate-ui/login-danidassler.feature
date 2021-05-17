@@ -10,13 +10,8 @@ Scenario: login & view perfil
   Given driver 'http://localhost:8080/login'
 
   #Rellenamos el formulario de login con los 2 campos
-  * clearCookies()
-
-  Given driver 'http://localhost:8080/login'
-
   * input('#username', 'danidassler')
   * input('#password', 'aa')
-  * driver.screenshot()
 
   #Pulsamos el botón y comprobamos que nos redirige al perfil
   * submit().click("button[type=submit]")  

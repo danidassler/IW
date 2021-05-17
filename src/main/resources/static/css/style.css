@@ -3,7 +3,7 @@
     padding: 0;
 }
 a{
-    text-decoration: none;
+    text-decoration: none:  !important;
 }
 .header-top .fa.fa-wifi {
     -ms-transform: rotate(7deg); /* IE 9 */
@@ -1644,6 +1644,7 @@ section.featured {
   font-family: "Roboto",sans-serif;
   font-size: 18px;
   font-weight: 400;
+    
 }
 
 
