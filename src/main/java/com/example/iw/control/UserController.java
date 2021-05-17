@@ -162,11 +162,11 @@ public class UserController {
 		throws JsonProcessingException {
 		
 		String text = o.get("men").asText();
-		Usuario receiver = entityManager.find(Usuario.class, id);
+		Usuario u = entityManager.find(Usuario.class, id);
 		Usuario sender = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
-		model.addAttribute("user", receiver);
+		model.addAttribute("user", u);
 
-		boolean ok = comprobarUsuario(receiver, sender, model);
+		boolean ok = comprobarUsuario(u, sender, model);
 		if(!ok){
 			return "errorUser";
 		}

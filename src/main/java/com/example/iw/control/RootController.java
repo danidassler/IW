@@ -52,7 +52,18 @@ public class RootController {
         List<BigDecimal> mejorPuja = new ArrayList<>();*/
         List<?> prods = new ArrayList<>();
         prods = entityManager.createQuery("SELECT p FROM Producto p").getResultList();
+        model.addAttribute("prods", prods);
+            
+        return "tienda";                     
+    }
+
+    @GetMapping("/tienda/{categoria}") 
+    public String tiendaF(Model model, @PathVariable String categoria) {   
         
+        /*List<BigDecimal> menorPrecio = new ArrayList<>();
+        List<BigDecimal> mejorPuja = new ArrayList<>();*/
+        List<?> prods = new ArrayList<>();
+        prods = entityManager.createQuery("SELECT p FROM Producto p WHERE p.categorias LIKE '%" + categoria + "%'").getResultList();
         model.addAttribute("prods", prods);
             
         return "tienda";                     
