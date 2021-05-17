@@ -74,16 +74,18 @@ public class UserController {
 		Usuario u = entityManager.find(Usuario.class, id);
 		model.addAttribute("user", u);
 		Usuario user = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
-		
-		/*controlamos si el ID de la URL es el mismo que el de la sesion
-		para que otro usuario no pueda acceder al perfil de otra persona*/
-		boolean ok = comprobarUsuario(u, user, model);
-		if(!ok){
-			return "errorUser";
+
+		if (u.getId() != user.getId() &&
+			! user.hasRole(Usuario.Rol.ADMIN)) {
+			throw new NoEsTuPerfilException();
 		}
 
         List<Oferta> pujas = entityManager.createNamedQuery("Oferta.pujasUser").setParameter("userId", id).getResultList(); //Aqui se necesita pujas altas
 		List<Oferta> precios = entityManager.createNamedQuery("Oferta.preciosUser").setParameter("userId", id).getResultList();
+
+        //estos gets no sabemos si estan bien, porque tenemos una transaccion
+        //la transaccion es: sergio vende a dani un producto aceptando su puja mas alta
+        //en los perfiles a dani si le sale la compra pero a sergio no le sale la venta
         List<Oferta> tVentas = entityManager.createNamedQuery("Oferta.ventasUser").setParameter("userId" , id).getResultList();//user.getTransaccionesVenta();
         List<Oferta> tCompras = entityManager.createNamedQuery("Oferta.comprasUser").setParameter("userId" , id).getResultList();//user.getTransaccionesCompra();
 
@@ -121,11 +123,10 @@ public class UserController {
 		model.addAttribute("user", target);
 		
 		Usuario requester = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
-		
-		boolean ok = comprobarUsuario(target, requester, model);
-		if(!ok){
-			return "errorUser";
-		}		
+		if (requester.getId() != target.getId() &&
+				! requester.hasRole(Usuario.Rol.ADMIN)) {
+			throw new NoEsTuPerfilException();
+		}
 		
 		if (edited.getPassword() != null && edited.getPassword().equals(pass2)) {
 			// save encoded version of password
@@ -162,11 +163,11 @@ public class UserController {
 		throws JsonProcessingException {
 		
 		String text = o.get("men").asText();
-		Usuario u = entityManager.find(Usuario.class, id);
+		Usuario receiver = entityManager.find(Usuario.class, id);
 		Usuario sender = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
-		model.addAttribute("user", u);
+		model.addAttribute("user", receiver);
 
-		boolean ok = comprobarUsuario(u, sender, model);
+		boolean ok = comprobarUsuario(receiver, sender, model);
 		if(!ok){
 			return "errorUser";
 		}
@@ -231,16 +232,8 @@ public class UserController {
 	
 
 	@GetMapping("/modificarPerfil/{id}") 
-    public String modificarPerfil(@PathVariable long id, Model model, HttpSession session) {    
-		//AQUI HABRIA QUE CONTROLARLO TAMBIEN? 
+    public String modificarPerfil(@PathVariable long id, Model model) {    
         Usuario user = entityManager.find(Usuario.class, id);
-		Usuario u = (Usuario)session.getAttribute("u");
-
-		boolean ok = comprobarUsuario(user, u, model);
-		if(!ok){
-			return "errorUser";
-		}
-
         model.addAttribute("user", user);
         return "modificarPerfil";                     
     }
@@ -256,7 +249,15 @@ public class UserController {
 		@RequestParam String password2,
         Model model, HttpSession session) {    
 		
-        Usuario user = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+		Usuario u = entityManager.find(Usuario.class, id);
+        Usuario user =(Usuario)session.getAttribute("u");
+
+		if(u.getId() != user.getId()){
+			//response.sendError(HttpServletResponse.SC_FORBIDDEN,  "Este no es tu perfil");
+			log.info("ESTE NO ES TU PERFIL."); //mostrar mensaje de error o crear pagina como errorPuja
+			model.addAttribute("user", u);
+			return "modificarPerfil";
+		}
 
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -279,15 +280,8 @@ public class UserController {
     }
 
 	@GetMapping("/depositarFondo/{id}")
-    public String depositarFondo(@PathVariable long id, Model model, HttpSession session) {    
+    public String depositarFondo(@PathVariable long id, Model model) {    
         Usuario prof = entityManager.find(Usuario.class, id);
-		Usuario u = (Usuario)session.getAttribute("u");
-
-		boolean ok = comprobarUsuario(prof, u, model);
-		if(!ok){
-			return "errorUser";
-		}
-
         model.addAttribute("prof", prof);
         return "depositarFondo";                     
     }
@@ -298,8 +292,13 @@ public class UserController {
         @RequestParam BigDecimal saldo,
         Model model, HttpSession session, HttpServletResponse response) {    
 
+        Usuario u = entityManager.find(Usuario.class, id);
         Usuario prof = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
-
+		if(u.getId() != prof.getId()){
+			model.addAttribute("prof", prof); 
+			log.info("ESTE NO ES TU PERFIL.");
+			return "depositarFondo";
+		}
         BigDecimal nuevoSaldo = prof.getSaldo().add(saldo);
         prof.setSaldo(nuevoSaldo);
         entityManager.merge(prof);
@@ -309,15 +308,8 @@ public class UserController {
 
     
     @GetMapping("/retirarFondo/{id}")
-    public String retirarFondo(@PathVariable long id, Model model, HttpSession session) {    
+    public String retirarFondo(@PathVariable long id, Model model) {    
         Usuario prof = entityManager.find(Usuario.class, id);
-		Usuario u = (Usuario)session.getAttribute("u");
-
-		boolean ok = comprobarUsuario(prof, u, model);
-		if(!ok){
-			return "errorUser";
-		}
-
         model.addAttribute("prof", prof);
         return "retirarFondo";                     
     }
@@ -328,13 +320,19 @@ public class UserController {
         @RequestParam BigDecimal saldo,
         Model model, HttpSession session) {    
 
+        Usuario u = entityManager.find(Usuario.class, id);
         Usuario prof = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+		if(u.getId() != prof.getId()){
+			//response.sendError(HttpServletResponse.SC_FORBIDDEN,  "Este no es tu perfil");
+			log.info("ESTE NO ES TU PERFIL.");
+			model.addAttribute("prof", prof);  
+			return "retirarFondo";
+		}
 
-		int errorRF = 0;
         if(saldo.compareTo(prof.getSaldo()) == 1){ //PREGUNTAR AL PROFESOR POR QUÉ PETA 
             // ERROR: Selected 'text/html' given [text/html, application/xhtml+xml, image/avif, image/webp, image/apng, application/xml;q=0.9, application/signed-exchange;v=b3;q=0.9, */*;q=0.8]
-			errorRF = 1;
-			model.addAttribute("errorRF", errorRF);
+			//response.sendError(HttpServletResponse.SC_FORBIDDEN,  "Este no es tu perfil");
+			log.info("NO PUEDES RETIRAR MAS DINERO DE LO QUE TIENES");
             model.addAttribute("prof", prof);     
 			return "retirarFondo";
         }
@@ -344,26 +342,4 @@ public class UserController {
         model.addAttribute("prof", prof);     
         return "retirarFondo";                     
     }
-
-	@GetMapping("/errorUser")
-    @Transactional
-    public String errorUser(Model model, HttpSession session){
-
-        return "errorUser";
-    }
-
-	/*controlamos si el ID de la URL es el mismo que el de la sesion
-	para que otro usuario no pueda acceder al perfil de otra persona*/
-	public Boolean comprobarUsuario(Usuario u, Usuario user, Model model){
-		int userDiferente = 0;
-		if (u.getId() != user.getId() &&
-			! user.hasRole(Usuario.Rol.ADMIN)) {
-			userDiferente = 1;
-			model.addAttribute("userDiferente", userDiferente);
-			model.addAttribute("idUser", user.getId());
-			return false;
-		}
-		return true;
-	}
-
 }

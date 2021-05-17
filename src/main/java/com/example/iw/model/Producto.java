@@ -7,8 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 //import javax.validation.constraints.NotNull;
 
@@ -16,16 +14,6 @@ import lombok.Data;
 
 @Entity
 @Data
-@NamedQueries({
-	@NamedQuery(name="Producto.hasProducto",
-			query="SELECT COUNT(nombre) "
-					+ "FROM Producto u "
-					+ "WHERE u.nombre = :nombre AND u.talla = :talla"),
-    @NamedQuery(name="Producto.hasProducto2",
-            query="SELECT COUNT(nombre) "
-                     + "FROM Producto u "
-                     + "WHERE u.nombre = :nombre AND u.talla = :talla AND u.id != :id")
-})
 public class Producto {
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

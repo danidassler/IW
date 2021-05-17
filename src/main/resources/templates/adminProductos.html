@@ -5,6 +5,9 @@
     <title>Administrador Productos</title>
 </head>
 <body>
+    <nav th:replace="frags/nav.html :: nav">
+		Nav goes here
+	</nav>
     <div>
         <th:block th:replace="frags/header.html">
             Aqui va lo que hay en header, esto no se ve
@@ -12,61 +15,28 @@
     </div>
 
     <div>
-
-        <div class="d-flex justify-content-center">
-            <a class="btn btn-info newProduct mt-4" th:if="${session.u.hasRole(session.u.getRol())}" th:href="@{/admin/formularioProducto}">Nuevo Producto</a>
-        </div>
-        <div class="container">
-            <table class="tabla_productos table align-middle table-borderless text-center container-fluid">
-                <thead>
-                    <tr class="d-flex m-3">
-
-                        <th class="col-3 font-monospace fs-5" scope="col">Imagen</th>
-                        <th class="col-3 font-monospace fs-5" scope="col">Nombre</th>
-                        <th class="col-3 font-monospace fs-5" scope="col">Categoría</th>
-
-                        <!--<th>Maxima Puja</th>
-                    <th>Menor Precio</th>-->
-                        <th class="col-3 font-monospace fs-5">Editar Productos</th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="d-flex m-3 p-3 align-items-center" th:each="p: ${prods}">
-
-                        <td class="col-3"><img class="img_tienda_producto" th:src="@{/producto/{id}/photo(id=${p.id})}" alt="foto" width="150" height="150" /></td>
-                        <td class="col-3 align-middle align-items-center"><a class="productoTienda align-middle fs-5" th:href="@{'/producto/' + ${p.id}}" th:text="${p.nombre}">N</a></td>
-                        <td class="col-3 align-middle align-items-center fs-5" th:text="${p.categorias}">C</td>
-
-                        <!--<td th:text="${mp}">MP</td>
-                    <td th:text="${mprec}">MP</td>-->
-                        <td class="col-3 align-middle align-items-center">
-                            <a class="btn btn-primary" th:href="@{'/admin/modificarProducto/' + ${p.id}}" role="button">Editar Producto</a>
-                        </td>
-
-                    </tr>
-                </tbody>
-            </table>
-            <!--
-        <div class="row">
-            <div th:each="p: ${prods}" class="col">
-
-                <img th:src="@{/producto/{id}/photo(id=${p.id})}" alt="foto" width="100" height="150" />
-                <p> <span th:text="${p.nombre}"></span></p>
-                <a th:href="@{'/admin/modificarProducto/' + ${p.id}}"></a><button class="btn btn-primary" type="button"> Editar Producto </button></a>
-            </div>
-         </div>
-             -->
-
-        </div>
-        <div class="d-flex justify-content-center">
-            <a class="newProduct" th:if="${session.u.hasRole(session.u.getRol())}" class="btn btn-primary" th:href="@{/admin/formularioProducto}">Nuevo Producto </a>
-        </div>
-    </div>
         <div>
-            <th:block th:replace="frags/pie.html">
-                Aqui va lo que hay en header, esto no se ve
-            </th:block>
+            <b>Buscador</b>
+            <button>Buscar</button>
         </div>
-    </body>
-    </html>
+        <div>
+            <b>Lista de productos:</b>
+            <button>Filtro</button>
+            <button class="newProduct" type="button"> <a th:if="${session.u.hasRole(session.u.getRol())}" class="newProduct" th:href="@{/admin/formularioProducto}">Nuevo Producto </a></button>
+        </div>
+        <div th:each="p: ${prods}">
+            <div>
+                <img th:src="@{/producto/{id}/photo(id=${p.id})}" alt="foto" width="100" height="150"/>
+                <p> <span th:text="${p.nombre}"></span></p>
+                <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:href="@{'/admin/modificarProducto/' + ${p.id}}">Editar Producto </a></button>
+            </div>
+        </div>
+
+    </div>
+    <div>
+        <th:block th:replace="frags/pie.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+</body>
+</html>
