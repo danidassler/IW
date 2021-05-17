@@ -35,38 +35,65 @@ public class MensajeController {
 		
 	@GetMapping("/{id}")
 	public String getMessages(@PathVariable long id, Model model, HttpSession session) {
+		long adminId = 0;
 		model.addAttribute("users", entityManager.createQuery(
 			"SELECT u FROM Usuario u").getResultList());
+		try {
+			adminId = (long)entityManager.createNamedQuery("Mensaje.findAdmin").setParameter("userId", id).getSingleResult();
+		}catch (Exception e) {
+			log.info("Ningún admin te ha contestado");
+		}
+		finally{
+			model.addAttribute("adminId", adminId); // Utilizado únicamente por el cliente
+		}
 		return "chat";
 	}
-	@GetMapping(path = "/received", produces = "application/json")
+
+	@GetMapping(path = "/userReceived/{adminId}", produces = "application/json") //Mensajes recibidos por el usuario
 	@Transactional // para no recibir resultados inconsistentes
 	@ResponseBody  // para indicar que no devuelve vista, sino un objeto (jsonizado)
-	public List<Mensaje.Transfer> retrieveMessages(HttpSession session) {
-		long userId = ((Usuario)session.getAttribute("u")).getId();		
-		Usuario u = entityManager.find(Usuario.class, userId);
-		log.info("Generating message list for user {} ({} messages)", 
-				u.getUsername(), u.getMensajesRecibidos().size());		
-		List<Mensaje.Transfer> mensajes = new ArrayList<>();
-		mensajes.addAll(u.getMensajesRecibidos().stream().map(Transferable::toTransfer).collect(Collectors.toList()));
-		mensajes.addAll(u.getMensajesEnviados().stream().map(Transferable::toTransfer).collect(Collectors.toList()));
-
+	public List<Mensaje.Transfer> messagesFromAdmin(@PathVariable long adminId, HttpSession session) {
+		List<Mensaje.Transfer> mensajes = new ArrayList<>(); //Ordenar por sent para que tenga coherencia
+		if(adminId != 0){ //En caso de asignarle un admin, se mostrarán el chat
+			mensajes = getAllMessages2(adminId, session);
+		}
+		 //En caso de no tener ningún admin asignado, no se muestra ningún mensaje
 
 		return  mensajes;
-	}	
-	@GetMapping(path = "/received/{clientId}", produces = "application/json") //Recibe id de un cliente, se creará 2 queries para recibir todos los mensajes recibidos y enviados entre el admin y ese user
+	}
+
+	@GetMapping(path = "/adminReceived/{clientId}", produces = "application/json") //Mensajes recibidos por el admin
 	@Transactional
 	@ResponseBody
-	public List<Mensaje.Transfer> messagesFromId(@PathVariable long clientId, HttpSession session) {
-		List<Mensaje.Transfer> mensajes = new ArrayList<>(); //Ordenar por sent para que tenga coherencia
+	public List<Mensaje.Transfer> messagesFromClient(@PathVariable long clientId, HttpSession session) {
+		List<Mensaje.Transfer> mensajes = new ArrayList<>();
 		if(clientId != 0){
-			long userId = ((Usuario)session.getAttribute("u")).getId();		
-			List<Mensaje> mensajesRecibidos = entityManager.createNamedQuery("Mensaje.recibidos").setParameter("userId", userId).setParameter("clienteId", clientId).getResultList();
-			List<Mensaje> mensajesEnviados = entityManager.createNamedQuery("Mensaje.enviados").setParameter("userId", userId).setParameter("clienteId", clientId).getResultList();
-			mensajes.addAll(mensajesRecibidos.stream().map(Transferable::toTransfer).collect(Collectors.toList()));
-			mensajes.addAll(mensajesEnviados.stream().map(Transferable::toTransfer).collect(Collectors.toList()));
+			mensajes = getAllMessages2(clientId, session);
 		}
-
+		else{ //En caso de ser clientId = 0, se mostrarán los mensajes de Atención al Cliente aún no contestados.
+			List<Mensaje> mensajesPending = entityManager.createNamedQuery("Mensaje.findNullMsg").getResultList();
+			log.info(mensajesPending);
+			mensajes.addAll(mensajesPending.stream().map(Transferable::toTransfer).collect(Collectors.toList()));
+		}
 		return  mensajes;
-	}	
+	}
+
+	//Funciones Auxiliares
+	public List<Mensaje.Transfer> getAllMessages(long receptorId, HttpSession session){
+		List<Mensaje.Transfer> mensajes = new ArrayList<>();
+		long userId = ((Usuario)session.getAttribute("u")).getId();		
+		List<Mensaje> mensajesRecibidos = entityManager.createNamedQuery("Mensaje.recibidos").setParameter("userId", userId).setParameter("clienteId", receptorId).getResultList();
+		List<Mensaje> mensajesEnviados = entityManager.createNamedQuery("Mensaje.enviados").setParameter("userId", userId).setParameter("clienteId", receptorId).getResultList();
+		mensajes.addAll(mensajesRecibidos.stream().map(Transferable::toTransfer).collect(Collectors.toList()));
+		mensajes.addAll(mensajesEnviados.stream().map(Transferable::toTransfer).collect(Collectors.toList()));
+		return mensajes;
+	}
+
+	public List<Mensaje.Transfer> getAllMessages2(long receptorId, HttpSession session){
+		List<Mensaje.Transfer> mensajes = new ArrayList<>();
+		long userId = ((Usuario)session.getAttribute("u")).getId();		
+		List<Mensaje> msjs = entityManager.createNamedQuery("Mensaje.total").setParameter("userId", userId).setParameter("clienteId", receptorId).getResultList();
+		mensajes.addAll(msjs.stream().map(Transferable::toTransfer).collect(Collectors.toList()));
+		return mensajes;
+	}
 }

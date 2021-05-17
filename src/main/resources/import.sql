@@ -1,3 +1,4 @@
+INSERT INTO Usuario VALUES (0, 'Administrador' , 1, 'Admin', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', 'ADMIN',0, 'Admin');
 INSERT INTO Usuario VALUES (1, 'Sanz Mayo' , 1, 'Daniel', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u',  'USER', 1200, 'danidassler');
 INSERT INTO Usuario VALUES (2, 'Moran Aguero' , 1, 'Sergio', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', 'USER', 1200, 'sergiom23');
 INSERT INTO Usuario VALUES (3, 'Casado Molinero' , 1, 'Alvaro', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', 'USER', 1200, 'alvaro09');

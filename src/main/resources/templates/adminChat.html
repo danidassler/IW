@@ -4,9 +4,11 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<title>Mensajes</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-	<script th:src="@{/js/simple-datatables-2.1.10.min.js}"></script>
-	<link th:href="@{/css/simple-datatables-2.1.10.css}" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+	<link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+	<link rel ="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+	<link rel ="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
 </head>
 <body>
     <nav th:replace="frags/nav.html :: nav">
@@ -22,16 +24,15 @@
         <div class="main">
         <h1>Mensajes recibidos</h1>
         
-        <table class="datatable" id="datatable"></table>
+        <table id="datatable" class="display" style="width:100%"></table>
         
         </div>
 	</div>	
 
 	<div class="sidebar">
-		<form th:action="@{/perfil/idOfTarget/msg}" method="POST">
+		<form th:action="@{/admin/idOfTarget/msg}" method="POST">
 
 		<select id="idOfTarget" onchange="changeFunc();">
-            <option value="0">Canal Admin</option>
 			<option th:each="user: ${users}" th:value="${user.id}" th:text="${user.username}">mfreire</option>
 		</select>
 		<textarea id="men" style="display:none;" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea>
@@ -39,7 +40,7 @@
 		</form>
 	</div>
 
-	<script>
+	<script th:inline="javascript">
 
 	function formatDate(d) {
 		// 2020-03-23T10:48:11.074 => 23/3/2020@10:48:18
@@ -47,63 +48,58 @@
 	}
 
     function changeFunc() {
-    var selectBox = document.getElementById("idOfTarget");
-    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-	console.log(dt);
-	dt.rows().remove("all");
-	if(selectedValue == "0"){
-		document.getElementById('men').style.display = "none";
-		document.getElementById('sendmsg').style.display = "none";
-	}
-	else{
-		document.getElementById('men').style.display = "block";
-		document.getElementById('sendmsg').style.display = "block";
-	}
-
-	$.get(config.rootUrl + "chat/received/" + selectedValue, function(data){
-		for (let i=0; i<data.length; i++) {
-		    let row = data[i];
-		    row.sent = formatDate(row.sent);
-		    if (row.received) {
-		        row.received = formatDate(row.received);
-		    }
-			dt.rows().add([formatDate(new Date().toISOString()), row.text])
+		dt.clear().draw();
+		var selectBox = document.getElementById("idOfTarget");
+		var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+		console.log(dt);
+		if(selectedValue == "0"){
+			document.getElementById('men').style.display = "none";
+			document.getElementById('sendmsg').style.display = "none";
 		}
-	})
+		else{
+			document.getElementById('men').style.display = "block";
+			document.getElementById('sendmsg').style.display = "block";
+		}
+		$.get("/chat/adminReceived/" + selectedValue, function(data){
+			for (let i=0; i<data.length; i++) {
+				let row = data[i];
+				row.sent = formatDate(row.sent);
+				if (row.received) {
+					row.received = formatDate(row.received);
+				}
+				console.log(row);
+				dt.row.add({from : row.from, to : row.to, sent : formatDate(new Date().toISOString()) , text : row.text}).draw();
+			}
+		})
    }
+    var dt = $('#datatable').DataTable( {
+    ajax: { url: "/chat/adminReceived/" + document.getElementById("idOfTarget").value,
+	dataSrc:""
+		},
+	columns: [
+	{ data: 'from' },
+	{ data: 'to' },
+	{ data: 'sent' },
+	{ data: 'text' },
+ 	]
 
-   let dt = new simpleDatatables.DataTable(
-		'#datatable', { 
-		    ajax: {
-		        url: config.rootUrl + "chat/received/" + document.getElementById("idOfTarget").value, // empieza siempre por config.rootUrl
-		        load: function(xhr) {
-					console.log(xhr);
-		        	let data = JSON.parse(xhr.responseText);
-					console.log(data)
-		        	for (let i=0; i<data.length; i++) {
-		        		let row = data[i];
-		        		row.sent = formatDate(row.sent);
-		        		if (row.received) {
-		        			row.received = formatDate(row.received);
-		        		}
-		        	}
-		        	return JSON.stringify(data);
-		        }
-		    }
-		}
-	);
+   	} );
 	// mostrando una tabla dinámica con datos cargados del servidor vía AJAX
 
 	// envío de mensajes vía AJAX, sin recargar la página
 	document.addEventListener("DOMContentLoaded", () => {
 		let b = document.getElementById("sendmsg");
 		b.onclick = (e) => {
+			let selectBox = document.getElementById("idOfTarget");
+			let receptor = selectBox.options[selectBox.selectedIndex].text;
 			let idOfTarget = document.getElementById("idOfTarget").value;
 			let url = b.parentNode.action.replace("idOfTarget", idOfTarget);
+			let username = [[${username}]];
 			console.log(url);
 			e.preventDefault();
-			console.log(b, b.parentNode)
-			dt.rows().add([formatDate(new Date().toISOString()), document.getElementById("men").value]);
+			console.log(b, b.parentNode);
+			dt.row.add({from : username, to : receptor, sent : formatDate(new Date().toISOString()), text : document.getElementById("men").value}).draw();
+			console.log(dt);
 			go(url, 'POST', {men: 
 					document.getElementById("men").value})
 				.then(d => console.log("happy", d))
@@ -111,15 +107,12 @@
 		}
 	});
 
-	// sobreescribid esta funcion para especificar qué sucede cuando recibes un mensaje
-	// aquí estoy metiendo el mensaje al final de la tabla
 	ws.receive = (m) => {
 		console.log(m);
 		if(document.getElementById("idOfTarget").value == m.to || (document.getElementById("idOfTarget").value == m.from && m.to != "0")){
-			dt.rows().add([formatDate(new Date().toISOString()), m.text]);
+			dt.row.add([m.from, m.to, formatDate(new Date().toISOString()), m.text]).draw();
 		}		
 	}
-	
 	</script>
 </body>
 </html>
