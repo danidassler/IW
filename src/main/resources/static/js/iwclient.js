@@ -3,49 +3,48 @@
  */
 const ws = {
 
-	/**
-	 * Number of retries if connection fails
-	 */
-	retries: 3,
-		
-	/**
-	 * Default action when message is received. 
-	 */
-	receive: (text) => {
-		console.log(text);
-	},
+    /**
+     * Number of retries if connection fails
+     */
+    retries: 3,
 
-	headers: {'X-CSRF-TOKEN' : config.csrf.value},
-	
-	/**
-	 * Attempts to establish communication with the specified
-	 * web-socket endpoint. If successfull, will call 
-	 */
-	initialize: (endpoint, subs = []) => {	
-		try {
-			ws.stompClient = Stomp.client(endpoint);
-			ws.stompClient.reconnect_delay = 2000;
-			// only works on modified stomp.js, not on original from mantainer's site
-			ws.stompClient.reconnect_callback = () => ws.retries -- > 0;
-			ws.stompClient.connect(ws.headers, () => {
-		        ws.connected = true;
-		        console.log('Connected to ', endpoint, ' - subscribing...');		        
-		        while (subs.length != 0) {
-		        	ws.subscribe(subs.pop())
-		        }
-		    });			
-			console.log("Connected to WS '" + endpoint + "'")
-		} catch (e) {
-			console.log("Error, connection to WS '" + endpoint + "' FAILED: ", e);
-		}
-	},
-	
-	subscribe: (sub) => {
+    /**
+     * Default action when message is received. 
+     */
+    receive: (text) => {
+        console.log(text);
+    },
+
+    headers: { 'X-CSRF-TOKEN': config.csrf.value },
+
+    /**
+     * Attempts to establish communication with the specified
+     * web-socket endpoint. If successfull, will call 
+     */
+    initialize: (endpoint, subs = []) => {
         try {
-	        ws.stompClient.subscribe(sub, 
-				(m) => ws.receive(JSON.parse(m.body))); 	// falla si no recibe JSON!
+            ws.stompClient = Stomp.client(endpoint);
+            ws.stompClient.reconnect_delay = 2000;
+            // only works on modified stomp.js, not on original from mantainer's site
+            ws.stompClient.reconnect_callback = () => ws.retries-- > 0;
+            ws.stompClient.connect(ws.headers, () => {
+                ws.connected = true;
+                console.log('Connected to ', endpoint, ' - subscribing...');
+                while (subs.length != 0) {
+                    ws.subscribe(subs.pop())
+                }
+            });
+            console.log("Connected to WS '" + endpoint + "'")
+        } catch (e) {
+            console.log("Error, connection to WS '" + endpoint + "' FAILED: ", e);
+        }
+    },
 
-        	console.log("Hopefully subscribed to " + sub);
+    subscribe: (sub) => {
+        try {
+            ws.stompClient.subscribe(sub,
+                (m) => ws.receive(JSON.parse(m.body))); // falla si no recibe JSON!
+            console.log("Hopefully subscribed to " + sub);
         } catch (e) {
             console.log("Error, could not subscribe to " + sub);
         }

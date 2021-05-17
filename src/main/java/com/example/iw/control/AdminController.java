@@ -25,20 +25,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import java.time.LocalDateTime;
-import com.example.iw.model.Mensaje;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 /**
  * Admin-only controller
  * @author mfreire
@@ -55,9 +45,6 @@ public class AdminController {
 	@Autowired
 	private LocalData localData;
 	
-    @Autowired
-	private SimpMessagingTemplate messagingTemplate;
-
 	@Autowired
 	private Environment env;
 
@@ -260,55 +247,5 @@ public class AdminController {
 
             return "administrarUsuario";
     }
-
-    @GetMapping("/adminChat/{id}")
-    public String adminChat(@PathVariable long id, Model model, HttpSession session) {
-        model.addAttribute("users", entityManager.createQuery(
-            "SELECT u FROM Usuario u").getResultList());
-        Usuario admin = entityManager.find(Usuario.class, id);
-        model.addAttribute("username", admin.getUsername());
-        return "adminChat";
-}
-
-@PostMapping("/{id}/msg")
-@ResponseBody
-@Transactional
-public String postMsg(@PathVariable long id, 
-        @RequestBody JsonNode o, Model model, HttpSession session) 
-    throws JsonProcessingException {
-    
-    String text = o.get("men").asText();
-    Usuario receiver = entityManager.find(Usuario.class, id);
-    Usuario admin = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
-    model.addAttribute("user", receiver);
-    
-    List<Mensaje> mensajesPending = entityManager.createNamedQuery("Mensaje.findNullMsgbyId").setParameter("userId", id).getResultList(); //Recoge todos los mensajes enviados a Atención al cliente del 
-    for(Mensaje msg: mensajesPending){
-        msg.setReceptor(admin);
-        entityManager.merge(msg);
-    }
-    // construye mensaje, lo guarda en BD
-    Mensaje m = new Mensaje();
-    m.setReceptor(receiver);
-    m.setEmisor(admin);
-    m.setFechaEnvio(LocalDateTime.now());
-    m.setMensaje(text);
-    entityManager.persist(m);
-    entityManager.flush();
-    
-    // construye json
-    ObjectMapper mapper = new ObjectMapper();
-    ObjectNode rootNode = mapper.createObjectNode();
-    rootNode.put("from", admin.getId());
-    rootNode.put("to", receiver.getId());
-    rootNode.put("text", text);
-    //rootNode.put("id", m.getId());
-    String json = mapper.writeValueAsString(rootNode);
-    
-    log.info("Sending a message to {} with contents '{}'", id, json);
-
-    messagingTemplate.convertAndSend("/user/"+receiver.getUsername()+"/queue/updates", json);
-    return "{\"result\": \"message sent.\"}";
-}	
 
 }

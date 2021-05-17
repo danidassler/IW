@@ -1,4 +1,3 @@
-INSERT INTO Usuario VALUES (0, 'Administrador' , 1, 'Admin', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', 'ADMIN',0, 'Admin');
 INSERT INTO Usuario VALUES (1, 'Sanz Mayo' , 1, 'Daniel', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u',  'USER', 1200, 'danidassler');
 INSERT INTO Usuario VALUES (2, 'Moran Aguero' , 1, 'Sergio', '{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u', 'USER', 1200, 'sergiom23');
 INSERT INTO Usuario VALUES (3, 'Casado Molinero' , 1, 'Alvaro', '{bcrypt}$2y$12$7vArUIV/8C0NBorPW9tCtuXnGQeCdVha.Q4V1tmI1ymrwBgptZsKm', 'USER', 1200, 'alvaro09'); -- bb
@@ -13,6 +12,8 @@ INSERT INTO Producto VALUES (5, 'Accesorios', 'Zeppelin inflable de Supreme. Pre
 INSERT INTO Producto VALUES (6, 'Relojes', 'Reloj de la lujosa marca ROLEX. Solo existen 500 unidades de este lujoso reloj en todo el mundo. En nuestra tienda, puedes obtener este Rolex GTM nuevo y original. Presenta una construcion de acero inoxidable y una esfera negra elegante.', 'Rolex GTM-Master II "Batman"', 'Unica');
 INSERT INTO Producto VALUES (7, 'Electronica', 'Consola de ultima generacion de Sony que esta arrasando en el mercado. La consola tiene un color blanco e inluye un mando de color blanco a juego. Con una capacidad de 1TB tienes capacidad para almacenar todos los juegos que necesites!', 'Sony Play Station 5', '1 TB');
 
+
+
 INSERT INTO Oferta VALUES (1, 0,'2021-10-10', '2021-10-01', NULL, 470, 0, 1, 1, NULL); -- puja dani 470 p1 --
 INSERT INTO Oferta VALUES (2, 0,'2021-11-15', '2021-11-05', NULL, 500, 1, NULL, 1, 2); -- precio sergio 500 p1 --
 INSERT INTO Oferta VALUES (3, 0,'2021-07-24', '2021-06-30', NULL, 380, 0, 2, 2, NULL); -- puja sergio 380 p2 --
@@ -22,3 +23,8 @@ INSERT INTO Oferta VALUES (5, 0,'2021-04-17', '2021-04-10', NULL, 510, 1, NULL, 
 INSERT INTO Oferta VALUES (6, 1,'2021-10-15', '2021-10-01', '2021-10-09', 405, 0, 1, 2, 3); -- Transaccion dani 405 p2 --
 INSERT INTO Oferta VALUES (7, 1,'2021-04-02', '2021-03-22', '2021-04-01', 490, 1, 5, 1, 4); -- Transaccion sergio 405 p1 --
 INSERT INTO Oferta VALUES (8, 1,'2021-04-02', '2021-03-22', '2021-04-02', 550, 1, 5, 1, 4); -- Transaccion sergio 405 p1 --
+
+INSERT INTO Mensaje VALUES (1, '2021-05-10', 'Donde esta mi pedido', 1, 3); -- usuario 1 emisor --
+INSERT INTO Mensaje VALUES (2, '2021-05-10', 'Su pedido esta en camino, relajese', 3, 1); -- usuario 1 receptor --
+INSERT INTO Mensaje VALUES (3, '2021-05-22', 'Sabes si puedo devolver las yeezy?', 2, 4); -- usuario 2 emisor, 4 receptor --
+INSERT INTO Mensaje VALUES (4, '2021-05-10', 'Si claro, si aun no has abierto el paquete', 4, 2); -- usuario 4 emisor, 2 receptor --

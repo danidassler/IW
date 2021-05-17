@@ -4,11 +4,7 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<title>Mensajes</title>
-	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-	<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-	<link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
-	<link rel ="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
-	<link rel ="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+
 	<script th:src="@{/js/simple-datatables-2.1.10.min.js}"></script>
 	<link th:href="@{/css/simple-datatables-2.1.10.css}" rel="stylesheet">
 </head>
@@ -28,14 +24,13 @@
 	</div>
 	</div>	
 
-	<div class="sidebar" th:if="${session.u.hasRole('ADMIN')}">
-		Eres un administrador, no puedes utilizar Atención al Cliente.
-	</div>
-
-	<div class="sidebar" th:if="${session.u.hasRole('USER')}">
-		<form th:action="@{/perfil/chatconadmin}" method="POST">
-		<textarea id="men" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea>
-		<button id="sendmsg2" type="submit">Enviar</button>
+	<div class="sidebar">
+		<form th:action="@{/perfil/idOfTarget/msg}" method="POST">
+		<select id="idOfTarget">
+			<option th:each="user: ${users}" th:value="${user.id}" th:text="${user.username}">mfreire</option>
+		</select>
+		<textarea id="men" placeholder="escribe al usuario seleccionado" rows="4" cols="20"></textarea>
+		<button id="sendmsg" type="submit">Enviar</button>
 		</form>
 	</div>
 
@@ -45,57 +40,47 @@
 		// 2020-03-23T10:48:11.074 => 23/3/2020@10:48:18
 		return new Date(d).toLocaleString("es-ES").split(" ").join("@")
 	}
-    function asignarAdmin(from) {
-		admin = from;
-		console.log(from);
-   }
 
-   let admin = [[${adminId}]]; //Variable global
 	// mostrando una tabla dinámica con datos cargados del servidor vía AJAX
-    var dt = $('#datatable').DataTable( {
-    ajax: { url: "/chat/userReceived/" + document.getElementById("idOfTarget").value,
-	dataSrc:""
-		},
-	columns: [
-	{ data: 'from' },
-	{ data: 'to' },
-	{ data: 'sent' },
-	{ data: 'text' },
- 	]
+	let dt = new simpleDatatables.DataTable(
+		'#datatable', { 
+		    ajax: {
+		        url: config.rootUrl + "chat/received", // empieza siempre por config.rootUrl
+		        load: function(xhr) {
+		        	let data = JSON.parse(xhr.responseText);
+		        	for (let i=0; i<data.length; i++) {
+		        		let row = data[i];
+		        		row.sent = formatDate(row.sent);
+		        		if (row.received) {
+		        			row.received = formatDate(row.received);
+		        		}
+		        	}
+		        	
+		        	return JSON.stringify(data);
+		        }
+		    }
+		}
+	);
 
-   	} );
-
+	// envío de mensajes vía AJAX, sin recargar la página
 	document.addEventListener("DOMContentLoaded", () => {
-		let b = document.getElementById("sendmsg2");
+		let b = document.getElementById("sendmsg");
 		b.onclick = (e) => {
+			let idOfTarget = document.getElementById("idOfTarget").value;
+			let url = b.parentNode.action.replace("idOfTarget", idOfTarget);
 			e.preventDefault();
-
-			//dt.rows().add(["yo", admin, formatDate(new Date().toISOString()), document.getElementById("men").value]);
-			if(admin == 0){
-				console.log(b, b.parentNode)
-				go("/perfil/chatconadmin", 'POST', {men: 
-						document.getElementById("men").value})
-					.then(d => console.log("happy", d))
-					.catch(e => console.log("sad", e))
-			}
-			else{
-				console.log(b, b.parentNode)
-				let url = "/perfil/" + admin + "/msg";
-				go(url, 'POST', {men: 
-						document.getElementById("men").value})
-					.then(d => console.log("happy", d))
-					.catch(e => console.log("sad", e))
-			}
+			console.log(b, b.parentNode)
+			go(url, 'POST', {men: 
+					document.getElementById("men").value})
+				.then(d => console.log("happy", d))
+				.catch(e => console.log("sad", e))
 		}
 	});
 
 	// sobreescribid esta funcion para especificar qué sucede cuando recibes un mensaje
 	// aquí estoy metiendo el mensaje al final de la tabla
 	ws.receive = (m) => {
-		//dt.rows().add([m.from, m.to, formatDate(new Date().toISOString()), m.text]);		
-		if(admin != m.from && admin == 0){ //Le asignara los mensajes al primer admin que le hable
-			asignarAdmin(m.from);
-		}
+		dt.rows().add([m.from, m.to, formatDate(new Date().toISOString()), "", m.text, m.id]);		
 	}
 	
 	</script>
