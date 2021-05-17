@@ -6,37 +6,44 @@
 	<title>IW: Plantilla</title>
 </head>
 <body>
-
-	<nav th:replace="frags/nav.html :: nav">
-		Nav goes here
-	</nav>
-	<div>
-		<th:block th:replace="frags/header.html"/>
-	</div>
-	
-	<div class="container">
-	<div class="main">
-	
-	<h1>Bienvenido a la plantilla de IW</h1>
-	<!--th:text="#{index.welcome}"-->
-	<p>
-	Esta plantilla sirve para lorem ipsum dolor sit amet, consectetuer adipiscing elit. 
-	Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis 
-	dis parturient montes, nascetur ridiculus mus. Donec qu
-	</p>
-	
-	<div th:if="${session.u == null}">
-	<h4>Intenta ver un perfil</h4>
-	<ul>
-		<li><a th:href="@{/perfil/1}">Uno</a></li>
-		<li><a th:href="@{/perfil/2}">Dos</a></li>
-		<li><a th:href="@{/perfil/3}">Tres</a>
-	</li>
-	</ul>
-
-	</div>
-	
-	</div>
+    <div>
+        <th:block th:replace="frags/header.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+	<div class="container-fluid">
+		<div class="col-12 text-center">
+			<div class="row align-items-center border-bottom pb-4">
+				<h1 class="sitename mt-3" >Bienvenido a  <span class="sitename">NewChance</span></h1>
+				<p class="mt-4 mb-4"> Proyecto de la asignaruta IW de la Universidad Complutense de Madrid </p>
+				<!--<img th:src="@{../static/img/logoucm.jpg}" alt="foto" width="350" height="400"/>-->
+				<h3 class="mb-4"> Integrantes </h3>
+				<div class="row">
+					<div class="col-3"></div>
+					<div class="col-2">
+						<p> Daniel Sanz Mayo </p>
+					</div>
+					<div class="col-2">
+						<p> Sergio Morán Agüero </p>
+					</div>
+					<div class="col-2">
+						<p> Jin Tao Peng Zou </p>
+					</div>
+					<div class="col-3"></div>
+				</div>
+				<div class="row">
+					<div class="col-4"></div>
+					<div class="col-2">
+						<p> Jin Wang Xu </p>
+					</div>
+					<div class="col-2">
+						<p> Alvaro Casado Molinero </p>
+					</div>
+					<div class="col-4"></div>
+				</div>
+					<!--SI QUEREIS PODEMOS PONER UNAS FOTOS PARA OCUPAR MAS-->
+			</div>
+		</div>
 	</div>
 		
 	<footer th:replace="frags/pie.html">

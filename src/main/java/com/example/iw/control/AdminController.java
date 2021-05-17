@@ -29,6 +29,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.time.LocalDateTime;
+import com.example.iw.model.Mensaje;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.web.bind.annotation.RequestBody;
 /**
  * Admin-only controller
  * @author mfreire
@@ -47,6 +57,9 @@ public class AdminController {
 	
 	@Autowired
 	private Environment env;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
 	@GetMapping("/")
 	public String index(Model model) {
@@ -85,7 +98,7 @@ public class AdminController {
         return "formularioProducto";
     }
 
-    @PostMapping("formularioProducto")
+    @PostMapping("/formularioProducto")
     @Transactional
     public String formularioProducto(
         @RequestParam String nombre,
@@ -97,8 +110,17 @@ public class AdminController {
         @RequestParam("photo") MultipartFile photo,  
         HttpSession session) throws IOException{
         
-        //CONTROLAR QUE NO SE METE UN PRODUCTO YA EXISTENTE
-        //incluir el nuevo producto en la bbdd
+        long n = (long) entityManager.createNamedQuery("Producto.hasProducto")
+        .setParameter("nombre", nombre).setParameter("talla", talla)
+        .getSingleResult();
+        
+        int errorP = 0;
+        if(n > 0){ //ya esta el producto
+            errorP = 1;
+            model.addAttribute("errorP", errorP);
+            return "formularioProducto";
+        }
+
         Producto prod = new Producto();
         prod.setNombre(nombre);
         prod.setDesc(desc);
@@ -143,8 +165,20 @@ public class AdminController {
         @RequestParam String talla,
         Model model){
         
-        //CONTROLAR QUE NO SE METE UN PRODUCTO YA EXISTENTE
         Producto prod = entityManager.find(Producto.class, id);
+
+        long n = (long) entityManager.createNamedQuery("Producto.hasProducto2")
+        .setParameter("nombre", nombre).setParameter("talla", talla).setParameter("id", id)
+        .getSingleResult();
+
+        int errorP = 0;
+        if(n > 0){ //ya esta el producto
+            errorP = 1;
+            model.addAttribute("errorP", errorP);
+            model.addAttribute("prod", prod);
+            return "modificarProducto";
+        }
+
         prod.setNombre(nombre);
         prod.setDesc(desc);
         prod.setCategorias(categorias);
@@ -189,7 +223,22 @@ public class AdminController {
         
         model.addAttribute("prods", prods); 
             
-        return "adminProductos";                     
+        return "adminProductos"; 
+                   
+		/*List<?> prods = entityManager.createQuery("SELECT p FROM Producto p").getResultList();
+		List<?> matrix = new ArrayList<>();
+		int  numrows = prods.size()/4;
+		model.addAttribute("numrows", numrows); 
+		model.addAttribute("prods", prods); 
+		int col = 0;
+		for(int row = 0; row < prods.size()/4; row++){
+			for(; col < 4; col++){
+				
+			}
+		}
+
+            
+        return "adminProductos";*/
     }
 
     @PostMapping("banearUsuario/{id}")
@@ -211,5 +260,54 @@ public class AdminController {
 
             return "administrarUsuario";
     }
+    
+    //Websockets
+    @GetMapping("/adminChat/{id}")
+    public String adminChat(@PathVariable long id, Model model, HttpSession session) {
+        model.addAttribute("users", entityManager.createQuery(
+            "SELECT u FROM Usuario u").getResultList());
+        Usuario admin = entityManager.find(Usuario.class, id);
+        model.addAttribute("username", admin.getUsername());
+        return "adminChat";
+    }
 
+    @PostMapping("/{id}/msg")
+    @ResponseBody
+    @Transactional
+    public String postMsg(@PathVariable long id, @RequestBody JsonNode o, Model model, HttpSession session) 
+        throws JsonProcessingException {
+
+        String text = o.get("men").asText();
+        Usuario receiver = entityManager.find(Usuario.class, id);
+        Usuario admin = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+        model.addAttribute("user", receiver);
+
+        List<Mensaje> mensajesPending = entityManager.createNamedQuery("Mensaje.findNullMsgbyId").setParameter("userId", id).getResultList(); //Recoge todos los mensajes enviados a Atención al cliente del 
+        for(Mensaje msg: mensajesPending){
+            msg.setReceptor(admin);
+            entityManager.merge(msg);
+        }
+        // construye mensaje, lo guarda en BD
+        Mensaje m = new Mensaje();
+        m.setReceptor(receiver);
+        m.setEmisor(admin);
+        m.setFechaEnvio(LocalDateTime.now());
+        m.setMensaje(text);
+        entityManager.persist(m);
+        entityManager.flush();
+
+        // construye json
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode rootNode = mapper.createObjectNode();
+        rootNode.put("from", admin.getId());
+        rootNode.put("to", receiver.getId());
+        rootNode.put("text", text);
+        //rootNode.put("id", m.getId());
+        String json = mapper.writeValueAsString(rootNode);
+
+        log.info("Sending a message to {} with contents '{}'", id, json);
+
+        messagingTemplate.convertAndSend("/user/"+receiver.getUsername()+"/queue/updates", json);
+        return "{\"result\": \"message sent.\"}";
+    }
 }

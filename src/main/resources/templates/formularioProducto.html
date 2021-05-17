@@ -6,18 +6,62 @@
         td, th { border: 1px solid grey; text-align: center; border-spacing: 10px;}
         table { padding: 0; }
     </style>
+    <link rel="stylesheet" th:href="@{/css/error.css}" href="css/error.css" type="text/css"/>
     <title>Formulario para un producto</title>
 </head>
 <body>
-    <nav th:replace="frags/nav.html :: nav">
-		Nav goes here
-	</nav>
     <div>
         <th:block th:replace="frags/header.html">
             Aqui va lo que hay en header, esto no se ve
         </th:block>
     </div>
-    <h3>Formulario Producto</h3>
+
+    <div class="container-fluid">
+        <div class="row text-center align-items-center mt-5 ml-5 mr-5 mb-1 border rounded p-3 mb-5">
+            <h4>Información del producto</h4>
+            <form method="POST" th:action="@{/admin/formularioProducto}" enctype="multipart/form-data">
+            <div class="col text-center border-right">
+                <label for="photo" class="form-label mt-3">Foto del producto:</label> <input type="file" name="photo" id="photo"/>
+            </div>
+            <div class="col text-center">
+                <div class="row align-items-center m-4">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col">
+                                <p> <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre del producto" required="required"></input></p>
+                            </div>
+                            <div class="col">
+                                <p><input type="text" id="categorias" name="categorias" class="form-control" placeholder="Categoria" required="required"></input> </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p><input type="text" id="desc" name="desc" class="form-control" placeholder="Descripcion" required="required"></input></p>
+                            </div>
+                            <div class="col">
+                                <p><input type="text" id="talla" name="talla" class="form-control" placeholder="Talla" required="required"></input></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col"></div>
+                            <div class="col-6">
+                                <button id="addProducto" class="btn btn-lg btn-primary btn-block" type="submit">Agregar Producto</button>
+                            </div>
+                            <div class="col"></div>
+                        </div>
+                        </form>
+                        <div th:if="${errorP==1}" class="error">
+                            <div class="errorbody">
+                              <p>ERROR: El producto ya existe.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--<h3>Formulario Producto</h3>
     <p>Con este formulario el administrador podrá añadir un nuevo producto a la tienda, rellenando los requisitos necesarios para que sea valido.</p>
     <table>
         <tr>
@@ -50,9 +94,14 @@
                 
                     <button class="btn btn-lg btn-primary btn-block" id="addProducto" type="submit">Agregar Producto</button>
                 </form>
+                <div class="error">
+                    <div class="errorbody">
+                      <p th:if="${errorP==1}">ERROR: El producto ya existe.</p>
+                    </div>
+                </div>
             </td>
         </tr>
-    </table>
+    </table>-->
     <th:block th:replace="frags/pie.html">
     Aqui va lo que hay en header, esto no se ve
     </th:block>

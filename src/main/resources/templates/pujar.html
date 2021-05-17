@@ -6,61 +6,80 @@
         td, th { border: 1px solid grey; text-align: center; border-spacing: 10px;}
         table { padding: 0; }
     </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Pujar un producto</title>
 </head>
 <body>
-    <nav th:replace="frags/nav.html :: nav">
-		Nav goes here
-	</nav>
     <div>
         <th:block th:replace="frags/header.html">
             Aqui va lo que hay en header, esto no se ve
         </th:block>
     </div>
-    <h3>Puja de un producto</h3>
-    <p>Aquí un usuario podrá pujar un producto y luego visualizar el historial de pujas de otros usuarios</p>
-    <table>
-        <tr>
-            <td>
-                <b><p th:text="${prod.nombre}">Producto</p></b>
-                <p th:if="${menorPrecio != 0}">Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€</p>
-                <p th:if="${menorPrecio == 0}">Precio mas bajo: --- €</p>
-                <p th:if="${mejorPuja != 0}">Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p> 
-                <p th:if="${mejorPuja == 0}">Puja mas alta: --- € </p> 
-                <p>Talla: <span th:text="${prod.talla}">N</span></p>
-                <img th:src="@{/producto/{id}/photo(id=${prod.id})}" alt="foto" width="350" height="400"/>
-            </td>
-            <td>
-                <!-- HABRIA QUE CONTROLAR QUE SI UN USUARIO YA TIENE UNA PUJA EN UN PRODUCTO, 
-                EN VEZ DE CREARSE UNA NUEVA PUJA, SE MODIFIQUE LA QUE TENIA, ya que un usuario 
-                solo puede tener 1 puja activa por un mismo producto a la vez-->
-                <form method="post" th:action="@{'/oferta/pujar/' + ${prod.id}}">
-                    <h4>Información de la puja</h4>
-                    <p>Ten en cuenta que al precio que establezcas se le sumarán el 9% de tasas y 10€ de envio</p>
-                    <p>El dinero sera restado de tu saldo al realizar la puja, y devuelto si la cancelas.</p>
-                    <p>
-                        <label for="precio" class="sr-only">Precio de puja: </label>
-                        <input type="text" id="precio" name="precio" 
-                          class="form-control" placeholder="Precio" required="required"></input>
-                    </p>
-                    <p>
-                        <label for="tiempoExpiracion" class="sr-only">Tiempo de expiración (dias): </label>
-                        <select name="tiempoExpiracion">
-                            <option>1</option>
-                            <option>3</option>
-                            <option>7</option>
-                            <option>14</option>
-                            <option>30</option>
-                            <option>60</option>
 
-                        </select>
-                    </p>
-                
-                    <button class="btn btn-lg btn-primary btn-block" id="pujaProducto" type="submit">Pujar</button>
+    <div class="container-fluid">
+        <div class="row align-items-center m-5 border rounded pb-3">    
+            <div class="col-4 text-center img-fluid p-3">
+                <div class="col-12 pb-2">
+                    <p th:if="${menorPrecio != 0}">Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€</p>
+                    <p th:if="${menorPrecio == 0}">Precio mas bajo: --- €</p>
+                    <p th:if="${mejorPuja != 0}">Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p> 
+                    <p th:if="${mejorPuja == 0}">Puja mas alta: --- € </p> 
+                </div>
+                <img class="rounded p-2" th:src="@{/producto/{id}/photo(id=${prod.id})}" alt="foto" width="250" height="300"/>
+            </div>
+            <div class="col-8 text-center border-left justify-content-center">
+                <div class="row align-items-center m-4">
+                    <div class="col-12">
+                        <p class="h1 font-monospace fw-bold" th:text="${prod.nombre}"><b>Producto</b></p>
+                    </div>
+                    <div class="col-12">
+                        <p>Talla: <span th:text="${prod.talla}">N</span></p>
+                    </div>
+                </div>
+                <form class="justify-content-center" method="post" th:action="@{'/oferta/pujar/' + ${prod.id}}">
+                    <div class="row">
+                        <div class="col-12">
+                            <h4>Información de la puja</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <p>Ten en cuenta que al precio que establezcas se le sumarán el 9% de tasas y 10€ de envio
+                            El dinero sera restado de tu saldo al realizar la puja, y devuelto si la cancelas.</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col row justify-content-center pb-2">
+                            <div class="input-group align-items-center">
+                                <label for="precio" class="sr-only">Precio de puja: </label>
+                                <input type="text" id="precio" name="precio" 
+                                class="form-control" placeholder="Precio" required="required"></input>
+                            </div>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col"></div>
+                            <div class="col row justify-content-center pb-2">
+                                <label for="tiempoExpiracion" >Tiempo de expiración (dias): </label>
+                                <select name="tiempoExpiracion" class="form-select" aria-label="Default select example">
+                                    <option value="1">1</option>
+                                    <option value="3">3</option>
+                                    <option selected value="7">7</option>
+                                    <option value="14">14</option>
+                                    <option value="30">30</option>
+                                    <option value="60">60</option>
+                                </select>
+                            </div>
+                        <div class="col"></div>
+                    </div>
+                        <button class="btn btn-primary btn-xs" id="pujaProducto" type="submit">Pujar</button>  
                 </form>
-            </td>
-        </tr>
-    </table>
+            </div>
+        </div>  
+    </div>
     <th:block th:replace="frags/pie.html">
     Aqui va lo que hay en header, esto no se ve
     </th:block>
