@@ -75,11 +75,11 @@
                     <span><a class="tienda" th:href="@{/tienda/Relojes}"><b>Relojes</b></a></span>
                 </li>
                 <!--<li>
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <input class="form-control w-25" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </li>-->
             </ul>
-            <div class="logx" th:if="${session.u}">
+            <div class="logx ml-2" th:if="${session.u}">
                 <!--<a id="received" th:href="@{/message/}" th:text="${session.unread} ? '📬': '📪'">📫</a>	 /-->
                 <a th:if="${session.u.hasRole('ADMIN')}" class="btn btn-outline-primary" th:href="@{/admin/adminUsuarios}">Administrar Usuarios</a>
                 <form th:action="@{/logout}" method="post">

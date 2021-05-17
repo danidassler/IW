@@ -14,12 +14,12 @@ Scenario: ADMIN: login, add product | User 1: login & place price | User 2: logi
   * driver.screenshot()
 
   # Pulsamos el botón de "Administrar Productos" Para acceder a la vista del admin
-  * click("a[class~="adminProductos]")
+  * click("a[class~=adminProductos]")
   * match html('title') contains 'Administrador Productos'
   * driver.screenshot()
 
   # Pulsamos el botón de "Nuevo Producto" Para acceder al formulario de crear un producto nuevo
-  * click("a[class=newProduct]")
+  * click("a[class~=newProduct]")
   * match html('title') contains 'Formulario para un producto'
   * driver.screenshot()
 

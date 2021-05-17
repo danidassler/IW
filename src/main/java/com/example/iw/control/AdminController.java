@@ -85,7 +85,7 @@ public class AdminController {
         return "formularioProducto";
     }
 
-    @PostMapping("formularioProducto")
+    @PostMapping("/formularioProducto")
     @Transactional
     public String formularioProducto(
         @RequestParam String nombre,
@@ -210,7 +210,22 @@ public class AdminController {
         
         model.addAttribute("prods", prods); 
             
-        return "adminProductos";                     
+        return "adminProductos"; 
+                   
+		/*List<?> prods = entityManager.createQuery("SELECT p FROM Producto p").getResultList();
+		List<?> matrix = new ArrayList<>();
+		int  numrows = prods.size()/4;
+		model.addAttribute("numrows", numrows); 
+		model.addAttribute("prods", prods); 
+		int col = 0;
+		for(int row = 0; row < prods.size()/4; row++){
+			for(; col < 4; col++){
+				
+			}
+		}
+
+            
+        return "adminProductos";*/
     }
 
     @PostMapping("banearUsuario/{id}")

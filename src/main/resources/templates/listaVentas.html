@@ -2,11 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <style>
-        td { padding: 1em; }
-        table { padding: 1em; }
-        .in_table {border: 1px solid grey; text-align: center;}
-    </style>
     <title>Ventas de un producto</title>
 </head>
 <body>
@@ -15,60 +10,68 @@
             Aqui va lo que hay en header, esto no se ve
         </th:block>
     </div>
-    <h4>Venta:</h4>
-    <div>Esta vista mostrará el historial de las ventas de un producto específico</div>
-    <div>Será muy parecida al de mostrar los precios marcados por los vendedores sobre este producto</div>
-    <table>
-        <tr>    
-            <td>
-                <p><b><span th:text="${prod.nombre}">N</span></b></p>
-                <p th:if="${menorPrecio != 0}">Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€</p>
-                <p th:if="${menorPrecio == 0}">Precio mas bajo: --- €</p>
-                <p th:if="${mejorPuja != 0}">Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p> 
-                <p th:if="${mejorPuja == 0}">Puja mas alta: --- € </p>
-                <p><img th:src="@{/producto/{id}/photo(id=${prod.id})}" alt="foto" width="350" height="400"/></p>
-            </td>
-            <td>
-                <button><a th:href="@{'/producto/compra/' + ${prod.id}}">Comprar ya</a></button>
-                <button th:if="${mejorPuja != 0}"><a th:href="@{'/producto/venta/' + ${prod.id}}">Vender ya</a></button>
-                <p><input type="text"> €</input></p>
-                <b><p>Ultimas Ventas</p></b>
 
-                <table class="in_table">
-                    <tr> 
-                        <td>
-                            <p>Talla</p>
-                        </td>
-                        <td>
-                            <p>Precio de Venta</p>
-                        </td>
-                        <td>
-                            <p>Fecha</p>
-                        </td>
-                    </tr>
+    <div class="container-fluid">
+        <div class="row align-items-center mt-5 ml-5 mr-5 mb-4 border rounded p-3">
+            <div class="col-4 text-center img-fluid">
+                <img class="rounded p-2" th:src="@{/producto/{id}/photo(id=${prod.id})}" alt="foto" width="300"/>
+            </div>
+            <div class="col-8 border-left">
+                <div class="row text-center m-4">
+                    <p class="h1 font-monospace fw-bold"><span th:text="${prod.nombre}">N</span></p>
+                </div>
+                <div class="row text-center">
+                    <div class="col border m-3 align-middle align-items align-items-center text-center">
+                        <div class="row mt-3">
+                            <p class="h3 mb-3">Ultimas ventas:</p>
+                            <div class="col m-1">
+                                <span class="h5">Precio</span>
+                            </div>
 
-                    <tr th:each="v: ${ventas}">    
-                        <td>
-                            <span th:text="${prod.talla}">N</span>
-                        </td>
-                        <td>
-                           <span th:text="${v.precio}">N</span>€
-                        </td>
-                        <td>
-                            <span th:text="${v.fechaTransaccion}">F</span>
-                        </td>
-                    </tr>
+                            <div class="col m-1">
+                                <span class="h5">Fecha</span>
+                            </div>
+                        </div>
+                        <div class="row m-2" th:each="v: ${ventas}">
+                            <div class="col m-1">
+                                <span class="h4" th:text="${v.precio}">N</span>€
+                            </div>
+                            <div class="col m-1">
+                                <span class="h6" th:text="${v.fechaTransaccion}">N</span>
+                            </div>
+                        </div>
+                    </div>
 
-                </table>
+                    <div class="col m-3">
+                        <div class="row m-3">
+                            <div class="col">
+                                <p th:if="${mejorPuja != 0}">
+                                    <a class="btn btn-danger btn-xs col-lg-12" th:href="@{'/producto/venta/' + ${prod.id}}" role="button"  style="margin-bottom:4px;white-space: normal;">Vender ya
+                                        <br><span th:text="${mejorPuja}"> HB</span>€  
+                                    </a></p>
+                                <p th:if="${mejorPuja == 0}"> 
+                                    <a class="btn btn-danger disabled btn-xs col-lg-12" th:href="@{'/producto/venta/' + ${prod.id}}" role="button" aria-disabled="true"  style="margin-bottom:4px;white-space: normal;">Vender ya <br>--- € </a></p>
+                            </div>
+
+                        </div>
+                        <div class="row m-3">
+                            <div class="col">
+
+                                <p th:if="${menorPrecio != 0}"> 
+                                    <a class="productoComprarYa btn btn-success btn-xs col-lg-12" th:href="@{'/producto/compra/' + ${prod.id}}" role="button"  style="margin-bottom:4px;white-space: normal;">Comprar ya
+                                        <br><span th:text="${menorPrecio}"> LA</span>€
+                                    </a></p>
+                                <p th:if="${menorPrecio == 0}"> <a class="productoComprarYa btn btn-success disabled btn-xs col-lg-12" th:href="@{'/producto/compra/' + ${prod.id}}" role="button" aria-disabled="true"  style="margin-bottom:4px;white-space: normal;">Comprar ya
+                                    <br>--- €
+                                </a> </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
                 
-
-            </td>
-            <td style="vertical-align:top">
-                <p>Saldo disponible: 800 €</p>
-            </td>
-        </tr>
-    </table>
-
+            </div>
+        </div>
+    </div>
     <th:block th:replace="frags/pie.html">
         Aqui va lo que hay en header, esto no se ve
     </th:block>

@@ -59,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					"/css/**", "/fonts/**", "/js/**", "/img/**", "data/img/**",
 					"/", "/error", "/tienda", 
 					"/tienda/**", 
-					"/producto/**", "/producto/*/photo", "/perfil/*/photo",
+					"/producto/*", "/producto/*/photo", "/perfil/*/photo", "/oferta/listaPujas/*", "/oferta/listaPrecios/*", "/oferta/listaVentas/*",
 					"/registro").permitAll()
 	            .antMatchers("/admin/**").hasRole("ADMIN")		  // <-- administration
 	            .anyRequest().authenticated()

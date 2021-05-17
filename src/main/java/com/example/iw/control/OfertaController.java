@@ -32,9 +32,8 @@ public class OfertaController {
     public String pujar(@PathVariable long id, Model model, HttpSession session) {    
         Producto prod = entityManager.find(Producto.class, id);
 
-        Usuario user = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
-        BigDecimal mejorPuja = obtenerMejorPuja(id, user);
-        BigDecimal menorPrecio = obtenerMenorPrecio(id, user);
+        BigDecimal mejorPuja = obtenerMejorPuja(id);
+        BigDecimal menorPrecio = obtenerMenorPrecio(id);
 
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
@@ -96,8 +95,8 @@ public class OfertaController {
             entityManager.merge(u);
         }
 
-        BigDecimal mejorPuja = obtenerMejorPuja(id, u);
-        BigDecimal menorPrecio = obtenerMenorPrecio(id, u);
+        BigDecimal mejorPuja = obtenerMejorPuja(id);
+        BigDecimal menorPrecio = obtenerMenorPrecio(id);
 
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
@@ -170,8 +169,8 @@ public class OfertaController {
         prec.setTipo(Oferta.Tipo.PRECIO);
         entityManager.persist(prec);
 
-        BigDecimal mejorPuja = obtenerMejorPuja(id, u);
-        BigDecimal menorPrecio = obtenerMenorPrecio(id, u);
+        BigDecimal mejorPuja = obtenerMejorPuja(id);
+        BigDecimal menorPrecio = obtenerMenorPrecio(id);
 
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
@@ -185,9 +184,8 @@ public class OfertaController {
     public String fijarPrecio(@PathVariable long id, Model model, HttpSession session) {    
         Producto prod = entityManager.find(Producto.class, id);
 
-        Usuario user = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
-        BigDecimal mejorPuja = obtenerMejorPuja(id, user);
-        BigDecimal menorPrecio = obtenerMenorPrecio(id, user);
+        BigDecimal mejorPuja = obtenerMejorPuja(id);
+        BigDecimal menorPrecio = obtenerMenorPrecio(id);
 
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
@@ -203,9 +201,8 @@ public class OfertaController {
         
         List<Oferta> pujas = entityManager.createNamedQuery("Oferta.pujas").setParameter("productoId", id).getResultList();
 
-        Usuario user = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
-        BigDecimal mejorPuja = obtenerMejorPuja(id, user);
-        BigDecimal menorPrecio = obtenerMenorPrecio(id, user);
+        BigDecimal mejorPuja = obtenerMejorPuja(id);
+        BigDecimal menorPrecio = obtenerMenorPrecio(id);
 
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
@@ -222,9 +219,8 @@ public class OfertaController {
         Producto prod = entityManager.find(Producto.class, id);
         List<Oferta> precios = entityManager.createNamedQuery("Oferta.precios").setParameter("productoId", id).getResultList();
 
-        Usuario user = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
-        BigDecimal mejorPuja = obtenerMejorPuja(id, user);
-        BigDecimal menorPrecio = obtenerMenorPrecio(id, user);
+        BigDecimal mejorPuja = obtenerMejorPuja(id);
+        BigDecimal menorPrecio = obtenerMenorPrecio(id);
 
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
@@ -243,9 +239,8 @@ public class OfertaController {
         
         List<Oferta> ventas = entityManager.createNamedQuery("Oferta.transaction").setParameter("productoId", id).getResultList();
 
-        Usuario user = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
-        BigDecimal mejorPuja = obtenerMejorPuja(id, user);
-        BigDecimal menorPrecio = obtenerMenorPrecio(id, user);
+        BigDecimal mejorPuja = obtenerMejorPuja(id);
+        BigDecimal menorPrecio = obtenerMenorPrecio(id);
         
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
@@ -257,7 +252,7 @@ public class OfertaController {
 
 
     //funciones para obtener los precios mas bajos y pujas mas altas de los productos
-    public BigDecimal obtenerMejorPuja(long id, Usuario user){
+    public BigDecimal obtenerMejorPuja(long id){
         BigDecimal mejorPuja = (BigDecimal)entityManager.createNamedQuery("Oferta.mejorPuja").setParameter("productoId", id).getSingleResult();
         
         if(mejorPuja == null){
@@ -267,7 +262,7 @@ public class OfertaController {
         return mejorPuja;
     }
 
-    public BigDecimal obtenerMenorPrecio(long id, Usuario user){
+    public BigDecimal obtenerMenorPrecio(long id){
         BigDecimal menorPrecio = (BigDecimal)entityManager.createNamedQuery("Oferta.menorPrecio").setParameter("productoId", id).getSingleResult();
                
         if(menorPrecio == null){

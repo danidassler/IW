@@ -2,10 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <style>
-        td { padding: 1em; }
-        table { padding: 1em; }
-    </style>
     <title>Puja de un producto</title>
 </head>
 <body>
@@ -16,11 +12,11 @@
     </div>
 
     <div class="container-fluid">
-        <div class="row  mt-5 ml-5 mr-5 mb-4 border rounded p-3">
-            <div class="col-4 text-center img-fluid border-right">
+        <div class="row align-items-center mt-5 ml-5 mr-5 mb-4 border rounded p-3">
+            <div class="col-4 text-center img-fluid">
                 <img class="rounded p-2" th:src="@{/producto/{id}/photo(id=${prod.id})}" alt="foto" width="300"/>
             </div>
-            <div class="col-8">
+            <div class="col-8 border-left">
                 <div class="row text-center m-4">
                     <p class="h1 font-monospace fw-bold"><span th:text="${prod.nombre}">N</span></p>
                 </div>
@@ -44,7 +40,7 @@
                                         <br><span th:text="${mejorPuja}"> HB</span>€  
                                     </a></p>
                                 <p th:if="${mejorPuja == 0}"> 
-                                    <a class="btn btn-danger disabled btn-xs col-lg-12" th:href="@{'/oferta/pujar/' + ${prod.id}}" role="button" aria-disabled="true"  style="margin-bottom:4px;white-space: normal;">Vender ya <br>--- € </a></p>
+                                    <a class="btn btn-danger disabled btn-xs col-lg-12" th:href="@{'/producto/venta/' + ${prod.id}}" role="button" aria-disabled="true"  style="margin-bottom:4px;white-space: normal;">Vender ya <br>--- € </a></p>
                             </div>
 
                         </div>
