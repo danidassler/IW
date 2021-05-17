@@ -34,7 +34,11 @@ import lombok.Setter;
 	@NamedQuery(name="Usuario.hasUsername",
 			query="SELECT COUNT(username) "
 					+ "FROM Usuario u "
-					+ "WHERE u.username = :username")
+					+ "WHERE u.username = :username"),
+	@NamedQuery(name="Usuario.findAdmin",
+			query="SELECT u "
+					+ "FROM Usuario u "
+					+ "WHERE u.rol = 'ADMIN'")
 })
 public class Usuario implements Transferable<Usuario.Transfer> {
 
