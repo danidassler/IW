@@ -72,11 +72,7 @@ nav>*{
 	font-size: 240%;
 	font-weight: bold;
 }
-.logo {
-	background-image: url(../img/logo.png);
-	width: 64px;
-	height: 64px;
-}
+
 .logx {
 	margin-left: auto;
 }

@@ -43,6 +43,7 @@
                     <p class="h3"><b>Saldo:</b> <span th:text="${user.saldo}"> </span>€</p> 
                     <a class="btn btn-outline-primary mt-3" th:href="@{'/perfil/depositarFondo/' + ${user.id}}">Depositar fondo </a>
                     <a class="btn btn-outline-primary mt-3" th:href="@{'/perfil/retirarFondo/' + ${user.id}}">Retirar fondo </a>
+                    <a class="btn btn-outline-primary mt-3" th:href="@{'/chat/' + ${user.id}}">Chat </a>
                 </div>
 
             </div>
