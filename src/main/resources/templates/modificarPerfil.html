@@ -2,69 +2,55 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <style>
-        td, th { border: 1px solid grey; text-align: center; border-spacing: 10px;}
-        table { padding: 0; }
-    </style>
     <title>Modificar perfil</title>
 </head>
 <body>
-    <nav th:replace="frags/nav.html :: nav">
-		Nav goes here
-	</nav>
     <div>
         <th:block th:replace="frags/header.html">
             Aqui va lo que hay en header, esto no se ve
         </th:block>
     </div>
-    <h3>Modificar Perfil</h3>
-    <p>Desde aquí el usuario puede cambiar sus datos personales.</p>
-    <table>
-        <tr>
-            <td>
-                <p>Foto de perfil</p>
-                <!--<img src="../static/img/ipsum.jpg" th:src="@{/img/ipsum.jpg}" alt="foto" width="350" height="400"/>
-                <p style="text-align: center;"><button>Seleccionar foto...</button ></p>-->
-                    <img th:src="@{/perfil/{id}/photo(id=${user.id})}"  width="350" height="400">
-                    <form th:action="@{/perfil/{id}/photo(id=${user.id})}" method="POST" enctype="multipart/form-data">
-                    Nueva foto <input type="file" name="photo"/>
-                <button type="submit">Actualizar</button>
+    <div class="container-fluid">
+        <div class="row align-items-center mt-5 ml-5 mr-5 mb-1 border rounded p-3 mb-5">
+            <div class="col-4 text-center img-fluid">
+                <p class="h4 font-monospace  fw-bold" th:text="${user.username}">Nombre de usuario:</p>
+                <img th:src="@{/perfil/{id}/photo(id=${user.id})}"  width="250" height="300">
+                <form th:action="@{/perfil/{id}/photo(id=${user.id})}" method="POST" enctype="multipart/form-data">
+                <span> Subir foto <input type="file" id="photo" name="photo"> </span>
+                <p></p>
+                <button class=" btn btn-primary btn-xs" type="submit">Subir foto</button>
                 </form>
-            </td>
-            <td>
-                <form method="post" th:action="@{'/perfil/modificarPerfil/' + ${user.id}}">
-                    <h4>Información del perfil</h4>
-                    <p>
-                        <label for="nombre" class="sr-only">Nombre: </label>
-                        <input type="text" id="nombre" name="nombre" 
-                          class="form-control" th:value="${user.nombre}" required="required"></input>
-                    </p>
-                    <p>
-                        <label for="apellidos" class="sr-only">Apellidos: </label>
-                        <input type="text" id="apellidos" name="apellidos" 
-                          class="form-control" th:value="${user.apellidos}" required="required"></input>
-                    </p>
-                    <p>
-                        <label for="newpassword" class="sr-only">Nueva Contraseña (opcional): </label>
-                        <input type="text" id="newpassword" name="newpassword" 
-                          class="form-control" placeholder="" ></input>
-                    </p>
-                    <p>
-                        <label for="password" class="sr-only">Contraseña: </label>
-                        <input type="text" id="password" name="password" 
-                          class="form-control" placeholder="" required="required"></input>
-                    </p>
-                    <p>
-                        <label for="password2" class="sr-only">Repite contraseña: </label>
-                        <input type="text" id="password2" name="password2" 
-                          class="form-control" placeholder="" required="required"></input>
-                    </p>
-                
-                    <button class="btn btn-lg btn-primary btn-block" type="submit">Modificar Perfil</button>
-                </form>
-            </td>
-        </tr>
-    </table>
+            </div>
+            <div class="col-8 text-center border-left">
+                <div class="row align-items-center m-4">
+                    <div class="col-12">
+                        <form method="post" th:action="@{'/perfil/modificarPerfil/' + ${user.id}}">
+                            <h3 class="font-monospace fw-bold">Información del perfil</h3>
+                            <p><input type="text" id="nombre" name="nombre" class="form-control" th:value="${user.nombre}" required="required"></input></p>
+
+                            <p><input type="text" id="apellidos" name="apellidos" class="form-control" th:value="${user.apellidos}" required="required"></input></p>
+                        
+                            <h3 class="font-monospace fw-bold"> Cambio de contraseña </h3>
+                            <p><input type="text" id="newpassword" name="newpassword" class="form-control" placeholder="Nueva contraseña"></input></p>
+                    
+                            <p><input type="text" id="password2" name="password2" class="form-control" placeholder="Repetir contraseña" required="required"></input></p>
+
+                            <p><input type="text" id="password" name="password" class="form-control" placeholder="Contraseña antigua" required="required"></input></p>
+            
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col-6">
+                                    <button class="btn btn-lg btn-primary btn-block" type="submit">Modificar Producto</button>
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <th:block th:replace="frags/pie.html">
     Aqui va lo que hay en header, esto no se ve
     </th:block>

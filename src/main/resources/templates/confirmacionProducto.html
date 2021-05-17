@@ -8,66 +8,44 @@
     <title>Confirmacion</title>
 </head>
 <body>
-    <nav th:replace="frags/nav.html :: nav">
-		Nav goes here
-	</nav>
     <div>
         <th:block th:replace="frags/header.html">
             Aqui va lo que hay en header, esto no se ve
         </th:block>
     </div>
 
-    <div>
-        <p> Esta vista será similar tanto cuando compras como cuando vendes, se mostrará un resumen de los datos e información de la compra o venta </p>
-        <h2>Confirmación del pedido</h2>
-        <h4>Muchas gracias por comprar en nuestra tienda. Te confirmamos que ya estamos preparando su pedido. Te mostramos un resumen del pedido: </h4>
-        <div class="linearBox">
-            <p th:if="${dif == 0}">Detalles de la venta:     <b> nº de pedido asociado: <span th:text="${nPedido}"> </b></p>
-            <p th:if="${dif == 1}">Detalles de la compra:     <b> nº de pedido: <span th:text="${nPedido}"> </b></p>
-            <table>
-                <tr>
-                    <td>
-                        <p>Producto</p>
-                    </td>
-                    <td>
-                        <p><span th:text="${prod.nombre}"></span></p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>Precio</p>
-                    </td>
-                    <td>
-                        <p><span th:text="${precio}"></span> €</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>Impuestos</p>
-                    </td>
-                    <td>
-                        <p><span th:text="${impuestos}"></span> €</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>Costes de envío</p>
-                    </td>
-                    <td>
-                        <p><span th:text="${envio}"></span> €</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>Total</p>
-                    </td>
-                    <td>
-                        <p><span th:text="${precioFinal}"></span> €</p>
-                    </td>
-                </tr>
-            </table>
-        </div>
+    <div class="container-fluid text-center pt-4">
+        <h2 class="font-monospace fw-bold">Confirmación del pedido</h2>
+        <p>Muchas gracias por comprar en nuestra tienda. Te confirmamos que ya estamos preparando su pedido. Te mostramos un resumen del pedido: </p>
+        <div class="row align-items-center text-center mt-2 ml-5 mr-5 mb-1 border border-info border-5 rounded pb-3 mb-5">
+            <div class="col-12 mt-3">
+                <p th:if="${dif == 0}">Detalles de la venta -->      nº de pedido asociado: <b><span th:text="${nPedido}"> </b></p>
+                <p th:if="${dif == 1}">Detalles de la compra:  -->  nº de pedido: <b><span th:text="${nPedido}"> </b></p>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <p>Producto: <span class="fw-bold" th:text="${prod.nombre}"></span></p>
+                </div>
+                <div class="col-6">
+                    <p>Precio: <span class="fw-bold" th:text="${precio}"></span> €</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <p>Impuestos: <span  class="fw-bold" th:text="${impuestos}"></span> €</p>
+                </div>
+                <div class="col-6">
+                    <p>Costes de envío: <span  class="fw-bold" th:text="${envio}"></span> €</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 fs-3">
+                    <p>Total: <span class="fw-bold" th:text="${precioFinal}"></span> €</p>
+                </div>
+            </div>
+        </div>  
     </div>
+
     <div>
         <th:block th:replace="frags/pie.html">
             Aqui va lo que hay en header, esto no se ve
