@@ -6,80 +6,115 @@
         td, th { border: 1px solid grey; text-align: center; border-spacing: 10px;}
         table { padding: 0; }
     </style>
+        <link rel="stylesheet" th:href="@{/css/error.css}" href="css/error.css" type="text/css"/>
     <title>Retirar fondo</title>
 </head>
 <body>
-    <nav th:replace="frags/nav.html :: nav">
-		Nav goes here
-	</nav>
     <div>
         <th:block th:replace="frags/header.html">
             Aqui va lo que hay en header, esto no se ve
         </th:block>
     </div>
-    <h3>Retirar Fondo</h3>
-    <p>Aquí podrás retirar fondos y recuperar las ganancias obtenidas en la web, en cuestión de segundos. </p>
-    <table>
-        <tr>
-            <td>
-                <p>Información del usuario</p>
-                <img th:src="@{/perfil/{id}/photo(id=${prof.id})}" alt="foto"/>
-                <p><span th:text="${prof.nombre}"></span> <span th:text="${prof.apellidos}"></span></p>
-                <p>Saldo Actual: <span th:text="${prof.saldo}"></span> </p>
-            </td>
-            <td>
-                <form method="post" th:action="@{'/perfil/retirarFondo/' + ${prof.id}}">
-                    <h4>Métodos de Pago</h4>
-                    <label for="metodoPago" class="sr-only">Aceptamos los siguientes métodos de pago: </label>
-                    <select name="metodoPago" id="cars">
-                        <optgroup label="Cuenta Bancaria"></optgroup>
-                        <option>Visa</option>
-                        <option>Mastercard</option>
-                        <option>American Express</option>
-                        <optgroup label="Pago Online"></optgroup>
-                        <option>Paypal</option>
-                        <option>WebMoney</option>
-                        <option>Paysafecard</option>
-                    </select>
-                    
-                    <p>
-                        <label for="nombre" class="sr-only">Nombre </label>
-                        <input type="text" id="nombre" name="nombre" 
-                          class="form-control" placeholder="Nombre" required="required"></input>
-                    </p>
-                    <p>
-                        <label for="correo" class="sr-only">Correo Electrónico</label>
-                        <input type="text" id="correo" name="correo" 
-                          class="form-control" placeholder="Correo" required="required"></input>
-                    </p>
-                    <p>
-                        <label for="direccion" class="sr-only">Dirección </label>
-                        <input type="text" id="direccion" name="direccion" 
-                          class="form-control" placeholder="Direccion" required="required"></input>
-                    </p>
-                    <p>
-                        <label for="tarjetaDebito" class="sr-only">Introduce su tarjeta de débito: </label>
-                        <input type="text" id="tarjetaDebito" name="tarjetaDebito" 
-                          class="form-control" placeholder="TarjetaDebito" required="required"></input>
-                    </p>
 
-                    <p>
-                        <label for="cvv" class="sr-only">CVV </label>
-                        <input type="text" id="cvv" name="cvv" 
-                          class="form-control" placeholder="CVV" required="required"></input>
-                    </p>
+    <div class="container-fluid">
+        <div class="row align-items-center mt-5 ml-5 mr-5 mb-1 border rounded pb-3 mb-5">
+            <div class="col-4 text-center img-fluid p-3">
+                <div class="col-12 pb-2">
+                    <p><span class="font-monospace fw-bold h3" th:text="${prof.username}"></span></p>
+                    <p><span th:text="${prof.nombre}"></span> <span th:text="${prof.apellidos}"></span></p>
+                    <p><img th:src="@{/perfil/{id}/photo(id=${prof.id})}" alt="foto" width="150" height="200"/></p>
+                    <p>Saldo Actual:</p>
+                    <p class="h1 font-monospace"><span th:text="${prof.saldo}"></span>€</p>
+                </div>
+            </div>
+        
+        
+            <div class="col-8 text-center border-left justify-content-center">
+                <div class="row align-items-center m-4">
+                    <div class="col-12">
+                        <p class="h2 font-monospace fw-bold"><b>Depositar Fondos</b></p>
+                    </div>
+                </div>
 
-                    <p>
-                        <label for="saldo" class="sr-only">Dinero a retirar de tu cuenta de NewChance </label>
-                        <input type="text" id="saldo" name="saldo" 
-                          class="form-control" placeholder="Saldo" required="required"></input>
-                    </p>
-                
-                    <button class="btn btn-lg btn-primary btn-block" type="submit">Retirar Saldo</button>
-                </form>
-            </td>
-        </tr>
-    </table>
+                <div class="row">
+                    <div class="col">
+                        <form class="justify-content-center row g-3" method="post" th:action="@{'/perfil/depositarFondo/' + ${prof.id}}">
+                            <div class="row">
+                                <div class="col"></div>
+                                <div class="col row justify-content-center pb-2">
+                                        <label for="pago" class="form-label">Metodos de pago</label>
+                                        <select class="form-select" name="metodoPago" id="metodoPago">
+                                            <optgroup label="Cuenta Bancaria"></optgroup>
+                                            <option>Visa</option>
+                                            <option>Mastercard</option>
+                                            <option>American Express</option>
+                                            <optgroup label="Pago Online"></optgroup>
+                                            <option>Paypal</option>
+                                            <option>WebMoney</option>
+                                            <option>Paysafecard</option>
+                                        </select>
+                                    </div>
+                                <div class="col"></div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="nombre" class="form-label">Nombre </label>
+                                <input type="text" id="nombre" name="nombre" 
+                                    class="form-control" placeholder="Nombre" required="required"></input>
+                              </div>
+                            <div class="col-md-6">
+                                <label for="correo" class="form-label">Correo Electrónico</label>
+                                <input type="text" id="correo" name="correo" 
+                                    class="form-control" placeholder="Correo" required="required"></input>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="direccion" class="form-label">Dirección </label>
+                                        <input type="text" id="direccion" name="direccion" 
+                                        class="form-control" placeholder="Direccion" required="required"></input>
+                              </div>
+
+                            <div class="col-md-6">
+                                <label for="tarjetaDebito" class="form-label">Introduce su tarjeta de débito: </label>
+                                <input type="text" id="tarjetaDebito" name="tarjetaDebito" 
+                                    class="form-control" placeholder="TarjetaDebito" required="required"></input>
+                              </div>
+                            <div class="col-md-6">
+                                <label for="cvv" class="form-label">CVV </label>
+                                        <input type="text" id="cvv" name="cvv" 
+                                            class="form-control" placeholder="CVV" required="required"></input>
+                            </div>
+
+
+                            <div class="row mt-3">
+                                <div class="col"></div>
+                                <div class="col row justify-content-center pb-2">
+                                        <label for="saldo" class="form-label">Dinero a retirar</label>
+                                        <input type="text" id="saldo" name="saldo" 
+                                            class="form-control" placeholder="Saldo" required="required"></input>
+                                </div>
+                                <div class="col"></div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col"></div>
+                                <div class="col-6">
+                                    <button class="btn btn-xs btn-primary btn-block" type="submit">Retirar saldo</button>
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                        </form>
+                        <div th:if="${errorRF==1}" class="error">
+                            <div class="errorbody">
+                                <p>ERROR: No puedes retirar mas dinero del que tienes.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <th:block th:replace="frags/pie.html">
     Aqui va lo que hay en header, esto no se ve
     </th:block>
