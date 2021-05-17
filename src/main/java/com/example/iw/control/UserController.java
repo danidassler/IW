@@ -162,39 +162,69 @@ public class UserController {
 		throws JsonProcessingException {
 		
 		String text = o.get("men").asText();
-		Usuario u = entityManager.find(Usuario.class, id);
+		Usuario receiver = entityManager.find(Usuario.class, id);
 		Usuario sender = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
-		model.addAttribute("user", u);
+		model.addAttribute("user", receiver);
 
-		boolean ok = comprobarUsuario(u, sender, model);
+		boolean ok = comprobarUsuario(receiver, sender, model);
 		if(!ok){
 			return "errorUser";
 		}
-		
 		// construye mensaje, lo guarda en BD
 		Mensaje m = new Mensaje();
-		m.setReceptor(u);
+		m.setReceptor(receiver);
+		m.setEmisor(sender);
+		m.setFechaEnvio(LocalDateTime.now());
+		m.setMensaje(text);
+		entityManager.persist(m);
+		entityManager.flush();
+		
+		// construye json
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode rootNode = mapper.createObjectNode();
+		rootNode.put("from", sender.getId());
+		rootNode.put("to", receiver.getId());
+		rootNode.put("text", text);
+		//rootNode.put("id", m.getId());
+		String json = mapper.writeValueAsString(rootNode);
+		
+		log.info("Sending a message to {} with contents '{}'", id, json);
+
+		messagingTemplate.convertAndSend("/user/"+receiver.getUsername()+"/queue/updates", json);
+		return "{\"result\": \"message sent.\"}";
+	}	
+
+	@PostMapping("/chatconadmin")
+	@ResponseBody
+	@Transactional
+	public String postMsg3( 
+			@RequestBody JsonNode o, Model model, HttpSession session) 
+		throws JsonProcessingException {
+		
+		String text = o.get("men").asText();
+		Usuario sender = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+		Usuario admin = entityManager.find(Usuario.class, (long) 0);
+		// construye mensaje, lo guarda en BD
+		Mensaje m = new Mensaje();
+		m.setReceptor(admin); 
 		m.setEmisor(sender);
 		m.setFechaEnvio(LocalDateTime.now());
 		m.setMensaje(text);
 		entityManager.persist(m);
 		entityManager.flush(); // to get Id before commit
-		
-		// construye json
+			
+			// construye json
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode rootNode = mapper.createObjectNode();
-		rootNode.put("from", sender.getUsername());
-		rootNode.put("to", u.getUsername());
+		rootNode.put("from", sender.getId());
+		rootNode.put("to", "0");
 		rootNode.put("text", text);
-		rootNode.put("id", m.getId());
 		String json = mapper.writeValueAsString(rootNode);
-		
-		log.info("Sending a message to {} with contents '{}'", id, json);
+	
+		messagingTemplate.convertAndSend("/topic/admin", json);
 
-		messagingTemplate.convertAndSend("/user/"+u.getUsername()+"/queue/updates", json);
 		return "{\"result\": \"message sent.\"}";
 	}	
-	
 	@PostMapping("/{id}/photo")
 	public String postPhoto(
 			HttpServletResponse response,
