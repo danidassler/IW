@@ -146,3 +146,22 @@ nav div.debug {
 	margin: 0;
 	padding: 0;
 }
+
+/*For messages in chat & adminChat*/
+
+.colorAZUL{
+	background-color: cadetblue;
+}
+.colorAMARILLO{
+	background-color: darkgoldenrod;
+}
+.even.colorAZUL{
+	background-color: cadetblue;
+}
+.odd.colorAMARILLO{
+	background-color: darkgoldenrod;
+}
+
+.even.colorAMARILLO{
+	background-color: darkgoldenrod;
+}

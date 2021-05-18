@@ -40,56 +40,69 @@
 	</div>	
 
 
-	<script>
-	
+	<script th:inline="javascript">
+
 	function formatDate(d) {
-		// 2020-03-23T10:48:11.074 => 23/3/2020@10:48:18
-		return new Date(d).toLocaleString("es-ES").split(" ").join("@")
+		// 2020-03-23T10:48:11.074 => 10:48:18
+		return new Date(d).toLocaleString("es-ES").split(" ")[1];
 	}
-    function asignarAdmin(from) {
+
+    function asignarAdmin(from) { //Función auxiliar que asigna al admin que ha contestado, todos los próximos mensajes del cliente
 		admin = from;
 		console.log(from);
-   }
+	}
 
-   let admin = [[${adminId}]]; //Variable global
-	// mostrando una tabla dinámica con datos cargados del servidor vía AJAX
-    let dt = $('#datatable').DataTable( {
+	//Variables globales
+	var admin = [[${adminId}]]; // 0 Si no está definido ningún admin, x si está definido
+	var username = [[${username}]]; // El username del usuario con session 
+
+	var dt = $('#datatable').DataTable( { //Inicializada database
 	columns: [
 	{ data: 'from' },
 	{ data: 'sent' },
 	{ data: 'text' },
- 	]
-
-   	} );
-
-	   $.get("/chat/userReceived/" + admin, function(data){
-			for (let i=0; i<data.length; i++) {
-				let row = data[i];
-				row.sent = formatDate(row.sent);
-				if (row.received) {
-					row.received = formatDate(row.received);
-				}
-				console.log(row);
-				let newRow = dt.row.add({from : row.from, sent : formatDate(new Date().toISOString()) , text : row.text}).draw().node();
-				$(newRow).addClass("colorAZUL");
+ 	],
+	"stripeClasses": [],
+    "aaSorting": []
+   	});
+	$(function() { //función que agrega todas las filas al database
+		$.get("/chat/userReceived/" + admin, function(data){
+		for (let i=0; i<data.length; i++) {
+			let row = data[i];
+			row.sent = formatDate(row.sent);
+			if (row.received) {
+				row.received = formatDate(row.received);
 			}
-		})
+			console.log(row);
+			let newRow = dt.row.add({from : row.from, sent : formatDate(new Date().toISOString()) , text : row.text}).draw().node();
+			if(row.from == username){ //Los mensajes que envías, se le asignan un color
+				$(newRow).addClass("table-info");
+			}
+			else{
+				$(newRow).addClass("table-success");
+			}
+		}
+	})
+	});
+
+	// envío de mensajes vía AJAX, sin recargar la página
 	document.addEventListener("DOMContentLoaded", () => {
 		let b = document.getElementById("sendmsg2");
 		b.onclick = (e) => {
-			e.preventDefault();
-			dt.row.add({from : "YO", sent : formatDate(new Date().toISOString()), text : document.getElementById("men").value}).draw();
-			if(admin == 0){
+			e.preventDefault(); //Ignora el action del formulario
+
+			let newRow = dt.row.add({from : username, sent : formatDate(new Date().toISOString()), text : document.getElementById("men").value}).draw().node();
+			$(newRow).addClass("table-info");
+			if(admin == 0){ //Mensajes para enviar al canal de admin
 				console.log(b, b.parentNode)
 				go("/perfil/chatconadmin", 'POST', {men: 
 						document.getElementById("men").value})
 					.then(d => console.log("happy", d))
 					.catch(e => console.log("sad", e))
 			}
-			else{
+			else{ //Mensajes para enviar a un admin en concreto
 				console.log(b, b.parentNode)
-				let url = "/perfil/" + admin + "/msg";
-				go(url, 'POST', {men: 
+				go("/perfil/" + admin + "/msg", 'POST', {men: 
 						document.getElementById("men").value})
 					.then(d => console.log("happy", d))
 					.catch(e => console.log("sad", e))
@@ -97,12 +110,9 @@
 		}
 	});
 
-	// sobreescribid esta funcion para especificar qué sucede cuando recibes un mensaje
-	// aquí estoy metiendo el mensaje al final de la tabla
 	ws.receive = (m) => {
-		//dt.rows().add([m.from, m.to, formatDate(new Date().toISOString()), m.text]);	
-		let newRow = dt.row.add([m.from, formatDate(new Date().toISOString()), m.text]).draw().node();
-		$(newRow).addClass("colorAMARILLO");
+		let newRow = dt.row.add({from : m.from, sent : formatDate(new Date().toISOString()), text : m.text}).draw().node();
+		$(newRow).addClass("table-success");
 		if(admin != m.fromId && admin == 0){ //Le asignara los mensajes al primer admin que le hable
 			asignarAdmin(m.fromId);
 		}

@@ -166,11 +166,12 @@ public class UserController {
 		Usuario sender = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
 		model.addAttribute("user", receiver);
 
+		/*
 		boolean ok = comprobarUsuario(receiver, sender, model);
 		if(!ok){
 			return "errorUser";
 		}
-		
+		*/
 		// construye mensaje, lo guarda en BD
 		Mensaje m = new Mensaje();
 		m.setReceptor(receiver);
@@ -218,7 +219,8 @@ public class UserController {
 			// construye json
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode rootNode = mapper.createObjectNode();
-		rootNode.put("from", sender.getId());
+		rootNode.put("from", sender.getUsername());
+		rootNode.put("fromID", sender.getId());
 		rootNode.put("to", "0");
 		rootNode.put("text", text);
 		String json = mapper.writeValueAsString(rootNode);
