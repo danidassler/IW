@@ -162,11 +162,11 @@ public class UserController {
 		throws JsonProcessingException {
 		
 		String text = o.get("men").asText();
-		Usuario u = entityManager.find(Usuario.class, id);
+		Usuario receiver = entityManager.find(Usuario.class, id);
 		Usuario sender = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
-		model.addAttribute("user", u);
+		model.addAttribute("user", receiver);
 
-		boolean ok = comprobarUsuario(u, sender, model);
+		boolean ok = comprobarUsuario(receiver, sender, model);
 		if(!ok){
 			return "errorUser";
 		}
@@ -184,7 +184,8 @@ public class UserController {
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode rootNode = mapper.createObjectNode();
 		rootNode.put("from", sender.getUsername());
-		rootNode.put("to", receiver.getUsername());
+		rootNode.put("fromId", sender.getId());
+		rootNode.put("to", receiver.getId());
 		rootNode.put("text", text);
 		//rootNode.put("id", m.getId());
 		String json = mapper.writeValueAsString(rootNode);

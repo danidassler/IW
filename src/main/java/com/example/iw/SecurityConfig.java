@@ -60,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					"/", "/error", "/tienda", 
 					"/tienda/**", 
 					"/producto/*", "/producto/*/photo", "/perfil/*/photo", "/oferta/listaPujas/*", "/oferta/listaPrecios/*", "/oferta/listaVentas/*",
-					"/registro").permitAll()
+					"/registro", "/busqueda").permitAll()
 	            .antMatchers("/admin/**").hasRole("ADMIN")		  // <-- administration
 	            .anyRequest().authenticated()
 	            .and()

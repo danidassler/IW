@@ -14,6 +14,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" th:href="@{/css/bootstrap4.min.css}" type="text/css" />
         <link rel="stylesheet" th:href="@{/css/bootstrap5.min.css}" type="text/css" />
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
         <link rel="stylesheet" th:href="@{/css/ionicons.min.css}" type="text/css" />
         <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" />
 
@@ -41,66 +42,78 @@
                 display: inline;
                 padding: 1em;
             }
+            .colorhref{
+                color: #0275d8 !important;
+            }
+            .colorhref:hover{
+                color: #22a1c7 !important;
+            }
         </style>
-        <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-            <a class="logo" href="" th:href="@{/}"></a>
-            <span class="sitename">NewChance</span>
-            <ul>
-                <li>
-                    <span> <a class="tienda" th:href="@{/tienda}"> <b>Tienda</b> </a></span>
-                </li>
-                <li>
-                    <span><a class="tienda" th:href="@{/tienda/Zapatillas}"><b>Zapatillas</b></a></span>
-                </li>
-                <li>
-                    <span> <a class="tienda" th:href="@{/tienda/Streetwear}"><b>Streetwear</b></a></span>
-                </li>
-                <li>
-                    <span><a class="tienda" th:href="@{/tienda/Accesorios}"><b>Accesorios</b></a></span>
-                </li>
-                <li>
-                    <span><a class="tienda" th:href="@{/tienda/Electronica}"><b>Electrónica</b></a></span>
-                </li>
-                <li>
-                    <span><a class="tienda" th:href="@{/tienda/Relojes}"><b>Relojes</b></a></span>
-                </li>
-                <!--<li>
-                    <input class="form-control w-25" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </li>-->
-            </ul>
-            <div class="logx ml-2" th:if="${session.u}">
-                <!--<a id="received" th:href="@{/message/}" th:text="${session.unread} ? '📬': '📪'">📫</a>	 /-->
-                <a th:if="${session.u.hasRole('ADMIN')}" class="btn btn-outline-primary" th:href="@{/admin/adminUsuarios}">Administrar Usuarios</a>
-                <form th:action="@{/logout}" method="post">
-                    <button class="btn btn-outline-primary" id="logout" type="submit">logout</button>
+        <nav class="navbar navbar-expand-lg" style="background-color: #e3f2fd;">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <span class="sitename">NewChance</span>
+                <div class="collapse navbar-collapse ml-3" id="navbarNavDropdown">
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item">
+                        <a class="font-monospace nav-link active tienda colorhref" aria-current="page" th:href="@{/tienda}"> Tienda</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="font-monospace nav-link dropdown-toggle colorhref" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Categorías
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="font-monospace dropdown-item tienda colorhref" th:href="@{/tienda/Zapatillas}">Zapatillas</a></li>
+                                <li><a class="font-monospace dropdown-item tienda colorhref" th:href="@{/tienda/Streetwear}">Satreetwear</a></li>
+                                <li><a class="font-monospace dropdown-item tienda colorhref" th:href="@{/tienda/Accesorios}">Accesorios</a></li>
+                                <li><a class="font-monospace dropdown-item tienda colorhref" th:href="@{/tienda/Relojes}">Relojes</a></li>
+                                <li><a class="font-monospace dropdown-item tienda colorhref" th:href="@{/tienda/Electronica}">Electrónica</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                <form class="d-flex" method="POST" th:action="@{/busqueda}">
+                    <input class="form-control me-2" type="search" placeholder="Search" name="busqueda" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
-                <a class="perfilUser" th:href="@{/perfil/{id}(id=${session.u.id})}">
-                    <img class="userthumb" th:src="@{/perfil/{id}/photo(id=${session.u.id})}" width="350" height="400">
-                    <span th:text="${session.u.username}">Pepe</span>
-                </a>
-            </div>
-            <div class="logx" th:unless="${session.u}">
-                <a class="btn btn-outline-primary" th:href="@{/login}" href="/login">Login</a>
-                <a class="btn btn-outline-primary" th:href="@{/registro}" href="/registro">Registro</a>
-                <!--/*
-				Esto es un comentario "thymeleaf" - no se verá en el HTML
-				El bloque de "debug" sólo está activado si application.properties tiene debug a "true"
-				(ver StartupConfig.java para ver cómo se lee el atributo y se pone en ${application.debug})
-			*/-->
-                <div class="debug" th:if="${application.debug}">
-                    <form th:action="@{/login}" method="post">
-                        <input type="hidden" name="username" value="TheRealJin">
-                        <input type="hidden" name="password" value="aa">
-                        <button type="submit">a</button>
-                    </form>
-                    <form th:action="@{/login}" method="post">
-                        <input type="hidden" name="username" value="danidassler">
-                        <input type="hidden" name="password" value="aa">
-                        <button type="submit">b</button>
-                    </form>
                 </div>
+
+                <div class="logx ml-2" th:if="${session.u}">
+                    <!--<a id="received" th:href="@{/message/}" th:text="${session.unread} ? '📬': '📪'">📫</a>	 /-->
+                    <a th:if="${session.u.hasRole('ADMIN')}" class="btn btn-outline-primary" th:href="@{/admin/adminUsuarios}">Administrar Usuarios</a>
+                    <form th:action="@{/logout}" method="post">
+                        <button class="btn btn-outline-primary" id="logout" type="submit">logout</button>
+                    </form>
+                    <a class="perfilUser" th:href="@{/perfil/{id}(id=${session.u.id})}">
+                        <img class="userthumb" th:src="@{/perfil/{id}/photo(id=${session.u.id})}" width="350" height="400">
+                        <span th:text="${session.u.username}">Pepe</span>
+                    </a>
+                </div>
+                <div class="logx" th:unless="${session.u}">
+                    <a class="btn btn-outline-primary" th:href="@{/login}" href="/login">Login</a>
+                    <a class="btn btn-outline-primary" th:href="@{/registro}" href="/registro">Registro</a>
+                    <!--/*
+                    Esto es un comentario "thymeleaf" - no se verá en el HTML
+                    El bloque de "debug" sólo está activado si application.properties tiene debug a "true"
+                    (ver StartupConfig.java para ver cómo se lee el atributo y se pone en ${application.debug})
+                */-->
+                    <div class="debug" th:if="${application.debug}">
+                        <form th:action="@{/login}" method="post">
+                            <input type="hidden" name="username" value="TheRealJin">
+                            <input type="hidden" name="password" value="aa">
+                            <button type="submit">a</button>
+                        </form>
+                        <form th:action="@{/login}" method="post">
+                            <input type="hidden" name="username" value="danidassler">
+                            <input type="hidden" name="password" value="aa">
+                            <button type="submit">b</button>
+                        </form>
+                    </div>
+                </div>
+
             </div>
+        
         </nav>
 
     </th:block>

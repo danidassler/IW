@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="css/main.css" type="text/css"/>
+    <meta charset="UTF-8"/>
+    <title>NewChance Shop</title> 
+</head>
+<body>
+    <div>
+        <th:block th:replace="frags/header.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+    <div class="text-center mt-3">
+        <p sec:authorize="isAuthenticated()">            
+            <a class="adminProductos btn btn-info btn-xs m-2" role="button" th:if="${session.u.hasRole('ADMIN')}" th:href="@{/admin/adminProductos}">Administrar Producto </a>
+            <a class="btn btn-info btn-xs m-2" th:if="${session.u.hasRole('ADMIN')}" role="button" th:href="@{/admin/formularioProducto}">Nuevo Producto </a>
+        </p>
+    </div>
+    <div th:if="${ok==1}" class="div_tienda_tabla">
+    <table class="tabla_productos table align-middle table-borderless text-center container-fluid">
+        <thead>
+            <tr class="d-flex m-3">
+                <th class="col-1 font-monospace fs-5" scope="col"></th>
+                <th class="col-2 font-monospace fs-5" scope="col">Imagen</th>
+                <th class="col-2 font-monospace fs-5" scope="col">Nombre</th>
+                <th class="col-2 font-monospace fs-5" scope="col">Categoría</th>
+                <th class="col-2 font-monospace fs-5" scope="col">Talla (EUR)</th>
+                <!--<th>Maxima Puja</th>
+                <th>Menor Precio</th>-->
+                <th class="col-2 font-monospace fs-5">Opciones</th>
+                <th class="col-1 fs-5" scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="d-flex m-3 p-3 align-items-center" th:each="p: ${prods}">
+                <td class="col-1"></td>
+                <td class="col-2"><img class="img_tienda_producto"th:src="@{/producto/{id}/photo(id=${p.id})}" alt="foto" width="150" height="150"/></td>
+                <td class="col-2"><a class="productoTienda align-middle fs-5" th:href="@{'/producto/' + ${p.id}}" th:text="${p.nombre}">N</a></td>
+                <td class="col-2 fs-5" th:text="${p.categorias}">C</td>
+                <td class="col-2 fs-5" th:text="${p.talla} ">T</td>
+                <!--<td th:text="${mp}">MP</td>
+                <td th:text="${mprec}">MP</td>-->
+                <td class="col-2">
+                    <p>
+                        <!-- en estos botones controlar que: si el producto no tiene aun ninguna
+                        oferta o precio de venta, entonces estos botones no deberian de aparecer,
+                        ya que  todavia no se podrian realizar dichas operaciones-->
+                        <a class="btn btn-success btn-xs tiendaCompraAhora" role="button" th:href="@{'/producto/compra/' + ${p.id}}">Comprar ya</a>
+                    </p>
+                    <p>
+                        <a class="btn btn-danger btn-xs tiendaCompraAhora" role="button" th:href="@{'/producto/venta/' + ${p.id}}">Vender ya</a>
+                    </p>
+                    <!--<p>
+                        <button class="tiendaPujar"><a th:href="@{'/oferta/pujar/' + ${p.id}}">Pujar</a></button>
+                        <button><a th:href="@{'/oferta/fijarPrecio/' + ${p.id}}">Fijar precio</a></button> 
+                    </p>-->
+                </td>
+                <td class="col-1"></td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+
+    <div th:if="${ok==0}" class="container-fluid text-center align-middle align-items-center">
+        <div class="row m-5 pb-3 border border-danger border-5 rounded">
+            <div class="col-12 mt-3 mb-3">
+                <h2 class="font-monospace">La busqueda no coincide con ninguno de nuestros productos.</h2>
+            </div>
+                        
+            <div class="col-12">
+                <p>Recuerda distinguir entre minusculas y mayusculas.</p>
+            </div>
+        </div>
+    </div>
+
+   <!-- ruta del proyecto  es/ucm/fdi/...
+    hacer un getmapping por vista
+    hacer en resources templates un html por vista
+    el getmapping hace un return que es el nombre del templates
+    Tenemos que tener fragmentos - por ejemplo productos en caso de tiendas -->
+    <div>
+        <th:block th:replace="frags/pie.html">
+            Aqui va lo que hay en header, esto no se ve
+        </th:block>
+    </div>
+
+</body>
+</html>

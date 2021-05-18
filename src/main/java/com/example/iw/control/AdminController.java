@@ -299,7 +299,8 @@ public class AdminController {
         // construye json
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode rootNode = mapper.createObjectNode();
-        rootNode.put("from", admin.getId());
+        rootNode.put("from", admin.getUsername());
+        rootNode.put("fromId", admin.getId());
         rootNode.put("to", receiver.getId());
         rootNode.put("text", text);
         //rootNode.put("id", m.getId());

@@ -69,35 +69,35 @@ public class RootController {
         return "tienda";                     
     }
 
-    @GetMapping("/tienda/{categoria}") 
-    public String tiendaF(Model model, @PathVariable String categoria) {   
-        
-        /*List<BigDecimal> menorPrecio = new ArrayList<>();
-        List<BigDecimal> mejorPuja = new ArrayList<>();*/
+    @GetMapping("/busqueda")
+    @Transactional
+    public String busqueda(Model model){
+
         List<?> prods = new ArrayList<>();
-        prods = entityManager.createQuery("SELECT p FROM Producto p WHERE p.categorias LIKE '%" + categoria + "%'").getResultList();
-        
+        prods = entityManager.createQuery("SELECT p FROM Producto p").getResultList();
         model.addAttribute("prods", prods);
             
-        return "tienda";                     
+        return "busqueda";  
     }
-    /*
-    @GetMapping("/chat") //HABLAR CON EL PROFE SOBRE ESTO
-    @Transactional
-    public String chat(@RequestParam long id, Model model) {    
-            
-        Usuario user = entityManager.find(Usuario.class, id);
-        
-        List<Mensaje> recibidos = user.getMensajesRecibidos();
-        List<Mensaje> enviados = user.getMensajesEnviados();
 
-        model.addAttribute("user", user);
-        model.addAttribute("recibidos", recibidos);
-        model.addAttribute("enviados", enviados); 
-            
-        return "chat";                     
+    @PostMapping("/busqueda")
+    @Transactional
+    public String busqueda(Model model, @RequestParam String busqueda){
+
+        List<?> prods = new ArrayList<>();
+        prods = entityManager.createQuery("SELECT p FROM Producto p WHERE p.nombre LIKE '%" + busqueda + "%' OR p.categorias LIKE '%" + busqueda + "%' OR p.talla LIKE '%" + busqueda + "%'").getResultList();
+        
+        int ok = 1;
+        if(prods.isEmpty()){ //la busqueda no coincide con nada
+            ok = 0;
+        }
+
+        model.addAttribute("prods", prods);
+        model.addAttribute("ok", ok);
+
+        return "busqueda";
     }
-    */
+
 	@GetMapping("/registro") 
 	public String registro(Model model){
 		return "registro";                     

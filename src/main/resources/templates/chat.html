@@ -6,11 +6,11 @@
 	<title>Mensajes</title>
 	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 	<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+	<link rel ="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" th:href="@{/css/main.css}" href="css/main.css" type="text/css"/>
 	<link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
 	<link rel ="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
 	<link rel ="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
-	<script th:src="@{/js/simple-datatables-2.1.10.min.js}"></script>
-	<link th:href="@{/css/simple-datatables-2.1.10.css}" rel="stylesheet">
 </head>
 <body>
     <div>
@@ -23,11 +23,8 @@
 	<div class="main">
 	<h1>Mensajes recibidos</h1>
 	
-	<table class="datatable" id="datatable"></table>
+	<table id="datatable" class="display" style="width:100%"></table>
 	
-	</div>
-	</div>	
-
 	<div class="sidebar" th:if="${session.u.hasRole('ADMIN')}">
 		Eres un administrador, no puedes utilizar Atención al Cliente.
 	</div>
@@ -38,6 +35,10 @@
 		<button id="sendmsg2" type="submit">Enviar</button>
 		</form>
 	</div>
+
+	</div>
+	</div>	
+
 
 	<script>
 	
@@ -53,24 +54,31 @@
    let admin = [[${adminId}]]; //Variable global
 	// mostrando una tabla dinámica con datos cargados del servidor vía AJAX
     let dt = $('#datatable').DataTable( {
-    ajax: { url: "/chat/userReceived/" + document.getElementById("idOfTarget").value,
-	dataSrc:""
-		},
 	columns: [
 	{ data: 'from' },
-	{ data: 'to' },
 	{ data: 'sent' },
 	{ data: 'text' },
  	]
 
    	} );
 
+	   $.get("/chat/userReceived/" + admin, function(data){
+			for (let i=0; i<data.length; i++) {
+				let row = data[i];
+				row.sent = formatDate(row.sent);
+				if (row.received) {
+					row.received = formatDate(row.received);
+				}
+				console.log(row);
+				let newRow = dt.row.add({from : row.from, sent : formatDate(new Date().toISOString()) , text : row.text}).draw().node();
+				$(newRow).addClass("colorAZUL");
+			}
+		})
 	document.addEventListener("DOMContentLoaded", () => {
 		let b = document.getElementById("sendmsg2");
 		b.onclick = (e) => {
 			e.preventDefault();
-
-			//dt.rows().add(["yo", admin, formatDate(new Date().toISOString()), document.getElementById("men").value]);
+			dt.row.add({from : "YO", sent : formatDate(new Date().toISOString()), text : document.getElementById("men").value}).draw();
 			if(admin == 0){
 				console.log(b, b.parentNode)
 				go("/perfil/chatconadmin", 'POST', {men: 
@@ -92,12 +100,14 @@
 	// sobreescribid esta funcion para especificar qué sucede cuando recibes un mensaje
 	// aquí estoy metiendo el mensaje al final de la tabla
 	ws.receive = (m) => {
-		//dt.rows().add([m.from, m.to, formatDate(new Date().toISOString()), m.text]);		
-		if(admin != m.from && admin == 0){ //Le asignara los mensajes al primer admin que le hable
-			asignarAdmin(m.from);
+		//dt.rows().add([m.from, m.to, formatDate(new Date().toISOString()), m.text]);	
+		let newRow = dt.row.add([m.from, formatDate(new Date().toISOString()), m.text]).draw().node();
+		$(newRow).addClass("colorAMARILLO");
+		if(admin != m.fromId && admin == 0){ //Le asignara los mensajes al primer admin que le hable
+			asignarAdmin(m.fromId);
 		}
 	}
-	
 	</script>
+
 </body>
 </html>
