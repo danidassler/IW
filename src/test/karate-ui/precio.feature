@@ -9,7 +9,7 @@ Scenario: login, precio & confirm
   * call read('logins.feature@alvaro')
 
   # Accedemos a la tienda
-  * click("a[class=tienda]")
+  * click("a[class~=tienda]")
   * match html('title') contains 'NewChance Shop'
   * driver.screenshot()
 

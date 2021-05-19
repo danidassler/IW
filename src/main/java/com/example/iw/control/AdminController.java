@@ -193,7 +193,7 @@ public class AdminController {
     @Transactional 
     public String adminUsuarios(Model model) {    
             
-        List<?> users = entityManager.createQuery("SELECT u FROM Usuario u").getResultList();
+        List<?> users = entityManager.createQuery("SELECT u FROM Usuario u WHERE u.id != 0").getResultList();
 
         model.addAttribute("users", users); 
             

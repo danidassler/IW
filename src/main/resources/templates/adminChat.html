@@ -19,17 +19,25 @@
         </th:block>
     </div>
 	
-	<div class="container">
+	<div class="container-fluid text-center align-middle align-items-center">
 		<div class="main">
-			<h1>Mensajes recibidos</h1>	
-			<table id="datatable" class="display" style="width:100%"></table>	
-			<div class="sidebar">
-				<form th:action="@{/admin/idOfTarget/msg}" method="POST">
-					<select id="idOfTarget" onchange="changeFunc();">
-						<option th:each="user: ${users}" th:value="${user.id}" th:text="${user.username}">mfreire</option>
-					</select>
-					<textarea id="men" style="display:none;" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea>
-					<button id="sendmsg" style="display:none;" type="submit">Enviar</button>
+			<h1 class="font-monospace col-12 pt-4">Mensajes</h1>	
+			<table id="datatable" class="display" style="width:100%">
+				<thead>
+					<tr>
+						<th>Emisor</th>
+						<th>Fecha</th>
+						<th>Mensaje</th>
+					</tr>
+				</thead>
+			</table>	
+			<div class="sidebar text-center align-middle align-items-center">
+				<form th:action="@{/admin/idOfTarget/msg}" class="mb-3 text-center" method="POST">
+				<select id="idOfTarget" onchange="changeFunc();">
+					<option th:each="user: ${users}" th:value="${user.id}" th:text="${user.username}">mfreire</option>
+				</select>
+				<textarea id="men" style="display:none;" class="form-control mt-3 mb-3" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea> 
+				<button id="sendmsg" style="display:none;" class="btn btn-primary mb-3" type="submit">Enviar</button> 
 				</form>
 			</div>
         </div>
@@ -52,8 +60,8 @@
 			document.getElementById('sendmsg').style.display = "none";
 		}
 		else{
-			document.getElementById('men').style.display = "block";
-			document.getElementById('sendmsg').style.display = "block";
+			document.getElementById('men').style.display = "inline-block";
+			document.getElementById('sendmsg').style.display = "inline-block";
 		}
 		adminReceived();
    }
@@ -69,7 +77,7 @@
 					row.received = formatDate(row.received);
 				}
 				console.log(row);
-				let newRow = dt.row.add({from : row.from, sent : formatDate(new Date().toISOString()) , text : row.text}).draw().node();
+				let newRow = dt.row.add({from : row.from, sent : row.sent , text : row.text}).draw().node();
 				if(row.from == username){
 					$(newRow).addClass("table-info");
 				}
@@ -125,5 +133,10 @@
 		}		
 	}
 	</script>
+
+	<th:block th:replace="frags/pie.html">
+	Aqui va lo que hay en header, esto no se ve
+	</th:block>
+
 </body>
 </html>

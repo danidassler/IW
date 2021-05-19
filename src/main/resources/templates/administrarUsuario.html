@@ -65,7 +65,7 @@
                                 <th class="col-2">Puja(€)</th>
                                 <!--<th>Puja más alta(€)</th>
                                 <th>Precio más bajo(€)</th>-->
-                                <th class="col-2">Expiración(Días)</th>
+                                <th class="col-2">Expiración</th>
                                 <th class="col-2"></th>
                             </tr>
                         </thead>
@@ -75,7 +75,7 @@
                                 <td class="col-2 align-middle align-items-center"><img th:src="@{/producto/{id}/photo(id=${p.producto.id})}" alt="foto" width="150" height="150"/></td>
                                 <td class="col-2 align-middle align-items-center"><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
                                 <td class="col-2 align-middle align-items-center" th:text="${p.precio}">D</td>
-                                <td class="col-2 align-middle align-items-center" th:text="${p.fechaExpiracion}">C</td>
+                                <td class="col-2 align-middle align-items-center" th:text="${#temporals.format(p.fechaExpiracion, 'dd-MM-yyyy')}">C</td>
                                 <td class="col-2"></td>
                             </tr>
                         </tbody>
@@ -97,7 +97,7 @@
                                 <th class="col-2">Venta(€)</th>
                             <!-- <th>Puja más alta(€)</th>
                                 <th>Precio más bajo(€)</th>-->
-                                <th class="col-2">Expiración(Días)</th>
+                                <th class="col-2">Expiración</th>
                                 <th class="col-2"></th>
                             </tr>
                         </thead>
@@ -107,7 +107,7 @@
                                 <td class="col-2 align-middle align-items-center"><img th:src="@{/producto/{id}/photo(id=${p.producto.id})}" alt="foto" width="150" height="150"/></td>
                                 <td class="col-2 align-middle align-items-center"><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
                                 <td class="col-2 align-middle align-items-center" th:text="${p.precio}">D</td>
-                                <td class="col-2 align-middle align-items-center" th:text="${p.fechaExpiracion}">F</td>
+                                <td class="col-2 align-middle align-items-center" th:text="${#temporals.format(p.fechaExpiracion, 'dd-MM-yyyy')}">F</td>
                                 <td class="col-2"></td>
                             </tr>
                         </tbody>

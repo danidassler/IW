@@ -37,7 +37,7 @@
                                 <span class="h4" th:text="${v.precio}">N</span>€
                             </div>
                             <div class="col m-1">
-                                <span class="h6" th:text="${v.fechaTransaccion}">N</span>
+                                <span class="h6" th:text="${#temporals.format(v.fechaTransaccion, 'dd-MM-yyyy')}">N</span>
                             </div>
                         </div>
                     </div>

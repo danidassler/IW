@@ -41,37 +41,17 @@
             <div class="row align-items-center pt-4">
                 <div class="col-12">
                     <p class="h3"><b>Saldo:</b> <span th:text="${user.saldo}"> </span>€</p> 
-                    <a class="btn btn-outline-primary mt-3" th:href="@{'/perfil/depositarFondo/' + ${user.id}}">Depositar fondo </a>
+                    <a class=" depositarFondo btn btn-outline-primary mt-3" th:href="@{'/perfil/depositarFondo/' + ${user.id}}">Depositar fondo </a>
                     <a class="btn btn-outline-primary mt-3" th:href="@{'/perfil/retirarFondo/' + ${user.id}}">Retirar fondo </a>
-                    <a class="btn btn-outline-primary mt-3" th:href="@{'/chat/' + ${user.id}}">Chat </a>
+                    <a th:if="${session.u.hasRole('ADMIN')}" class="btn btn-outline-primary mt-3" th:href="@{'/admin/adminChat/' + ${user.id}}">Chat </a>
+                    <a th:if="${session.u.hasRole('USER')}" class="btn btn-outline-primary mt-3" th:href="@{'/chat/' + ${user.id}}">Chat </a>
                 </div>
 
             </div>
           </div>
         </div>
-        <div class="row align-items-center m-2 p-3">
-            <div class="col-12 text-center">
-                <p th:if="${session.u.hasRole('ADMIN')}">
-                    <a class="btn btn-outline-secondary" th:href="@{/message}">Mensajes</a>  <button class="btn btn-outline-secondary">Notificaciones</button>
-                </p>
-            </div>
-        </div>
     </div>
-    <!--<div>
-        <p>Solo en caso de Administrador al visitar un perfil.</p>
-        <button>Administrar Usuario</button> <button>Administrar Productos</button>
-        <p th:if="${session.u.hasRole('ADMIN')}">Solo en caso de Administrador al visitar un perfil.
-            <a class="btn btn-outline-primary" th:href="@{/message}">Mensajes</a>  <button class="btn btn-outline-primary">Notificaciones</button>
-        </p>
-        <p>
-            <h3>Perfil - <span class="align-middle" th:text="${user.nombre}"></span> <span th:text="${user.apellidos}"></span> - <span th:text="${user.username}"></span></h3>
-            <button class="btn btn-outline-primary" type="button"> <a th:href="@{'/perfil/modificarPerfil/' + ${user.id}}">Editar perfil </a></button>
-        </p>
-        <p class="align-middle"> <b>SALDO:</b> 
-            <span th:text="${user.saldo}">saldo</span>€  
-            <button class="btn btn-outline-primary" type="button"> <a th:href="@{'/perfil/depositarFondo/' + ${user.id}}">Depositar fondo </a></button>
-            <button class="btn btn-outline-primary" type="button"> <a th:href="@{'/perfil/retirarFondo/' + ${user.id}}">Retirar fondo </a></button>
-        </p> -->
+
         <div class="text-center  mt-5 ml-5 mr-5 mb-1 border rounded pb-3 mb-5">
         <p>
             <b class="font-monospace fs-4 align-items-center">Pujas Activas:</b> <!--<button class="btn btn-success btn-xs tiendaCompraAhora">Ver todo</button>-->
@@ -84,7 +64,7 @@
                         <th class="col-2">Puja(€)</th>
                         <!--<th>Puja más alta(€)</th>
                         <th>Precio más bajo(€)</th>-->
-                        <th class="col-2">Expiración(Días)</th>
+                        <th class="col-2">Expiración</th>
                         <th class="col-2">Cancelar Antes</th>
                         <th class="col-1"></th>
                     </tr>
@@ -97,7 +77,7 @@
                         <td class="col-2 align-middle align-items-center" th:text="${p.precio}">D</td>
                         <!--<td th:text="${p.mejorPuja}">D</td>
                         <td th:text="${p.menorPrecio}">D</td>-->
-                        <td class="col-2 align-middle align-items-center" th:text="${p.fechaExpiracion}">C</td>
+                        <td class="col-2 align-middle align-items-center" th:text="${#temporals.format(p.fechaExpiracion, 'dd-MM-yyyy')}">C</td>
                         <td class="col-2 align-middle align-items-center"><form method="post" th:action="@{'/oferta/eliminarOferta/' + ${p.id}}">
                             <input type="hidden" name="precio" th:value="${p.precio}">
                             <input type="hidden" name="idOferta" th:value="${p.id}">
@@ -131,7 +111,7 @@
                             <td class="col-2 align-middle align-items-center"><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
                             <td class="col-2 align-middle align-items-center" th:text="${p.precio}">D</td>
                             <td class="col-3 align-middle align-items-center" th:text="${p.estado}">C</td>
-                            <td class="col-3 align-middle align-items-center" th:text="${p.fechaTransaccion}">F</td>
+                            <td class="col-3 align-middle align-items-center" th:text="${#temporals.format(p.fechaTransaccion, 'dd-MM-yyyy')}">F</td>
                         </tr>
                     </tbody>
 
@@ -151,7 +131,7 @@
                             <th class="col-2">Venta(€)</th>
                         <!-- <th>Puja más alta(€)</th>
                             <th>Precio más bajo(€)</th>-->
-                            <th class="col-2">Expiración(Días)</th>
+                            <th class="col-2">Expiración</th>
                             <th class="col-2">Cancelar Antes</th>
                             <th class="col-1"></th>
                         </tr>
@@ -164,7 +144,7 @@
                             <td class="col-2 align-middle align-items-center" th:text="${p.precio}">D</td>
                             <!--<td th:text="${p.producto.highestBid}">D</td>
                             <td th:text="${p.producto.lowestAsk}">D</td>-->
-                            <td class="col-2 align-middle align-items-center" th:text="${p.fechaExpiracion}">F</td>
+                            <td class="col-2 align-middle align-items-center" th:text="${#temporals.format(p.fechaExpiracion, 'dd-MM-yyyy')}">F</td>
                             <td class="col-2 align-middle align-items-center"><form method="post" th:action="@{'/oferta/eliminarOferta/' + ${p.id}}">
                                 <input type="hidden" name="precio" th:value="${p.precio}">
                                 <input type="hidden" name="idOferta" th:value="${p.id}">
@@ -197,7 +177,7 @@
                             <td class="col-2 align-middle align-items-center"><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
                             <td class="col-2 align-middle align-items-center" th:text="${p.precio}">D</td>
                             <td class="col-3 align-middle align-items-center" th:text="${p.estado}">C</td>
-                            <td class="col-3 align-middle align-items-center" th:text="${p.fechaTransaccion}">F</td>
+                            <td class="col-3 align-middle align-items-center" th:text="${#temporals.format(p.fechaTransaccion, 'dd-MM-yyyy')}">F</td>
                         </tr>
                     </tbody>
 

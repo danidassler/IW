@@ -19,9 +19,9 @@
         </th:block>
     </div>
 	
-	<div class="container-fluid">
+	<div class="container-fluid text-center align-middle align-items-center">
 		<div class="main">
-			<h1 class="font-monospace justify-content-center">Mensajes recibidos</h1>
+			<h1 class="font-monospace col-12 pt-4">Mensajes</h1>
 			
 			<table id="datatable" class="display" style="width:100%"></table>
 			
@@ -31,8 +31,8 @@
 
 			<div class="sidebar" th:if="${session.u.hasRole('USER')}">
 				<form th:action="@{/perfil/chatconadmin}" method="POST">
-				<textarea id="men" class="form-control" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea>
-				<button id="sendmsg2" class="btn btn-primary" type="submit">Enviar</button>
+				<p class="pt-3"><textarea id="men" class="form-control" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea></p>
+				<p class="pt-3"><button id="sendmsg2" class="btn btn-primary" type="submit">Enviar</button></p>
 				</form>
 			</div>
 		</div>
@@ -72,7 +72,7 @@
 				row.received = formatDate(row.received);
 			}
 			console.log(row);
-			let newRow = dt.row.add({from : row.from, sent : formatDate(new Date().toISOString()) , text : row.text}).draw().node();
+			let newRow = dt.row.add({from : row.from, sent : row.sent , text : row.text}).draw().node();
 			if(row.from == username){ //Los mensajes que envías, se le asignan un color
 				$(newRow).addClass("table-info");
 			}
@@ -116,6 +116,11 @@
 		}
 	}
 	</script>
+
+
+	<th:block th:replace="frags/pie.html">
+	Aqui va lo que hay en header, esto no se ve
+	</th:block>
 
 </body>
 </html>
