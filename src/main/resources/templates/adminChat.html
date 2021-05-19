@@ -20,21 +20,18 @@
     </div>
 	
 	<div class="container">
-    <div class="main">
-    <h1>Mensajes recibidos</h1>
-        
-    <table id="datatable" class="display" style="width:100%"></table>
-		
-	<div class="sidebar">
-			<form th:action="@{/admin/idOfTarget/msg}" method="POST">
-	
-			<select id="idOfTarget" onchange="changeFunc();">
-				<option th:each="user: ${users}" th:value="${user.id}" th:text="${user.username}">mfreire</option>
-			</select>
-			<textarea id="men" style="display:none;" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea>
-			<button id="sendmsg" style="display:none;" type="submit">Enviar</button>
-			</form>
-		</div>
+		<div class="main">
+			<h1>Mensajes recibidos</h1>	
+			<table id="datatable" class="display" style="width:100%"></table>	
+			<div class="sidebar">
+				<form th:action="@{/admin/idOfTarget/msg}" method="POST">
+					<select id="idOfTarget" onchange="changeFunc();">
+						<option th:each="user: ${users}" th:value="${user.id}" th:text="${user.username}">mfreire</option>
+					</select>
+					<textarea id="men" style="display:none;" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea>
+					<button id="sendmsg" style="display:none;" type="submit">Enviar</button>
+				</form>
+			</div>
         </div>
 	</div>	
 

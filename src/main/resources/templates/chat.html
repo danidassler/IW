@@ -19,26 +19,24 @@
         </th:block>
     </div>
 	
-	<div class="container">
-	<div class="main">
-	<h1>Mensajes recibidos</h1>
-	
-	<table id="datatable" class="display" style="width:100%"></table>
-	
-	<div class="sidebar" th:if="${session.u.hasRole('ADMIN')}">
-		Eres un administrador, no puedes utilizar Atención al Cliente.
-	</div>
+	<div class="container-fluid">
+		<div class="main">
+			<h1 class="font-monospace justify-content-center">Mensajes recibidos</h1>
+			
+			<table id="datatable" class="display" style="width:100%"></table>
+			
+			<div class="sidebar" th:if="${session.u.hasRole('ADMIN')}">
+				Eres un administrador, no puedes utilizar Atención al Cliente.
+			</div>
 
-	<div class="sidebar" th:if="${session.u.hasRole('USER')}">
-		<form th:action="@{/perfil/chatconadmin}" method="POST">
-		<textarea id="men" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea>
-		<button id="sendmsg2" type="submit">Enviar</button>
-		</form>
-	</div>
-
-	</div>
+			<div class="sidebar" th:if="${session.u.hasRole('USER')}">
+				<form th:action="@{/perfil/chatconadmin}" method="POST">
+				<textarea id="men" class="form-control" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea>
+				<button id="sendmsg2" class="btn btn-primary" type="submit">Enviar</button>
+				</form>
+			</div>
+		</div>
 	</div>	
-
 
 	<script th:inline="javascript">
 
