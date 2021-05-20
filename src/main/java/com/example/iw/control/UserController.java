@@ -166,12 +166,6 @@ public class UserController {
 		Usuario sender = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
 		model.addAttribute("user", receiver);
 
-		/*
-		boolean ok = comprobarUsuario(receiver, sender, model);
-		if(!ok){
-			return "errorUser";
-		}
-		*/
 		// construye mensaje, lo guarda en BD
 		Mensaje m = new Mensaje();
 		m.setReceptor(receiver);
@@ -184,13 +178,12 @@ public class UserController {
 		// construye json
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode rootNode = mapper.createObjectNode();
-		rootNode.put("from", sender.getUsername());
-		rootNode.put("fromId", sender.getId());
-		rootNode.put("to", receiver.getId());
-		rootNode.put("text", text);
-		//rootNode.put("id", m.getId());
+		rootNode.put("from", sender.getUsername()); // Nickname del emisor
+		rootNode.put("fromId", sender.getId()); // Id del emisor
+		rootNode.put("to", receiver.getId()); // Id del receptor
+		rootNode.put("text", text); // Mensaje
 		String json = mapper.writeValueAsString(rootNode);
-		
+	
 		log.info("Sending a message to {} with contents '{}'", id, json);
 
 		messagingTemplate.convertAndSend("/user/"+receiver.getUsername()+"/queue/updates", json);
@@ -216,12 +209,12 @@ public class UserController {
 		entityManager.persist(m);
 		entityManager.flush(); // to get Id before commit
 			
-			// construye json
+		// construye json
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode rootNode = mapper.createObjectNode();
-		rootNode.put("from", sender.getUsername());
-		rootNode.put("fromID", sender.getId());
-		rootNode.put("to", "0");
+		rootNode.put("from", sender.getUsername()); //Nombre de usuario del emisor
+		rootNode.put("fromId", sender.getId()); //Id del emisor
+		rootNode.put("to", "0"); // Se lo envía a canal Admin
 		rootNode.put("text", text);
 		String json = mapper.writeValueAsString(rootNode);
 	

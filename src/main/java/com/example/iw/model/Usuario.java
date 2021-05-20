@@ -34,7 +34,10 @@ import lombok.Setter;
 	@NamedQuery(name="Usuario.hasUsername",
 			query="SELECT COUNT(username) "
 					+ "FROM Usuario u "
-					+ "WHERE u.username = :username")
+					+ "WHERE u.username = :username"),
+	@NamedQuery(name="Usuario.setAvailableChats",
+			query="SELECT DISTINCT u FROM Usuario u JOIN Mensaje m on u = m.emisor "
+					+ "WHERE (m.receptor.id = 0) OR (m.receptor.id = :userId)")
 })
 public class Usuario implements Transferable<Usuario.Transfer> {
 

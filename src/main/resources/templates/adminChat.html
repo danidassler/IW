@@ -34,6 +34,7 @@
 			<div class="sidebar text-center align-middle align-items-center">
 				<form th:action="@{/admin/idOfTarget/msg}" class="mb-3 text-center" method="POST">
 				<select id="idOfTarget" onchange="changeFunc();">
+					<option value="0" text = "Canal Admin"> Canal Admin </option>
 					<option th:each="user: ${users}" th:value="${user.id}" th:text="${user.username}">mfreire</option>
 				</select>
 				<textarea id="men" style="display:none;" class="form-control mt-3 mb-3" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea> 
@@ -65,7 +66,18 @@
 		}
 		adminReceived();
    }
-
+   function captureAdminMSG(){ //Función para capturar el mensaje de atención al cliente del usuario, para mostrarlo en el chat privado
+	var selectBox = document.getElementById("idOfTarget");
+	var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+	$.get("/admin/adminMsgCapture/" + selectedValue, function(data){
+			for (let i=0; i<data.length; i++) {
+				let row = data[i];
+				row.sent = formatDate(row.sent);
+				let newRow = dt.row.add({from : row.from, sent : row.sent , text : row.text}).draw().node();
+				$(newRow).addClass("table-success");
+			}
+		})
+   }
    function adminReceived(){ //Función que agrega las filas ordenadas por fecha de envío
 	var selectBox = document.getElementById("idOfTarget");
 	var selectedValue = selectBox.options[selectBox.selectedIndex].value;
@@ -87,7 +99,9 @@
 			}
 		})
    }
+   //Variables Globales
    var username = [[${username}]];
+   var optionCount = [[${optionCount}]];
 
     var dt = $('#datatable').DataTable( { //Inicializa datatable
 	columns: [
@@ -114,6 +128,7 @@
 			console.log(url);
 			e.preventDefault();
 			console.log(b, b.parentNode);
+			captureAdminMSG(); //Escribe los mensajes escritos por el cliente
 			let newRow = dt.row.add({from : username, sent : formatDate(new Date().toISOString()), text : document.getElementById("men").value}).draw().node();
 			$(newRow).addClass("table-info");
 			console.log(dt);
@@ -130,7 +145,20 @@
 		if(document.getElementById("idOfTarget").value == m.to || (document.getElementById("idOfTarget").value == m.fromId && m.to != "0")){
 			let newRow = dt.row.add({from : m.from, sent : formatDate(new Date().toISOString()), text : m.text}).draw().node();
 			$(newRow).addClass("table-success");
-		}		
+		}
+		if(m.to == "0"){ //Algún cliente ha escrito en el canal Admin
+			$.get("/admin/newClientAvailableChat/", function(data){
+				if(data > optionCount){ //Si ha recibido un mensaje de un cliente nuevo, aumenta el contador y el cliente se mostrará disponible para chatear
+					optionCount = data;
+					console.log(m.fromId);
+					console.log(m.fromId);
+					$('#idOfTarget').append($('<option>', {
+						value: m.fromId,
+						text: m.from
+					}));
+				}
+			})
+		}
 	}
 	</script>
 

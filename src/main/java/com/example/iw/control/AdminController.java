@@ -12,9 +12,7 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import com.example.iw.LocalData;
-import com.example.iw.model.Oferta;
-import com.example.iw.model.Producto;
-import com.example.iw.model.Usuario;
+import com.example.iw.model.*;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,12 +31,15 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.LocalDateTime;
-import com.example.iw.model.Mensaje;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.web.bind.annotation.RequestBody;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 /**
  * Admin-only controller
  * @author mfreire
@@ -264,13 +265,40 @@ public class AdminController {
     //Websockets
     @GetMapping("/adminChat/{id}")
     public String adminChat(@PathVariable long id, Model model, HttpSession session) {
-        model.addAttribute("users", entityManager.createQuery(
-            "SELECT u FROM Usuario u").getResultList());
+        List<Usuario> usuarios = new ArrayList<>();
+        usuarios = entityManager.createNamedQuery("Usuario.setAvailableChats").setParameter("userId", id).getResultList();
+        model.addAttribute("users", usuarios);
+        model.addAttribute("optionCount", usuarios.size());
         Usuario admin = entityManager.find(Usuario.class, id);
         model.addAttribute("username", admin.getUsername());
         return "adminChat";
     }
+	@GetMapping(path = "/newClientAvailableChat/", produces = "application/json") //Mensajes del cliente en canal Admin que serán capturados por el admin que le ha contestado
+	@Transactional
+	@ResponseBody
+	public int newClientAvailableChat(HttpSession session) {
+        List<Usuario> usuarios = new ArrayList<>();
+        Usuario admin = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+        usuarios = entityManager.createNamedQuery("Usuario.setAvailableChats").setParameter("userId", admin.getId()).getResultList();
+		return  usuarios.size();
+	}
 
+	@GetMapping(path = "/adminMsgCapture/{clientId}", produces = "application/json") //Mensajes del cliente en canal Admin que serán capturados por el admin que le ha contestado
+	@Transactional
+	@ResponseBody
+	public List<Mensaje.Transfer> messagesFromClienttoAdmin(@PathVariable long clientId, HttpSession session) {
+        Usuario admin = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+		List<Mensaje.Transfer> mensajes = new ArrayList<>();
+		List<Mensaje> mensajesToAdmin = entityManager.createNamedQuery("Mensaje.findNullMsgbyId").setParameter("userId", clientId).getResultList();
+        for(Mensaje msg: mensajesToAdmin){
+            msg.setReceptor(admin);
+            entityManager.merge(msg);
+        }
+        entityManager.flush();
+
+		mensajes.addAll(mensajesToAdmin.stream().map(Transferable::toTransfer).collect(Collectors.toList()));
+		return  mensajes;
+	}
     @PostMapping("/{id}/msg")
     @ResponseBody
     @Transactional
@@ -282,11 +310,6 @@ public class AdminController {
         Usuario admin = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
         model.addAttribute("user", receiver);
 
-        List<Mensaje> mensajesPending = entityManager.createNamedQuery("Mensaje.findNullMsgbyId").setParameter("userId", id).getResultList(); //Recoge todos los mensajes enviados a Atención al cliente del 
-        for(Mensaje msg: mensajesPending){
-            msg.setReceptor(admin);
-            entityManager.merge(msg);
-        }
         // construye mensaje, lo guarda en BD
         Mensaje m = new Mensaje();
         m.setReceptor(receiver);
