@@ -123,7 +123,11 @@ public class OfertaController {
         Oferta oferta = entityManager.find(Oferta.class, id);
         Oferta.Tipo tipo = oferta.getTipo();
 
-        if(tipo == Oferta.Tipo.PUJA){ //si es una puja devolvemos el dinero al usuario 
+        if(tipo == Oferta.Tipo.PUJA){ //si es una puja devolvemos el dinero al usuario
+            Usuario user = oferta.getComprador(); 
+            if(user.getId() != u.getId()){
+                return "errorUser";
+            }
             BigDecimal aniadir = precio.add(precio.multiply(new BigDecimal("9")).divide(new BigDecimal("100"))).add(new BigDecimal("10"));
             BigDecimal nuevoSaldo = u.getSaldo().add(aniadir);
             u.setSaldo(nuevoSaldo);
@@ -131,6 +135,10 @@ public class OfertaController {
             entityManager.remove(oferta);
         }
         else{ // si es un precio solo hace falta borrar la oferta de la bbdd
+            Usuario user = oferta.getVendedor(); 
+            if(user.getId() != u.getId()){
+                return "errorUser";
+            }
             entityManager.remove(oferta);
         }
         
@@ -267,7 +275,7 @@ public class OfertaController {
                
         if(menorPrecio == null){
             menorPrecio = new BigDecimal("0");
-        }
+        }a
 
         return menorPrecio;
     }

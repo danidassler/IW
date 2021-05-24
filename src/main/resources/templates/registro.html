@@ -42,13 +42,21 @@
           <input type="submit" value="Registrarme" class="btn btn-primary btn-block"></input>
         </div>
         <p class="forgot">¿Ya estas registrado?</p><a  class="text-center" th:href="@{/login}" href="/login">Haz login aqui</a>
+        <div th:if="${errorRU==1}"  class="container-fluid text-center align-middle align-items-center">
+          <div class="row m-2 border border-danger border-5 rounded">
+              <div class="col-12 mt-2">
+                  <p class="font-monospace" >ERROR: El nombre de usuario ya existe, elige otro</p>
+              </div>
+          </div>
+        </div>
+        <div th:if="${errorRC==1}"  class="container-fluid text-center align-middle align-items-center">
+          <div class="row m-2 border border-danger border-5 rounded">
+              <div class="col-12 mt-2">
+                  <p class="font-monospace" >ERROR: Las contraseñas no coinciden.</p>
+              </div>
+          </div>
+        </div>
       </form>
-    </div>
-    <div class="error">
-      <div class="errorbody">
-        <p th:if="${errorRU==1}">ERROR: El nombre de usuario ya existe, por favor, elige otro</p>
-        <p th:if="${errorRC==1}">ERROR: Las contraseñas no coinciden.</p>
-      </div>
     </div>
   <div>
     <th:block th:replace="frags/pie.html">

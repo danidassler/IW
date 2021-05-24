@@ -232,11 +232,10 @@ public class UserController {
 		
 		// check permissions
 		Usuario requester = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
-		if (requester.getId() != target.getId() &&
-				! requester.hasRole(Usuario.Rol.ADMIN)) {
-			response.sendError(HttpServletResponse.SC_FORBIDDEN, 
-					"No eres administrador, y éste no es tu perfil");
-			return "perfil";
+
+		boolean ok = comprobarUsuario(target, requester, model);
+		if(!ok){
+			return "errorUser";
 		}
 		
 		log.info("Updating photo for user {}", id);

@@ -275,6 +275,13 @@ public class ProductController {
 			@RequestParam("photo") MultipartFile photo,
 			@PathVariable("id") String id, Model model, HttpSession session) throws IOException {
 		
+        Usuario u = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+        if(!u.hasRole(Usuario.Rol.ADMIN)){
+            int noAdmin = 1;
+            model.addAttribute("noAdmin", noAdmin);
+            return "errorUser";
+        }
+
 		log.info("Updating photo for product {}", id);
 		File f = localData.getFile("img", "producto"+id);
 		if (photo.isEmpty()) {
