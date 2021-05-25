@@ -2,11 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <style>
-        td, th { border: 1px solid grey; text-align: center; border-spacing: 10px;}
-        table { padding: 0; }
-    </style>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Pujar un producto</title>
 </head>
 <body>
@@ -44,7 +39,8 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <p>Ten en cuenta que al precio que establezcas se le sumarán el 9% de tasas y 10€ de envio
+                            <p>Ten en cuenta que al precio que establezcas se le sumarán el <span th:text="${porcentaje}">I</span>% de tasas y 
+                                <span th:text="${envio}">I</span>€ de envio.
                             El dinero sera restado de tu saldo al realizar la puja, y devuelto si la cancelas.</p>
                         </div>
                     </div>

@@ -70,15 +70,15 @@ public class Oferta {
     private BigDecimal precio;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaExpiracion;
-    private LocalDateTime fechaTransaccion;
+    private LocalDateTime fechaTransaccion; //si este campo es igual a NULL significa que aún la transacción no se ha completado
     private Estado estado;
     
 
     @ManyToOne
-    private Usuario comprador;
+    private Usuario comprador; //si este campo es igual a NULL significa que aún la transacción no se ha completado
    
     @ManyToOne
-    private Usuario vendedor;
+    private Usuario vendedor; //si este campo es igual a NULL significa que aún la transacción no se ha completado
 
     @ManyToOne
     private Producto producto;

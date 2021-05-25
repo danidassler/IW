@@ -14,6 +14,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 
 import javax.persistence.EntityManager;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
@@ -26,6 +27,7 @@ import com.example.iw.model.Usuario;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,6 +47,12 @@ public class ProductController {
 
 	@Autowired 
 	private EntityManager entityManager;
+
+	@Autowired
+	private Environment env;
+
+    @Autowired
+	private ServletContext context;
 
     @Autowired
 	private LocalData localData;
@@ -97,9 +105,11 @@ public class ProductController {
         BigDecimal precio = mejorPuja;
         BigDecimal impuestos = new BigDecimal("0");
         BigDecimal precioFinal = mejorPuja;
-        BigDecimal envio = new BigDecimal("10");
+        BigDecimal envio = BigDecimal.valueOf((Double) context.getAttribute("envio"));
+       /* model.addAttribute("impuestos", env.getProperty("com.example.impuestos"));
+        model.addAttribute("envio", env.getProperty("com.example.envio"));*/
         if(!mejorPuja.equals(new BigDecimal("0"))){ //obtenemos el 9% de "mejorPuja" ya que son las tasas por usar la web
-            impuestos = mejorPuja.multiply(new BigDecimal("9")).divide(new BigDecimal("100"));
+            impuestos = mejorPuja.multiply(BigDecimal.valueOf((Double) context.getAttribute("impuestos"))).divide(new BigDecimal("100"));
         }
 
         precioFinal = precioFinal.subtract(impuestos).subtract(envio);
@@ -109,6 +119,7 @@ public class ProductController {
         model.addAttribute("menorPrecio", menorPrecio);
         model.addAttribute("precioFinal", precioFinal);
         model.addAttribute("envio", envio);
+        model.addAttribute("porcentaje", BigDecimal.valueOf((Double) context.getAttribute("impuestos")));
         model.addAttribute("impuestos", impuestos);
         model.addAttribute("precio", precio);
         model.addAttribute("idOferta", idOferta); 
@@ -139,9 +150,9 @@ public class ProductController {
         BigDecimal precio = menorPrecio;
         BigDecimal impuestos = new BigDecimal("0");
         BigDecimal precioFinal = menorPrecio;
-        BigDecimal envio = new BigDecimal("10");
+        BigDecimal envio = BigDecimal.valueOf((Double) context.getAttribute("envio"));
         if(!menorPrecio.equals(0)){ //obtenemos el 9% de "menorPrecio" ya que son los impuestos
-            impuestos = menorPrecio.multiply(new BigDecimal("9")).divide(new BigDecimal("100"));
+            impuestos = menorPrecio.multiply(BigDecimal.valueOf((Double) context.getAttribute("impuestos"))).divide(new BigDecimal("100"));
         }
 
         precioFinal = precioFinal.add(impuestos).add(envio);
@@ -151,6 +162,7 @@ public class ProductController {
         model.addAttribute("menorPrecio", menorPrecio);
         model.addAttribute("precioFinal", precioFinal);
         model.addAttribute("envio", envio);
+        model.addAttribute("porcentaje", BigDecimal.valueOf((Double) context.getAttribute("impuestos")));
         model.addAttribute("impuestos", impuestos);
         model.addAttribute("precio", precio);
         model.addAttribute("idOferta", idOferta);

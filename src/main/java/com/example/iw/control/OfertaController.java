@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
@@ -27,8 +28,12 @@ public class OfertaController {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Autowired
+	private ServletContext context;
     
     @GetMapping("/pujar/{id}")
+    @Transactional
     public String pujar(@PathVariable long id, Model model, HttpSession session) {    
         Producto prod = entityManager.find(Producto.class, id);
 
@@ -38,6 +43,8 @@ public class OfertaController {
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
         model.addAttribute("menorPrecio", menorPrecio);
+        model.addAttribute("envio", BigDecimal.valueOf((Double) context.getAttribute("envio"))); 
+        model.addAttribute("porcentaje", BigDecimal.valueOf((Double) context.getAttribute("impuestos"))); 
 
         return "pujar";                     
     }
@@ -59,6 +66,8 @@ public class OfertaController {
         int puedeP = 1; //entero para controlar si el usuario ya tiene una puja activa por el producto por el cual quiere pujar
         int puedeS = 1;
         int errorCompra = 0;
+        BigDecimal envio = BigDecimal.valueOf((Double) context.getAttribute("envio"));
+        BigDecimal porcentaje = BigDecimal.valueOf((Double) context.getAttribute("impuestos"));
         BigDecimal saldo = u.getSaldo(); // --> cogemos el saldo actual del usuario
         List<Oferta> pujasUser = entityManager.createNamedQuery("Oferta.pujasUser").setParameter("userId", u.getId()).getResultList(); //cogemos la lista de pujas actuales del usuario
 
@@ -68,7 +77,8 @@ public class OfertaController {
             }
         }
 
-        BigDecimal saldoSiPuja = saldo.subtract(precio.add(precio.multiply(new BigDecimal("9")).divide(new BigDecimal("100"))).add(new BigDecimal("10"))); //calculamos el saldo del usuario si este realizase la puja que está intentando realizar
+        BigDecimal saldoSiPuja = saldo.subtract(precio.add(precio.multiply(porcentaje)
+                                .divide(new BigDecimal("100"))).add(envio)); //calculamos el saldo del usuario si este realizase la puja que está intentando realizar
 
         if(saldoSiPuja.compareTo(new BigDecimal("0")) == -1 || puedeP == 0){ //saldoSiPuja < 0 --> la puja NO puede realizarse
             
@@ -101,6 +111,8 @@ public class OfertaController {
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
         model.addAttribute("menorPrecio", menorPrecio);
+        model.addAttribute("envio", envio);
+        model.addAttribute("porcentaje", porcentaje);
         
         return "pujar";
     }
@@ -108,7 +120,8 @@ public class OfertaController {
 
     @GetMapping("/eliminarOferta/{id}")
     public String eliminarPuja(Model model, HttpSession session){
-
+        int ok = 0;
+        model.addAttribute("ok", ok);
         return "eliminarOferta";
     }
 
@@ -128,7 +141,8 @@ public class OfertaController {
             if(user.getId() != u.getId()){
                 return "errorUser";
             }
-            BigDecimal aniadir = precio.add(precio.multiply(new BigDecimal("9")).divide(new BigDecimal("100"))).add(new BigDecimal("10"));
+            BigDecimal aniadir = precio.add(precio.multiply(BigDecimal.valueOf((Double) context.getAttribute("impuestos"))
+                                .divide(new BigDecimal("100"))).add(BigDecimal.valueOf((Double) context.getAttribute("envio"))));
             BigDecimal nuevoSaldo = u.getSaldo().add(aniadir);
             u.setSaldo(nuevoSaldo);
             entityManager.merge(u);
@@ -142,6 +156,8 @@ public class OfertaController {
             entityManager.remove(oferta);
         }
         
+        int ok = 1;
+        model.addAttribute("ok", ok);
         model.addAttribute("idUser", u.getId());
 
         return "eliminarOferta";    
@@ -182,7 +198,9 @@ public class OfertaController {
 
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
-        model.addAttribute("menorPrecio", menorPrecio);  
+        model.addAttribute("menorPrecio", menorPrecio);
+        model.addAttribute("envio", BigDecimal.valueOf((Double) context.getAttribute("envio"))); 
+        model.addAttribute("porcentaje", BigDecimal.valueOf((Double) context.getAttribute("impuestos"))); 
         
         return "fijarPrecio";
     }
@@ -197,7 +215,9 @@ public class OfertaController {
 
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
-        model.addAttribute("menorPrecio", menorPrecio);    
+        model.addAttribute("menorPrecio", menorPrecio);
+        model.addAttribute("envio", BigDecimal.valueOf((Double) context.getAttribute("envio"))); 
+        model.addAttribute("porcentaje", BigDecimal.valueOf((Double) context.getAttribute("impuestos"))); 
         return "fijarPrecio";                     
     }
 
@@ -275,7 +295,7 @@ public class OfertaController {
                
         if(menorPrecio == null){
             menorPrecio = new BigDecimal("0");
-        }a
+        }
 
         return menorPrecio;
     }

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
@@ -58,6 +59,9 @@ public class AdminController {
 	
 	@Autowired
 	private Environment env;
+    
+    @Autowired
+	private ServletContext context;
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
@@ -146,6 +150,9 @@ public class AdminController {
 			log.info("Successfully uploaded photo for {} into {}!", id, f.getAbsolutePath());
 		}
 
+        List<?> cats = entityManager.createNamedQuery("Producto.categories").getResultList();
+        context.setAttribute("categorias", cats);
+
         return "formularioProducto";
     }
 
@@ -187,6 +194,9 @@ public class AdminController {
         entityManager.merge(prod);
         model.addAttribute("prod", prod);     
 
+        List<?> cats = entityManager.createNamedQuery("Producto.categories").getResultList();
+        context.setAttribute("categorias", cats);
+
         return "modificarProducto";
     }
 
@@ -225,41 +235,25 @@ public class AdminController {
         model.addAttribute("prods", prods); 
             
         return "adminProductos"; 
-                   
-		/*List<?> prods = entityManager.createQuery("SELECT p FROM Producto p").getResultList();
-		List<?> matrix = new ArrayList<>();
-		int  numrows = prods.size()/4;
-		model.addAttribute("numrows", numrows); 
-		model.addAttribute("prods", prods); 
-		int col = 0;
-		for(int row = 0; row < prods.size()/4; row++){
-			for(; col < 4; col++){
-				
-			}
-		}
-
-            
-        return "adminProductos";*/
     }
 
-    @PostMapping("banearUsuario/{id}")
+    @GetMapping(path = "banearUsuario/{id}" , produces = "application/json")
     @Transactional
-    public String banearUsuario(
-        @PathVariable long id,
-        Model model){
+    @ResponseBody
+    public int banearUsuario(@PathVariable long id){
             Usuario user = entityManager.find(Usuario.class, id); 
+            int res = 0;
             if(user.getEnabled() == 1){ //aun esta activo
                 user.setEnabled((byte)0);
                 entityManager.merge(user);
+                res = 1;
             }
             else{ //esta baneado
                 user.setEnabled((byte)1);
                 entityManager.merge(user);
+                res = 2;
             }
-            
-            model.addAttribute("user", user);
-
-            return "administrarUsuario";
+        return res;
     }
     
     //Websockets
@@ -273,7 +267,7 @@ public class AdminController {
         model.addAttribute("username", admin.getUsername());
         return "adminChat";
     }
-	@GetMapping(path = "/newClientAvailableChat/", produces = "application/json") //Mensajes del cliente en canal Admin que serán capturados por el admin que le ha contestado
+	@GetMapping(path = "/newClientAvailableChat/", produces = "application/json")
 	@Transactional
 	@ResponseBody
 	public int newClientAvailableChat(HttpSession session) {

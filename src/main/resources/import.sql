@@ -15,11 +15,11 @@ INSERT INTO Producto VALUES (7, 'Electronica', 'Consola de ultima generacion de 
 
 
 
-INSERT INTO Oferta VALUES (1, 0,'2021-10-10', '2021-10-01', NULL, 470, 0, 1, 1, NULL); -- puja dani 470 p1 --
-INSERT INTO Oferta VALUES (2, 0,'2021-11-15', '2021-11-05', NULL, 500, 1, NULL, 1, 2); -- precio sergio 500 p1 --
-INSERT INTO Oferta VALUES (3, 0,'2021-07-24', '2021-06-30', NULL, 380, 0, 2, 2, NULL); -- puja sergio 380 p2 --
-INSERT INTO Oferta VALUES (4, 0,'2021-03-27', '2021-03-20', NULL, 445, 0, 3, 1, NULL); -- puja casado 445 p1 --
-INSERT INTO Oferta VALUES (5, 0,'2021-04-17', '2021-04-10', NULL, 510, 1, NULL, 1, 4); -- precio jin 510 p1 --
+INSERT INTO Oferta VALUES (1, 0, DATEADD('DAY', 25, CURRENT_DATE), DATEADD('DAY', -5, CURRENT_DATE), NULL, 470, 0, 1, 1, NULL); -- puja dani 470 p1 --
+INSERT INTO Oferta VALUES (2, 0, DATEADD('MONTH', 1, CURRENT_DATE), DATEADD('DAY', -15, CURRENT_DATE), NULL, 500, 1, NULL, 1, 2); -- precio sergio 500 p1 --
+INSERT INTO Oferta VALUES (3, 0, DATEADD('DAY', 2, CURRENT_DATE), DATEADD('DAY', -5, CURRENT_DATE), NULL, 380, 0, 2, 2, NULL); -- puja sergio 380 p2 --
+INSERT INTO Oferta VALUES (4, 0, DATEADD('DAY', 6, CURRENT_DATE), DATEADD('DAY', -8, CURRENT_DATE), NULL, 445, 0, 3, 1, NULL); -- puja casado 445 p1 --
+INSERT INTO Oferta VALUES (5, 0, DATEADD('DAY', 5, CURRENT_DATE), DATEADD('DAY', -25, CURRENT_DATE), NULL, 510, 1, NULL, 1, 4); -- precio jin 510 p1 --
 
 INSERT INTO Oferta VALUES (6, 1,'2021-10-15', '2021-10-01', '2021-10-09', 405, 0, 1, 2, 3); -- Transaccion dani 405 p2 --
 INSERT INTO Oferta VALUES (7, 1,'2021-04-02', '2021-03-22', '2021-04-01', 490, 1, 5, 1, 4); -- Transaccion sergio 405 p1 --

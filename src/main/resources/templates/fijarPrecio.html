@@ -2,10 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <style>
-        td, th { border: 1px solid grey; text-align: center; border-spacing: 10px;}
-        table { padding: 0; }
-    </style>
     <title>Fijar precio del producto</title>
 </head>
 <body>
@@ -44,7 +40,7 @@
                     <div class="row">
                         <div class="col-12">
                             <p>Ten en cuenta que el precio que establezcas no sera el dinero que recibiras.
-                            Al precio establecido se le restara el 9% de tasas y 10€ de envio.</p>
+                            Al precio establecido se le restara el <span th:text="${porcentaje}">I</span>% de impuestos y <span th:text="${envio}">I</span>€ de envio.</p>
                         </div>
                     </div>
                     <div class="row">

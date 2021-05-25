@@ -1,7 +1,11 @@
 package com.example.iw;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
 
 import org.apache.logging.log4j.LogManager;
@@ -26,6 +30,9 @@ public class StartupConfig {
 	private Environment env;
 
 	@Autowired
+    private EntityManager entityManager;
+
+	@Autowired
 	private ServletContext context;
 	
 	@EventListener(ContextRefreshedEvent.class)
@@ -35,6 +42,20 @@ public class StartupConfig {
 				&& Boolean.parseBoolean(debugProperty.toLowerCase()));
 		log.info("Setting global debug property to {}", 
 				context.getAttribute("debug"));
+
+		Double impuestosProperty =  Double.parseDouble(env.getProperty("com.example.impuestos"));
+		context.setAttribute("impuestos", impuestosProperty);
+		log.info("Setting global impuestos property to {}", 
+				context.getAttribute("impuestos"));
+
+		Double envioProperty = Double.parseDouble(env.getProperty("com.example.envio"));
+		context.setAttribute("envio", envioProperty);
+		log.info("Setting global envio property to {}", 
+				context.getAttribute("envio"));
+
+		List<?> categorias = entityManager.createNamedQuery("Producto.categories").getResultList();
+        context.setAttribute("categorias", categorias);
+
 		
 		// see http://www.ecma-international.org/ecma-262/5.1/#sec-15.9.1.15
 		// and https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html

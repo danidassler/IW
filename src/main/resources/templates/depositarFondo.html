@@ -2,10 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <style>
-        td, th { border: 1px solid grey; text-align: center; border-spacing: 10px;}
-        table { padding: 0; }
-    </style>
     <title>Depositar fondo</title>
 </head>
 <body>
@@ -89,7 +85,7 @@
                                 <div class="col"></div>
                                 <div class="col row justify-content-center pb-2">
                                         <label for="saldo" class="form-label">Dinero a incluir</label>
-                                        <input type="number" id="saldo" name="saldo" 
+                                        <input type="number" step=".01" id="saldo" name="saldo" 
                                             class="form-control" placeholder="Saldo" required="required"></input>
                                 </div>
                                 <div class="col"></div>

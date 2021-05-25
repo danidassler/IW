@@ -2,10 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <style>
-        td { padding: 1em; }
-        table { padding: 1em; }
-    </style>
     <title>Finalizar Venta</title>
 </head>
 <body>
@@ -41,7 +37,7 @@
                         </div>
                         <div class="col-6">
                             <p>Precio de venta: <span th:text="${precio}">LA</span>€</p>
-                            <p>Impuestos (9%): - <span th:text="${impuestos}">I</span>€</p>
+                            <p>Impuestos (<span th:text="${porcentaje}">I</span>%): - <span th:text="${impuestos}">I</span>€</p>
                             <p>Envio: - <span th:text="${envio}">I</span>€</p>
                             <p>Pago final: <b><span th:text="${precioFinal}">I</span>€</b></p>
                         </div>

@@ -2,9 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <style>
-        table {border: 1px solid grey;}
-    </style>
     <title>Confirmación</title>
 </head>
 <body>
@@ -14,7 +11,7 @@
         </th:block>
     </div>
 
-    <div class="container-fluid text-center align-middle align-items-center">
+    <div th:if="${ok==1}" class="container-fluid text-center align-middle align-items-center">
         <div class="row m-5 pb-3 border border-success border-5 rounded">
             <div class="col-12 mt-3 mb-3">
                 <h2 class="font-monospace">OFERTA ELIMINADA CORRECTAMENTE</h2>
@@ -22,6 +19,14 @@
                         
             <div class="col-12">
                 <p>Compruebalo en tu perfil: <a class="btn btn-xs btn-outline-primary" th:href="@{'/perfil/' + ${idUser}}">Perfil</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${ok==0}" class="container-fluid text-center align-middle align-items-center">
+        <div class="row m-5 pb-3 border border-success border-5 rounded">
+            <div class="col-12 mt-3 mb-3">
+                <h2 class="font-monospace">Error: no puedes eliminar una oferta que no es tuya.</h2>
             </div>
         </div>
     </div>

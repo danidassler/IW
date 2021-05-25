@@ -73,15 +73,6 @@ public class Usuario implements Transferable<Usuario.Transfer> {
     @Column(nullable = false)
     private BigDecimal saldo;
 
-	//Duda ManyToMany: dos usuarios en cada transacción (comprador y vendedor), un usuario puede tener muchas transacciones
-	/*@OneToMany
-	@JoinColumn(name="comprador_id")
-	private List<Transaccion> transaccionesCompra;
-
-	@OneToMany
-	@JoinColumn(name="vendedor_id")
-	private List<Transaccion> transaccionesVenta;*/
-
 	@OneToMany
 	@JoinColumn(name="comprador_id")
 	private List<Oferta> comprar;
@@ -118,16 +109,6 @@ public class Usuario implements Transferable<Usuario.Transfer> {
 				.anyMatch(r -> r.equals(roleName));
 	}
 	
-	/*
-	public boolean hasRole(Rol rol) {
-		String rolName = rol.name();
-		boolean ok = false;
-		if (rolName == "ADMIN"){
-			ok = true;
-		}
-		return ok;
-	}
-	*/
 	/**
 	 * Encodes a password, so that it can be saved for future checking. Notice
 	 * that encoding the same password multiple times will yield different
@@ -159,4 +140,3 @@ public class Usuario implements Transferable<Usuario.Transfer> {
 		return new Transfer(id,	username, mensajesRecibidos.size(), mensajesEnviados.size());
     }
 }
-//CONTROLAR QUE NO SE METE UN PRODUCTO YA EXISTENTE
