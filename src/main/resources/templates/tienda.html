@@ -12,14 +12,6 @@
     </div>
     <div class="text-center mt-3">
         <p sec:authorize="isAuthenticated()">
-            <!--th:if="${!session.isEmpty()}"-->
-            <!-- También es viable de esta forma: (Elegir en el futuro cuál es preferible)
-
-                <form th:action="@{/logout}" method="post">
-                    <button type="submit">logout</button>
-                </form>
-            -->
-            
             <a class="adminProductos btn btn-info btn-xs m-2" role="button" th:if="${session.u.hasRole('ADMIN')}" th:href="@{/admin/adminProductos}">Administrar Producto </a>
             <a class="btn btn-info btn-xs m-2" th:if="${session.u.hasRole('ADMIN')}" role="button" th:href="@{/admin/formularioProducto}">Nuevo Producto </a>
         </p>

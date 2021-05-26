@@ -91,7 +91,7 @@
                                 Categorías
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <li th:each="c: ${application.categorias}"><a class="font-monospace dropdown-item tienda colorhref" th:href="@{/tienda/'${c}'}" th:text="${c}">c</a></li>
+                                <li th:each="c: ${application.categorias}"><a class="font-monospace dropdown-item tienda colorhref" th:href="@{'/tienda/' + ${c}}" th:text="${c}">c</a></li>
                             </ul>
                         </li>
                     </ul>
