@@ -19,16 +19,14 @@ import lombok.Data;
 			query="SELECT o FROM Oferta o "
 					+ "WHERE o.comprador.id = :userId OR o.vendedor.id = :userId"),
     @NamedQuery(name="Oferta.mejorPuja",
-            /*query="SELECT o FROM Oferta o " + 
-            "WHERE o.precio = (SELECT MAX(precio) FROM Oferta WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId*/
-            query="SELECT MAX(o.precio) FROM Oferta o WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId AND NOT o.comprador.id =:userId"),
+            query="SELECT MAX(precio) FROM Oferta WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId"
+            /*query="SELECT MAX(o.precio) FROM Oferta o WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId AND NOT o.comprador.id =:userId"*/),
     @NamedQuery(name="Oferta.mPuja",
             query="SELECT o FROM Oferta o " + 
             "WHERE o.precio = (SELECT MAX(precio) FROM Oferta WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId AND NOT comprador.id =:userId)"),
     @NamedQuery(name="Oferta.menorPrecio",
-            /*query="SELECT o FROM Oferta o " + 
-            "WHERE o.precio = (SELECT MIN(precio) FROM Oferta WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId*/
-            query="SELECT MIN(o.precio) FROM Oferta o WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId AND NOT o.vendedor.id =:userId"),
+            query="SELECT MIN(precio) FROM Oferta WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId"
+            /*query="SELECT MIN(o.precio) FROM Oferta o WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId AND NOT o.vendedor.id =:userId"*/),
     @NamedQuery(name="Oferta.mPrecio",
             query="SELECT o FROM Oferta o " + 
             "WHERE o.precio = (SELECT MIN(precio) FROM Oferta WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId AND NOT vendedor.id =:userId)"),
@@ -72,15 +70,15 @@ public class Oferta {
     private BigDecimal precio;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaExpiracion;
-    private LocalDateTime fechaTransaccion;
+    private LocalDateTime fechaTransaccion; //si este campo es igual a NULL significa que aún la transacción no se ha completado
     private Estado estado;
     
 
     @ManyToOne
-    private Usuario comprador;
+    private Usuario comprador; //si este campo es igual a NULL significa que aún la transacción no se ha completado
    
     @ManyToOne
-    private Usuario vendedor;
+    private Usuario vendedor; //si este campo es igual a NULL significa que aún la transacción no se ha completado
 
     @ManyToOne
     private Producto producto;

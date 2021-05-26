@@ -18,12 +18,6 @@ import lombok.AllArgsConstructor;
 @Entity
 @Data
 @NamedQueries({
-	@NamedQuery(name="Mensaje.recibidos",
-			query="SELECT m FROM Mensaje m "
-					+ "WHERE m.emisor.id = :clienteId AND m.receptor.id = :userId"),
-	@NamedQuery(name="Mensaje.enviados",
-			query="SELECT m FROM Mensaje m "
-					+ "WHERE m.emisor.id = :userId AND m.receptor.id = :clienteId"),
 	@NamedQuery(name="Mensaje.total",
 			query="SELECT m FROM Mensaje m "
 					+ "WHERE (m.emisor.id = :userId AND m.receptor.id = :clienteId) OR (m.emisor.id = :clienteId AND m.receptor.id = :userId)"),		

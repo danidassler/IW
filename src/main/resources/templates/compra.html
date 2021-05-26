@@ -2,62 +2,64 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <style>
-        td { padding: 1em; }
-        table { padding: 1em; }
-    </style>
     <title>Finalizar Compra</title>
 </head>
 <body>
-    <nav th:replace="frags/nav.html :: nav">
-		Nav goes here
-	</nav>
     <div>
         <th:block th:replace="frags/header.html">
             Aqui va lo que hay en header, esto no se ve
         </th:block>
     </div>
-    <h4>Finalizar compra:</h4>
-    <table>
-        <tr>
-            <td><b><span th:text="${prod.nombre}">N</span></b></td>
-            <td><b>Revisión de la compra:</b></td>
-        </tr>
-        <tr>
-            <td>
-                <!--<p><b><span th:text="${prod.nombre}">N</span></b></p>-->
-                <p th:if="${menorPrecio != 0}">Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€</p>
-                <p th:if="${menorPrecio == 0}">Precio mas bajo: --- €</p>
-                <p th:if="${mejorPuja != 0}">Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p> 
-                <p th:if="${mejorPuja == 0}">Puja mas alta: --- € </p>
-                <p><span th:text="${prod.talla}">N</span>EUR</p>
-                <p><img th:src="@{/producto/{id}/photo(id=${prod.id})}" alt="foto"  width="350" height="400"/></p>
-            </td>
-            <td>
-                <!-- <p><b>Revisión de la venta:</b></p> -->
-                <p>Precio de la compra: <span th:text="${precio}">LA</span>€</p>
-                <p>Impuestos (9%): + <span th:text="${impuestos}">I</span>€</p>
-                <p>Envio: + <span th:text="${envio}">I</span>€</p>
-                <p>Pago final: <b><span th:text="${precioFinal}">I</span>€</b></p>
-            </td>
-            <td>
-                <p th:if="${menorPrecio!=0}">Esta compra reducirá tu saldo en <span th:text="${precioFinal}">I</span>€</p>
-                <form th:if="${menorPrecio!=0}" method="post" th:action="@{'/producto/confirmacionProducto/' + ${prod.id}}">
-                    <input type="hidden" name="precio" th:value="${precio}">
-                    <input type="hidden" name="precioFinal" th:value="${precioFinal}">
-                    <input type="hidden" name="impuestos" th:value="${impuestos}">
-                    <input type="hidden" name="envio" th:value="${envio}">
-                    <input type="hidden" name="idOferta" th:value="${idOferta}">
-                    <button class="btn btn-lg btn-primary btn-block" id="confirmarCompra" type="submit">Confirmar Compra</button>
-                </form>
-                <p th:if="${menorPrecio == 0}">Aun no puedes comprar este producto, espera a que un vendedor fije un precio o puedes realizar una puja aqui:
-                    <button><a th:href="@{'/oferta/pujar/' + ${prod.id}}">Pujar</a></button>
-                </p>
-            </td>
-
-        </tr>
-    </table>
-
+    <div class="container-fluid">
+        <div class="row align-items-center mt-5 ml-5 mr-5 mb-1 border rounded p-3 mb-5">
+            <div class="col-4 text-center img-fluid">
+                <img th:src="@{/producto/{id}/photo(id=${prod.id})}" alt="foto"  width="350" height="400"/>
+            </div>
+            <div class="col-8 text-center border-left">
+                <div class="row align-items-center m-4">
+                    <div class="col-12">
+                        <p class="h1 font-monospace fw-bold" th:text="${prod.nombre}"><b>Producto</b></p>
+                    </div>
+                </div>
+                <div class="row align-items-center border-bottom pb-4">
+                    <div class="col-6">
+                        <p class="h6">Talla: <span th:text="${prod.talla}"> T</span></p>
+                    </div>
+                    <div class="col-6">
+                        <p th:if="${menorPrecio != 0}">Precio mas bajo: <span th:text="${menorPrecio} ">LA</span>€</p>
+                        <p th:if="${menorPrecio == 0}">Precio mas bajo: --- €</p>
+                        <p th:if="${mejorPuja != 0}">Puja más alta: <span th:text="${mejorPuja} ">LA</span>€</p> 
+                        <p th:if="${mejorPuja == 0}">Puja mas alta: --- € </p>
+                    </div>
+                </div>
+                <div class="row align-items-center pb-4 p-3">
+                    <div class="col-12">
+                        <h4> Resumen de la compra </h4>
+                    </div>
+                    <div class="col-6">
+                        <p>Precio de la compra: <span th:text="${precio}">LA</span>€</p>
+                        <p>Impuestos (<span th:text="${porcentaje}">I</span>%): + <span th:text="${impuestos}">I</span>€</p>
+                        <p>Envio: + <span th:text="${envio}">I</span>€</p>
+                    </div>
+                    <div class="col-6">
+                        <p>Pago final: <b><span th:text="${precioFinal}">I</span>€</b></p>
+                        <p th:if="${menorPrecio!=0}">Esta compra reducirá tu saldo en <span th:text="${precioFinal}">I</span>€</p>
+                        <form th:if="${menorPrecio!=0}" method="post" th:action="@{'/producto/confirmacionProducto/' + ${prod.id}}">
+                            <input type="hidden" name="precio" th:value="${precio}">
+                            <input type="hidden" name="precioFinal" th:value="${precioFinal}">
+                            <input type="hidden" name="impuestos" th:value="${impuestos}">
+                            <input type="hidden" name="envio" th:value="${envio}">
+                            <input type="hidden" name="idOferta" th:value="${idOferta}">
+                            <button class="btn btn-success btn-xs" id="confirmarCompra" type="submit">Confirmar Compra</button>
+                        </form>
+                        <p th:if="${menorPrecio == 0}">Aun no puedes comprar este producto, espera a que un vendedor fije un precio o puedes realizar una puja aqui:
+                           <a class="btn btn-xs" th:href="@{'/oferta/pujar/' + ${prod.id}}">Pujar</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <th:block th:replace="frags/pie.html">
         Aqui va lo que hay en header, esto no se ve
     </th:block>

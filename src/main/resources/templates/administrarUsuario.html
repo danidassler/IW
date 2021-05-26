@@ -2,98 +2,128 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <style>
-        td, th { border: 1px solid grey; text-align: center; border-spacing: 10px;}
-        table { padding: 0; }
-    </style>
     <title>Administrar Usuario</title>
 </head>
 <body>
-    <nav th:replace="frags/nav.html :: nav">
-		Nav goes here
-	</nav>
     <div>
         <th:block th:replace="frags/header.html">
             Aqui va lo que hay en header, esto no se ve
         </th:block>
     </div>
-    <h3>Administrar - Usuario: <span th:text=${user.username}>A</span></h3>
-    <p>Desde aquí el usuario puede cambiar sus datos personales.</p>
-    <table>
-        <tr>
-            <td>
+
+    <div class="container-fluid">
+        <h3 class="text-center mt-4">Administrar - Usuario: <span th:text=${user.username}>A</span></h3>
+        <div class="row align-items-center mt-5 ms-5 me-5 mb-1 border rounded p-3">
+            <div class="col-4 text-center img-fluid">
                 <p><b>Foto de perfil</b></p>
-                <img th:src="@{/perfil/{id}/photo(id=${user.id})}" alt="foto" width="350" height="400"/>
-                <p style="text-align: center;">
-                <form th:if="${user.enabled == 1}" method="post" th:action="@{'/admin/banearUsuario/' + ${user.id}}">
-                    <input type="hidden" name="idUSer" th:value="${user.id}">
-                    <input type="submit" value="Banear" style= "margin: 5px;">
-                </form>
-                <form th:if="${user.enabled == 0}" method="post" th:action="@{'/admin/banearUsuario/' + ${user.id}}">
-                    <input type="hidden" name="idUSer" th:value="${user.id}">
-                    <input type="submit" value="Activar Usuario" style= "margin: 5px;">
-                </form>  
-                    <button style= "margin: 5px;">Mensaje</button>
-                </p>
-            </td>
-            <td>
-                    <h4>Información del perfil</h4>
-                    <p>
-                        Usuario: <span th:text=${user.username}>A</span>
-                    </p>
-                    <p>
-                        Nombre: <span th:text=${user.nombre}>A</span>
-                    </p>
-                    <p>
-                        Apellidos: <span th:text=${user.apellidos}>A</span>
-                    </p> 
-            </td>
-            <td>
+                <img th:src="@{/perfil/{id}/photo(id=${user.id})}" class="mb-3" alt="foto" width="250" height="300"/>
+            </div>
+            <div class="col-8 align-items-center text-center border-left">
+                <div class="row">
+                    <div class="col">
+                        <div class="row">
+                            <p class="h2">
+                                Nombre: <span th:text=${user.nombre}>A</span>
+                            </p>
+                            <p class="h2">
+                                Apellidos: <span th:text=${user.apellidos}>A</span>
+                            </p>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col">                            
+                            </div>
+                            <div class="col">                            
+                                <form id = "form" th:if="${user.enabled == 1}" method="get" th:action="@{'/admin/banearUsuario/' + ${user.id}}">
+                                    <input id = "name" type="hidden" name="idUSer" th:value="${user.id}">
+                                    <input id ="submit" type="submit" onClick="changeInput(event);" class="btn btn-primary btn-xs col-lg-12" value="Banear" style= "margin: 5px;">
+                                </form>
+                                <form id = "form" th:if="${user.enabled == 0}" method="get" th:action="@{'/admin/banearUsuario/' + ${user.id}}">
+                                    <input id = "name" type="hidden" name="idUSer" th:value="${user.id}">
+                                    <input id ="submit" type="submit" onClick="changeInput(event);" class="btn btn-primary btn-xs col-lg-12" value="Activar Usuario" style= "margin: 5px;">
+                                </form>  
+                            </div>
+                            <div class="col">                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>  
+        <div class="row">
+            <div class="col text-center mt-5 ml-5 mr-5 mb-1 border rounded pb-3 mb-5">
                 <p>
-                    <b>Pujas Activas:</b>
-                    <table>
-                        <tr>
-                            <th>Imagen</th>
-                            <th>Nombre Producto</th>
-                            <th>Puja(€)</th>
-                            <!--<th>Puja más alta(€)</th>
-                            <th>Precio más bajo(€)</th>-->
-                            <th>Expiración(Días)</th>
-                        </tr>
-                        <tr th:each="p: ${pujas}">
-                            <td><img th:src="@{/producto/{id}/photo(id=${p.producto.id})}" alt="foto" width="100" height="150"/></td>
-                            <td><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
-                            <td th:text="${p.precio}">D</td>
-                            <!--<td th:text="${p.mejorPuja}">D</td>
-                            <td th:text="${p.menorPrecio}">D</td>-->
-                            <td th:text="${p.fechaExpiracion}">C</td>
-                        </tr>
+                    <b class="font-monospace fs-4 align-items-center">Pujas Activas:</b> 
+                    <table class="tabla_productos table align-left table-borderless text-center container-fluid">
+                       <thead>
+                            <tr class="d-flex m-3">
+                                <th class="col-2"></th>
+                                <th class="col-2">Imagen</th>
+                                <th class="col-2">Nombre Producto</th>
+                                <th class="col-2">Puja(€)</th>
+                                <th class="col-2">Expiración</th>
+                                <th class="col-2"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="d-flex m-3 p-3 align-items-center" th:each="p: ${pujas}">
+                                <td class="col-2"></td>
+                                <td class="col-2 align-middle align-items-center"><img th:src="@{/producto/{id}/photo(id=${p.producto.id})}" alt="foto" width="150" height="150"/></td>
+                                <td class="col-2 align-middle align-items-center"><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
+                                <td class="col-2 align-middle align-items-center" th:text="${p.precio}">D</td>
+                                <td class="col-2 align-middle align-items-center" th:text="${#temporals.format(p.fechaExpiracion, 'dd-MM-yyyy')}">C</td>
+                                <td class="col-2"></td>
+                            </tr>
+                        </tbody>
                     </table>
                 </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col text-center mt-5 ml-5 mr-5 mb-1 border rounded pb-3 mb-5">
                 <p>
-                    <b>Productos que vende:</b> <button>Ver todo</button>
-                    <table>
-                        <tr>
-                            <th>Imagen</th>
-                            <th>Nombre Producto</th>
-                            <th>Venta(€)</th>
-                           <!-- <th>Puja más alta(€)</th>
-                            <th>Precio más bajo(€)</th>-->
-                            <th>Expiración(Días)</th>
-                        </tr>
-                        <tr th:each="p: ${precios}">
-                            <td><img th:src="@{/producto/{id}/photo(id=${p.producto.id})}" alt="foto" width="100" height="150"/></td>
-                            <td><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
-                            <td th:text="${p.precio}">D</td>
-                            <!--<td th:text="${p.producto.highestBid}">D</td>
-                            <td th:text="${p.producto.lowestAsk}">D</td>-->
-                            <td th:text="${p.fechaExpiracion}">F</td>
-                        </tr>
+                    <b class="font-monospace fs-4 align-items-center">Productos que esta vendiendo:</b> <!--<button class="btn btn-success btn-xs tiendaCompraAhora">Ver todo</button>-->
+                    <table class="tabla_productos table align-middle table-borderless text-center container-fluid">
+                        <thead>
+                            <tr class="d-flex m-3">
+                                <th class="col-2"></th>
+                                <th class="col-2">Imagen</th>
+                                <th class="col-2">Nombre Producto</th>
+                                <th class="col-2">Venta(€)</th>
+                                <th class="col-2">Expiración</th>
+                                <th class="col-2"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="d-flex m-3 p-3 align-items-center" th:each="p: ${precios}">
+                                <td class="col-2"></td>
+                                <td class="col-2 align-middle align-items-center"><img th:src="@{/producto/{id}/photo(id=${p.producto.id})}" alt="foto" width="150" height="150"/></td>
+                                <td class="col-2 align-middle align-items-center"><a th:href="@{'/producto/' + ${p.producto.id}}" th:text="${p.producto.nombre}">N</a></td>
+                                <td class="col-2 align-middle align-items-center" th:text="${p.precio}">D</td>
+                                <td class="col-2 align-middle align-items-center" th:text="${#temporals.format(p.fechaExpiracion, 'dd-MM-yyyy')}">F</td>
+                                <td class="col-2"></td>
+                            </tr>
+                        </tbody>
                     </table>
                 </p>
-            </td>
-        </tr>
-    </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        function changeInput(e){
+            e.preventDefault();
+            let value = document.getElementById("name").value;
+            $.get("/admin/banearUsuario/" + value, function(data){
+		    });
+            if(document.getElementById("submit").value == "Activar Usuario"){
+                document.getElementById("submit").value = "Banear";
+            }
+            else{
+                document.getElementById("submit").value = "Activar Usuario";
+            }
+        };
+
+    </script>
     <th:block th:replace="frags/pie.html">
     Aqui va lo que hay en header, esto no se ve
     </th:block>

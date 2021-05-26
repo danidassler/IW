@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
@@ -13,10 +14,12 @@ import com.example.iw.model.Usuario;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -28,9 +31,18 @@ public class RootController {
     @Autowired
     private EntityManager entityManager;
 
+    @Autowired
+	private ServletContext context;
+    
+    @Autowired
+	private Environment env;
 
     @GetMapping("/")
 	public String index(Model model) {
+        
+        /*List<?> categorias = entityManager.createNamedQuery("Producto.categories").getResultList();
+        context.setAttribute("categorias", categorias);*/
+
 		return "index";
 	}
 
@@ -47,53 +59,56 @@ public class RootController {
     @GetMapping("/tienda") 
     public String tienda(Model model) {   
         
-        List<BigDecimal> menorPrecio = new ArrayList<>();
-        List<BigDecimal> mejorPuja = new ArrayList<>();
+        /*List<BigDecimal> menorPrecio = new ArrayList<>();
+        List<BigDecimal> mejorPuja = new ArrayList<>();*/
         List<?> prods = new ArrayList<>();
         prods = entityManager.createQuery("SELECT p FROM Producto p").getResultList();
-        
-        //preguntar profe como conseguir mostrar los precios en la tienda
-
-        /*for (int i=0; i<prods.size(); i++){
-            List<Oferta> mejPuja = entityManager.createNamedQuery("Oferta.mejorPuja").setParameter("productoId", prods.get(i).getId()).getResultList();
-            List<Oferta> minPrecio = entityManager.createNamedQuery("Oferta.menorPrecio").setParameter("productoId", prods.get(i).getId()).getResultList(); 
-    
-            if((minPrecio.size() > 0)){
-                menorPrecio.add(minPrecio.get(0).getPrecio());
-            }
-            else{
-                menorPrecio.add(new BigDecimal("0"));
-            }
-            if((mejPuja.size() > 0)){
-                mejorPuja.add(mejPuja.get(0).getPrecio());
-            }
-            else{
-                mejorPuja.add(new BigDecimal("0"));
-            }
-        }
-        model.addAttribute("mejorPuja", mejorPuja);
-        model.addAttribute("menorPrecio", menorPrecio);   
-        */
         model.addAttribute("prods", prods);
             
         return "tienda";                     
     }
 
-    @GetMapping("/chat") //HABLAR CON EL PROFE SOBRE ESTO
-    @Transactional
-    public String chat(@RequestParam long id, Model model) {    
-            
-        Usuario user = entityManager.find(Usuario.class, id);
+    @GetMapping("/tienda/{categoria}") 
+    public String tiendaF(Model model, @PathVariable String categoria) {   
         
-        List<Mensaje> recibidos = user.getMensajesRecibidos();
-        List<Mensaje> enviados = user.getMensajesEnviados();
-
-        model.addAttribute("user", user);
-        model.addAttribute("recibidos", recibidos);
-        model.addAttribute("enviados", enviados); 
+        /*List<BigDecimal> menorPrecio = new ArrayList<>();
+        List<BigDecimal> mejorPuja = new ArrayList<>();*/
+        List<?> prods = new ArrayList<>();
+        prods = entityManager.createQuery("SELECT p FROM Producto p WHERE p.categorias LIKE '%" + categoria + "%'").getResultList();
+        model.addAttribute("prods", prods);
             
-        return "chat";                     
+        return "tienda";                     
     }
+
+    @GetMapping("/busqueda")
+    @Transactional
+    public String busqueda(Model model){
+
+        List<?> prods = new ArrayList<>();
+        prods = entityManager.createQuery("SELECT p FROM Producto p").getResultList();
+        model.addAttribute("prods", prods);
+            
+        return "busqueda";  
+    }
+
+    @PostMapping("/busqueda")
+    @Transactional
+    public String busqueda(Model model, @RequestParam String busqueda){
+
+        List<?> prods = new ArrayList<>();
+        prods = entityManager.createQuery("SELECT p FROM Producto p WHERE p.nombre LIKE '%" + busqueda + "%' OR p.categorias LIKE '%" + busqueda + "%' OR p.talla LIKE '%" + busqueda + "%'").getResultList();
+        
+        int ok = 1;
+        if(prods.isEmpty()){ //la busqueda no coincide con nada
+            ok = 0;
+        }
+
+        model.addAttribute("prods", prods);
+        model.addAttribute("ok", ok);
+
+        return "busqueda";
+    }
+
 	@GetMapping("/registro") 
 	public String registro(Model model){
 		return "registro";                     
@@ -117,17 +132,22 @@ public class RootController {
         user.setRol("USER");
         user.setEnabled(enabled);
 
+        int errorRU = 0;
+        int errorRC = 0;
         long n = (long) entityManager.createNamedQuery("Usuario.hasUsername").setParameter("username", username).getSingleResult();
         if(n > 0){ //ya existe el username en la base de datos
-            
-            return "registro"; //FALTA QUE SI EL USUARIO NO SE PUEDE REGISTRAR LE LLEVE A UNA PÁGINA DE ERROR
+            errorRU = 1;
+            model.addAttribute("errorRU", errorRU);
+            return "registro";
         }
         else{ //el usuario no existe en la base de datos
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             if(password.equals(password2)){
                 user.setPassword("{bcrypt}"+passwordEncoder.encode(password));
             }else{
-                return "registro"; //mostrar mensaje de error o crear pagina como errorPuja
+                errorRC = 1;
+                model.addAttribute("errorRC", errorRC);
+                return "registro"; 
             }
             entityManager.persist(user);
         }

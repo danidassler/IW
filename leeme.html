@@ -8,58 +8,10 @@
 	<body>
 
 		<h1>New Chance</h1>
+	
+		<h2>Fecha ultima actualizacion 25-05-2021</h2>
 		
-		<h2>Fecha 03-04-2021</h2>
-
-		<p>Enumeración de las vistas:</p>
-		<p>Todas las vistas tendrán un header y un pie como fragmentos</p>
-		<ul>
-			<li><a href="http://localhost:8080/">localhost:8080/</a>: Index principal que se eliminará durante el desarrollo del proyecto.</li>
-			<li><a href="http://localhost:8080/login">localhost:8080/login</a>: Página con un pequeño formulario para logearse con un usuario de la web. </li>
-			<li><a href="http://localhost:8080/tienda">localhost:8080/tienda</a>: Vista sobre la tienda principal, donde se mostrará la lista de productos. Además si eres un administrador, se habilitarán los botones "Administrar Productos" e "Incluir Nuevo Producto".</li>
-			<li><a href="http://localhost:8080/producto/1">localhost:8080/producto/1</a>: Vista sobre un producto detallado que el usuario ha seleccionado. En la vista, el usuario será capaz de ver todas las ventas, comprar, pujar, vender o fijar un precio.</li>
-			<li><a href="http://localhost:8080/producto/venta/1">localhost:8080/producto/venta/1</a>: Esta vista, será bastante parecida al de la compra. Detalla un resumen sobre la venta de un producto en el cual el vendedor debe de confirmar 2 checkboxs para verificar que el producto es nuevo y se debe de enviar en 2 días hábiles.</li>
-			<li><a href="http://localhost:8080/oferta/listaPujas/1">localhost:8080/oferta/listaPujas/1</a>: Esta vista mostrará el historial de las pujas que tiene un producto. En el historial se mostrará ibnformación importante del producto, como por ejemplo la talla, el precio y cuántos productos hay disponibles. </li>
-			<li><a href="http://localhost:8080/oferta/listaPrecios/1">localhost:8080/oferta/listaPrecios/1</a>: Esta vista mostrará el historial de los precios que tiene un producto. En el historial se mostrará ibnformación importante del producto, como por ejemplo la talla, el precio y cuántos productos hay disponibles. </li>
-			<li><a href="http://localhost:8080/oferta/listaVentas/1">localhost:8080/oferta/listaVentas/1</a>: Esta vista mostrará el historial de las ventas que tiene un producto. En el historial se mostrará ibnformación importante del producto, como por ejemplo la talla, el precio... </li>
-			<li><a href="http://localhost:8080/admin/formularioProducto">localhost:8080/admin/formularioProducto</a>: Vista con formulario para poder agregar un producto. Únicamente el administrador será capaz de ver esta vista y poder agregar un producto nuevo.</li>
-			<li><a href="http://localhost:8080/producto/confirmacionProducto/1">localhost:8080/producto/confirmacionProducto/1</a>: La vista muestra la confirmación de un pedido completado, con un resumen de la factura, detallando el número del pedido y los costes adicionales.</li>
-			<li><a href="http://localhost:8080/perfil/1">localhost:8080/perfil/1</a>: Muestra el perfil del usuario, detallando el historial de pujas pendientes o aceptadas, y productos pendientes de venta o ya confirmados. En el caso de ser administrador, se habilitarán dos botones para ver el listado de usuarios y el listado de productos.</li>
-			<li><a href="http://localhost:8080/admin/adminUsuarios">localhost:8080/admin/adminUsuarios</a>: Vista para administrar la lista de usuarios. Únicamente el administrador es capaz de ver esta vista. Adicionalmente, cuando entre en el perfil de un usuario, tendrá dos botones para banear o eliminar al usuario.</li>
-			<li><a href="http://localhost:8080/admin/adminProductos">localhost:8080/admin/adminProductos</a>: Vista que se mostrará la lista de los productos. Únicamente el administrador es capaz de ver esta vista y será capaz de añadir, modificar o eliminar los productos.</li>
-			<li><a href="http://localhost:8080/chat?id=1">localhost:8080/chat?id=1</a>: (actualmente sin funcionalidad) Consiste en visualizar el chat de un usuario con un asistente virtual de la página. </li>
-			<li><a href="http://localhost:8080/perfil/depositarFondo/1">localhost:8080/perfil/depositarFondo/1</a>: En esta vista, el usuario será capaz de añadir nuevos fondos a la página, para seguir pujando o comprando productos de la página.</li>
-			<li><a href="http://localhost:8080/oferta/fijarPrecio/1">localhost:8080/oferta/fijarPrecio/1</a>: Pagina con un pequeño formulario, donde un usuario que quiera vender un producto puede fijar el precio por el cual quiere vender dicho producto. Se añadirá una oferta (tipo precio) en la BBDD. </li>
-			<li><a href="http://localhost:8080/perfil/modificarPerfil/1">localhost:8080/perfil/modificarPerfil/1</a>: Página con un pequeño formulario donde el usuario podrá cambiar su contraseña o información de su perfil. </li>
-			<li><a href="http://localhost:8080/perfil/retirarFondo/1">localhost:8080/perfil/retirarFondo/1</a>: Página con un pequeño formulario donde el usuario podrá retirar dinero desde su cuenta en nuestra web a su cuenta bancaria. (Operación contraria a la de depositarFondo) </li>
-			<li><a href="http://localhost:8080/admin/administrarUsuario/1">localhost:8080/admin/administrarUsuario/1</a>: Pagina donde el administrador podrá visualizar la información relacionada con un usuario en concreto y realizar diferentes acciones (eliminar al usuario, enviarle un mensaje, banearle ...). Aún sin funcionalidad. </li>
-			<li><a href="http://localhost:8080/admin/modificarProducto/1">localhost:8080/admin/modificarProducto/1</a>: Página con un pequeño formulario donde el administrador podrá modificar datos de un producto ya existente (nombre, desc...) </li>
-			<li><a href="http://localhost:8080/producto/compra/1">localhost:8080/producto/compra/1</a>: Página muy similar a la de venta donde se detallan los datos de una compra y donde el usuario que va a comprar el producto debe confirmar la compra.  </li>
-			<li><a href="http://localhost:8080/oferta/pujar/1">localhost:8080/oferta/pujar/1</a>: Página con un pequeño formulario donde el usuario podrá pujar por un producto indicando la cantidad de dinero que considere oportuna. </li>
-			<li><a href="http://localhost:8080/oferta/errorPuja">localhost:8080/oferta/errorPuja</a>: Página con información sobre los motivos de que la realización de una puja haya fallado. </li>
-			<li><a href="http://localhost:8080/oferta/eliminarOferta/1">localhost:8080/oferta/eliminarOferta</a>: Página donde se muestra un mensaje indicando el exito de la eliminación de una puja o un precio. </li>
-		</ul>
-
-		<h2> Pruebas: </h2>
-			<ul>
-				<li><b>compra.feature:</b> El objetivo de la prueba es realizar una de las principales actividades de la web, comprar un producto. En este feature hacemos login en la aplicación con el usuario "danidassler" llamando a login-danidassler.feature, después accedemos a la tienda y pinchamos en el primer producto. Una vez en la página del producto, seleccionamos el botón de "comprar ya" y llegaremos a la página de confirmación de compra donde al pulsar el boton de "finalizar compra" habremos realizado la operación al completo. Para comprobar que nuestro saldo se ha reducido y la operación sale en nuestro perfil, accedemos a la pagina del perfil del usuario.</li>
-				<li><b>puja.feature:</b> El objetivo de la prueba es realizar una de las principales actividades de la web, pujar por un producto. En este feature hacemos login en la aplicación con el usuario "sergiom23" llamando a login-sergiom23.feature, después accedemos a la tienda y pinchamos en el primer producto. Una vez en la página del producto, seleccionamos el botón de "pujar" y llegaremos a la página de puja donde rellenaremos los campos del formulario necesarios para pujar y pulsaremos el boton "pujar", despues de esto, habremos realizado la operación al completo. Para comprobar que nuestro saldo se ha reducido y la operación sale en nuestro perfil, accedemos a la pagina del perfil del usuario.</li>
-			</ul>
-
-
-		<p>Procedencia de las imágenes utilizadas:</p>
-		<p>Las 4 primeras imágenes han sido sacados personalmente por los miembros del equipo</p>
-		<p>Las 2 últimas imágenes se han sacado por la página recomendada por el profesor: <a href="https://picsum.photos/">picsum.photos</a></p>
-		<ul>
-			<li>NMD.jpg</li>
-			<li>yeezy500.jpg</li>
-			<li>yeezy700.jpg</li>
-			<li>yeezy700.png</li>
-			<li>ipsum.jpg</li>
-			<li>ipsumOrdenador.jpg</li>
-		</ul>
-		<h2>Fecha 25-02-2021</h2>
-		<h2> Nuevos detalles de la aplicacion Web </h2>
+				<h2> Nuevos detalles de la aplicacion Web </h2>
 		
 		<h3> Hay dos formas de vender tu producto en NewChance: Fijar el precio que quieres obtener por tu producto o pulsar el botón de "vender ya"</h3>
 		<p> Al poner un precio a tu producto, indicas que estas dispuesto a vender tu articulo por ese determinado precio.</p>
@@ -179,6 +131,68 @@
 				</ul>
 			</li>
 
+		</ul>
+
+		<p>Enumeración de las vistas:</p>
+		<p>Todas las vistas tendrán un header y un pie como fragmentos</p>
+		<ul>
+			<li><a href="http://localhost:8080/">localhost:8080/</a>: Index principal que se eliminará durante el desarrollo del proyecto.</li>
+			<li><a href="http://localhost:8080/login">localhost:8080/login</a>: Página con un pequeño formulario para logearse con un usuario de la web. </li>
+			<li><a href="http://localhost:8080/registro">localhost:8080/registro</a>: Pagina con un formulario necesario para registrarse en la web. </li>
+			<li><a href="http://localhost:8080/tienda">localhost:8080/tienda</a>: Vista sobre la tienda principal, donde se mostrará la lista de productos. Además si eres un administrador, se habilitarán los botones "Administrar Productos" e "Incluir Nuevo Producto".</li>
+			<li><a href="http://localhost:8080/producto/1">localhost:8080/producto/1</a>: Vista sobre un producto detallado que el usuario ha seleccionado. En la vista, el usuario será capaz de ver todas las ventas, comprar, pujar, vender o fijar un precio.</li>
+			<li><a href="http://localhost:8080/producto/venta/1">localhost:8080/producto/venta/1</a>: Esta vista, será bastante parecida al de la compra. Detalla un resumen sobre la venta de un producto en el cual el vendedor debe de confirmar 2 checkboxs para verificar que el producto es nuevo y se debe de enviar en 2 días hábiles.</li>
+			<li><a href="http://localhost:8080/oferta/listaPujas/1">localhost:8080/oferta/listaPujas/1</a>: Esta vista mostrará el historial de las pujas que tiene un producto. En el historial se mostrará ibnformación importante del producto, como por ejemplo la talla, el precio y cuántos productos hay disponibles. </li>
+			<li><a href="http://localhost:8080/oferta/listaPrecios/1">localhost:8080/oferta/listaPrecios/1</a>: Esta vista mostrará el historial de los precios que tiene un producto. En el historial se mostrará ibnformación importante del producto, como por ejemplo la talla, el precio y cuántos productos hay disponibles. </li>
+			<li><a href="http://localhost:8080/oferta/listaVentas/1">localhost:8080/oferta/listaVentas/1</a>: Esta vista mostrará el historial de las ventas que tiene un producto. En el historial se mostrará ibnformación importante del producto, como por ejemplo la talla, el precio... </li>
+			<li><a href="http://localhost:8080/admin/formularioProducto">localhost:8080/admin/formularioProducto</a>: Vista con formulario para poder agregar un producto. Únicamente el administrador será capaz de ver esta vista y poder agregar un producto nuevo.</li>
+			<li><a href="http://localhost:8080/producto/confirmacionProducto/1">localhost:8080/producto/confirmacionProducto/1</a>: La vista muestra la confirmación de un pedido completado, con un resumen de la factura, detallando el número del pedido y los costes adicionales.</li>
+			<li><a href="http://localhost:8080/perfil/1">localhost:8080/perfil/1</a>: Muestra el perfil del usuario, detallando el historial de pujas pendientes o aceptadas, y productos pendientes de venta o ya confirmados. En el caso de ser administrador, se habilitarán dos botones para ver el listado de usuarios y el listado de productos.</li>
+			<li><a href="http://localhost:8080/admin/adminUsuarios">localhost:8080/admin/adminUsuarios</a>: Vista para administrar la lista de usuarios. Únicamente el administrador es capaz de ver esta vista. Adicionalmente, cuando entre en el perfil de un usuario, tendrá dos botones para banear o eliminar al usuario.</li>
+			<li><a href="http://localhost:8080/admin/adminProductos">localhost:8080/admin/adminProductos</a>: Vista que se mostrará la lista de los productos. Únicamente el administrador es capaz de ver esta vista y será capaz de añadir, modificar o eliminar los productos.</li>
+			<li><a href="http://localhost:8080/chat/1">localhost:8080/chat/1</a>:Consiste en visualizar el chat de un usuario con los administradores de la página. </li>
+			<li><a href="http://localhost:8080/perfil/depositarFondo/1">localhost:8080/perfil/depositarFondo/1</a>: En esta vista, el usuario será capaz de añadir nuevos fondos a la página, para seguir pujando o comprando productos de la página.</li>
+			<li><a href="http://localhost:8080/oferta/fijarPrecio/1">localhost:8080/oferta/fijarPrecio/1</a>: Pagina con un pequeño formulario, donde un usuario que quiera vender un producto puede fijar el precio por el cual quiere vender dicho producto. Se añadirá una oferta (tipo precio) en la BBDD. </li>
+			<li><a href="http://localhost:8080/perfil/modificarPerfil/1">localhost:8080/perfil/modificarPerfil/1</a>: Página con un pequeño formulario donde el usuario podrá cambiar su contraseña o información de su perfil. </li>
+			<li><a href="http://localhost:8080/perfil/retirarFondo/1">localhost:8080/perfil/retirarFondo/1</a>: Página con un pequeño formulario donde el usuario podrá retirar dinero desde su cuenta en nuestra web a su cuenta bancaria. (Operación contraria a la de depositarFondo) </li>
+			<li><a href="http://localhost:8080/admin/administrarUsuario/1">localhost:8080/admin/administrarUsuario/1</a>: Pagina donde el administrador podrá visualizar la información relacionada con un usuario en concreto y realizar diferentes acciones (eliminar al usuario, enviarle un mensaje, banearle ...). Aún sin funcionalidad. </li>
+			<li><a href="http://localhost:8080/admin/modificarProducto/1">localhost:8080/admin/modificarProducto/1</a>: Página con un pequeño formulario donde el administrador podrá modificar datos de un producto ya existente (nombre, desc...) </li>
+			<li><a href="http://localhost:8080/producto/compra/1">localhost:8080/producto/compra/1</a>: Página muy similar a la de venta donde se detallan los datos de una compra y donde el usuario que va a comprar el producto debe confirmar la compra.  </li>
+			<li><a href="http://localhost:8080/oferta/pujar/1">localhost:8080/oferta/pujar/1</a>: Página con un pequeño formulario donde el usuario podrá pujar por un producto indicando la cantidad de dinero que considere oportuna. </li>
+			<li><a href="http://localhost:8080/oferta/errorPuja">localhost:8080/oferta/errorPuja</a>: Página con información sobre los motivos de que la realización de una puja haya fallado. </li>
+			<li><a href="http://localhost:8080/oferta/eliminarOferta/1">localhost:8080/oferta/eliminarOferta</a>: Página donde se muestra un mensaje indicando el exito de la eliminación de una puja o un precio. </li>
+			<li><a href="http://localhost:8080/admin/adminChat/5">localhost:8080/adminChat/5</a>: Página de canal de chat del administrador. </li>
+			<li><a href="http://localhost:8080/busqueda">localhost:8080/busqueda</a>: Página donde se encontraran los productos coincidentes con la busqueda realizada a traves del buscador de la cabecera. </li>
+			<li><a href="http://localhost:8080/perfil/errorUser">localhost:8080/perfil/errorUser</a>: Página de error que aparece cuando un usuario realiza una accion no permitida. </li>
+			<li><a href="http://localhost:8080/error">localhost:8080/error</a>: Pagina de error donde aparecen las trazas si están en modo debug. </li>
+		</ul>
+
+		<h2> Pruebas: </h2>
+			<p>Solo la prueba de PruebaCompleta.feature se puede ejecutar sin tener que restaurar el servidor. </p>
+			<ul>
+				<li><b>login-Admin.feature:</b>El objetivo de esta prueba es simplemente hacer login en la aplicacion con un usuario ADMIN, mas concretamente con el usuario "TheRealJin". </li>
+				<li><b>login-danidassler.feature:</b> El objetivo de esta prueba es hacer login en la aplicacion con un usuario de tipo USER, mas concretamente con el usuario "danidassler".</li>
+				<li><b>login-alvaro09.feature:</b> El objetivo de esta prueba es hacer login en la aplicacion con un usuario de tipo USER, mas concretamente con el usuario "alvaro09".</li>
+				<li><b>login-sergiom23.feature:</b>  El objetivo de esta prueba es hacer login en la aplicacion con un usuario de tipo USER, mas concretamente con el usuario "sergiom23".</li>
+				<li><b>compra.feature:</b> El objetivo de la prueba es realizar una de las principales actividades de la web, comprar un producto.  En este feature hacemos login en la aplicación con el usuario "danidassler" llamando a login-danidassler.feature, después accedemos a la tienda y pinchamos en el primer producto. Una vez en la página del producto, seleccionamos el botón de "comprar ya" y llegaremos a la página de confirmación de compra donde al pulsar el boton de "finalizar compra" habremos realizado la operación al completo. Para comprobar que nuestro saldo se ha reducido y la operación sale en nuestro perfil, accedemos a la pagina del perfil del usuario.</li>
+				<li><b>puja.feature:</b> El objetivo de la prueba es realizar una de las principales actividades de la web, pujar por un producto. En este feature hacemos login en la aplicación con el usuario "sergiom23" llamando a login-sergiom23.feature, después accedemos a la tienda y pinchamos en el primer producto. Una vez en la página del producto, seleccionamos el botón de "pujar" y llegaremos a la página de puja donde rellenaremos los campos del formulario necesarios para pujar y pulsaremos el boton "pujar", despues de esto, habremos realizado la operación al completo. Para comprobar que nuestro saldo se ha reducido y la operación sale en nuestro perfil, accedemos a la pagina del perfil del usuario.</li>
+				<li><b>precio.feature:</b> El objetivo de esta prueba es realizar otra de las actividades principales de la pagina web, fijar un precio por un producto que quieres vender. Para ello hacemos login con un usuario tipo USER (alvaro09) y accedemos al primer producto de la tienda (Yeezy 700). Pinchamos en el boton "fijar precio" el cual nos llevara a una pagina con un pequeño formulario donde incluiremos el precio que deseemos. Para comprobar que se ha fijado el precio por nuestro producto nos redirigimos al perfil donde debe aparecer una nueva fila con la informacion en la tabla de "Productos que estas vendiendo". Despues hacemos logout. </li>
+				<li><b>PruebaCompleta.feature </b>: El objetivo de esta prueba e sprobar el funcionamiento de la aplicacion probando todas sus principales funciones (usando las pruebas descritas anteriormente). Primero hacemos login con el usuario tipo ADMIN (login-Admin.feature). Despues el admin se encarga de incluir un nuevo producto en la tienda pinchando en el boton de "Nuevo Producto" dentro de la pagina "Administrar Productos". Al pulsar en el boton accedemos a una pagina con un formulario donde rellenaremos los datos obligatorios. Despues de incluir el producto hacemos logout. A continuación llamamos a la prueba de <b>"precio.feature"</b> donde el usuario alvaro09 fijara un precio por el primer producto de la tienda. Despues llamaremos a <b>"compra.feature"</b> donde el usuario danidassler comprará directamente el primer producto de la tienda aceptand el precio incluido por Alvaro09.  </li>
+				<li><b>restaura.feature: </b>El objetivo de esta prueba es añadir dinero al usuario de danidassler para que se pueda ejecutar la prueba de PruebaCompleta.feature sin tener que reiniciar el servidor.</li>
+			</ul>
+
+		<p>Procedencia de las imágenes utilizadas:</p>
+		<p>Las 4 primeras imágenes han sido sacados personalmente por los miembros del equipo</p>
+		<p>Algunas imágenes se han sacado por la página recomendada por el profesor: <a href="https://picsum.photos/">picsum.photos</a></p>
+		<p> Otras imagenes se han obtenido de una web que presenta numerosas imagenes sin copyright: <a href="https://unsplash.com/">unsplash</a></p>
+		<ul>
+			<li>producto1</li>
+			<li>producto2</li>
+			<li>producto3</li>
+			<li>producto4</li>
+			<li>producto5</li>
+			<li>producto6</li>
+			<li>producto7</li>
 		</ul>
 
 	</body>

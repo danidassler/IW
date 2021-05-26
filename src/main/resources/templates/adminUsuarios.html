@@ -5,9 +5,6 @@
     <title>Administrador Usuarios</title>
 </head>
 <body>
-    <nav th:replace="frags/nav.html :: nav">
-		Nav goes here
-	</nav>
     <div>
         <th:block th:replace="frags/header.html">
             Aqui va lo que hay en header, esto no se ve
@@ -15,23 +12,30 @@
     </div>
 
     <div>
-        <div>
-            <b>Buscador</b>
-            <button>Buscar</button>
-        </div>
-        <div>
-            <b>Lista de usuarios:</b>
-            <button>Filtro</button>
-        </div>
+      
 
-        <div th:each="u: ${users}">
-            <div>
-                <img th:src="@{/perfil/{id}/photo(id=${u.id})}" alt="foto" width="100" height="150"/>
-                <p> <span th:text="${u.nombre}"></span> <span th:text="${u.apellidos}"></span></p>
-                <button class="btn btn-lg btn-primary btn-block" type="button"> <a th:href="@{'/admin/administrarUsuario/' + ${u.id}}">Administrar Usuario </a></button>
-            </div>
-        </div>
+        <div class="container">
+            <table class="tabla_productos table align-middle table-borderless text-center container-fluid mt-4">
+                <thead>
+                    <tr class="d-flex m-3">
+                        <th class="col-4 font-monospace fs-5" scope="col">Imagen</th>
+                        <th class="col-4 font-monospace fs-5" scope="col">Nombre</th>
+                        <th class="col-4 font-monospace fs-5">Administrar Usuarios</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="d-flex m-3 p-3 align-items-center" th:each="u: ${users}">
+                        <td class="col-4"><img th:src="@{/perfil/{id}/photo(id=${u.id})}" alt="foto" width="100" height="150"/></td>
+                        <td class="col-4 align-middle align-items-center"><span th:text="${u.nombre}"></span> <span th:text="${u.apellidos}"></span></td>
+                        <td class="col-4 align-middle align-items-center">
+                            <a th:href="@{'/admin/administrarUsuario/' + ${u.id}}" class="btn btn-primary" role="button">Administrar Usuario</a>
+                        </td>
 
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
     </div>
     <div>
         <th:block th:replace="frags/pie.html">

@@ -4,50 +4,47 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<title>Mensajes</title>
-	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-	<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-	<link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
-	<link rel ="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
-	<link rel ="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
 </head>
 <body>
-    <nav th:replace="frags/nav.html :: nav">
-		Nav goes here
-	</nav>
     <div>
         <th:block th:replace="frags/header.html">
             Aqui va lo que hay en header, esto no se ve
         </th:block>
     </div>
 	
-	<div class="container">
-        <div class="main">
-        <h1>Mensajes recibidos</h1>
-        
-        <table id="datatable" class="display" style="width:100%"></table>
-        
+	<div class="container-fluid text-center align-middle align-items-center">
+		<div class="main">
+			<h1 class="font-monospace col-12 pt-4">Mensajes</h1>	
+			<table id="datatable" class="display" style="width:100%">
+				<thead>
+					<tr>
+						<th>Emisor</th>
+						<th>Fecha</th>
+						<th>Mensaje</th>
+					</tr>
+				</thead>
+			</table>	
+			<div class="sidebar text-center align-middle align-items-center">
+				<form th:action="@{/admin/idOfTarget/msg}" class="mb-3 text-center" method="POST">
+				<select id="idOfTarget" onchange="changeFunc();">
+					<option value="0" text = "Canal Admin"> Canal Admin </option>
+					<option th:each="user: ${users}" th:value="${user.id}" th:text="${user.username}">mfreire</option>
+				</select>
+				<textarea id="men" style="display:none;" class="form-control mt-3 mb-3" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea> 
+				<button id="sendmsg" style="display:none;" class="btn btn-primary mb-3" type="submit">Enviar</button> 
+				</form>
+			</div>
         </div>
 	</div>	
-
-	<div class="sidebar">
-		<form th:action="@{/admin/idOfTarget/msg}" method="POST">
-
-		<select id="idOfTarget" onchange="changeFunc();">
-			<option th:each="user: ${users}" th:value="${user.id}" th:text="${user.username}">mfreire</option>
-		</select>
-		<textarea id="men" style="display:none;" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea>
-		<button id="sendmsg" style="display:none;" type="submit">Enviar</button>
-		</form>
-	</div>
 
 	<script th:inline="javascript">
 
 	function formatDate(d) {
-		// 2020-03-23T10:48:11.074 => 23/3/2020@10:48:18
-		return new Date(d).toLocaleString("es-ES").split(" ").join("@")
+		// 2020-03-23T10:48:11.074 => 10:48:18
+		return new Date(d).toLocaleString("es-ES").split(" ")[1]
 	}
 
-    function changeFunc() {
+    function changeFunc() { //En caso de ser canal admin, no puedes enviar ningún mensaje
 		dt.clear().draw();
 		var selectBox = document.getElementById("idOfTarget");
 		var selectedValue = selectBox.options[selectBox.selectedIndex].value;
@@ -57,10 +54,27 @@
 			document.getElementById('sendmsg').style.display = "none";
 		}
 		else{
-			document.getElementById('men').style.display = "block";
-			document.getElementById('sendmsg').style.display = "block";
+			document.getElementById('men').style.display = "inline-block";
+			document.getElementById('sendmsg').style.display = "inline-block";
 		}
-		$.get("/chat/adminReceived/" + selectedValue, function(data){
+		adminReceived();
+   }
+   function captureAdminMSG(){ //Función para capturar el mensaje de atención al cliente del usuario, para mostrarlo en el chat privado
+	var selectBox = document.getElementById("idOfTarget");
+	var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+	$.get("/admin/adminMsgCapture/" + selectedValue, function(data){
+			for (let i=0; i<data.length; i++) {
+				let row = data[i];
+				row.sent = formatDate(row.sent);
+				let newRow = dt.row.add({from : row.from, sent : row.sent , text : row.text}).draw().node();
+				$(newRow).addClass("table-success");
+			}
+		})
+   }
+   function adminReceived(){ //Función que agrega las filas ordenadas por fecha de envío
+	var selectBox = document.getElementById("idOfTarget");
+	var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+	$.get("/chat/adminReceived/" + selectedValue, function(data){
 			for (let i=0; i<data.length; i++) {
 				let row = data[i];
 				row.sent = formatDate(row.sent);
@@ -68,23 +82,33 @@
 					row.received = formatDate(row.received);
 				}
 				console.log(row);
-				dt.row.add({from : row.from, to : row.to, sent : formatDate(new Date().toISOString()) , text : row.text}).draw();
+				let newRow = dt.row.add({from : row.from, sent : row.sent , text : row.text}).draw().node();
+				if(row.from == username){
+					$(newRow).addClass("table-info");
+				}
+				else{
+					$(newRow).addClass("table-success");
+				}
 			}
 		})
    }
-    var dt = $('#datatable').DataTable( {
-    ajax: { url: "/chat/adminReceived/" + document.getElementById("idOfTarget").value,
-	dataSrc:""
-		},
+   //Variables Globales
+   var username = [[${username}]];
+   var optionCount = [[${optionCount}]];
+
+    var dt = $('#datatable').DataTable( { //Inicializa datatable
 	columns: [
 	{ data: 'from' },
-	{ data: 'to' },
 	{ data: 'sent' },
 	{ data: 'text' },
- 	]
-
+ 	],
+	"stripeClasses": [],
+	"aaSorting": []
    	} );
-	// mostrando una tabla dinámica con datos cargados del servidor vía AJAX
+
+	$(function() { //Genera las filas del datatable
+		adminReceived()
+	});
 
 	// envío de mensajes vía AJAX, sin recargar la página
 	document.addEventListener("DOMContentLoaded", () => {
@@ -94,11 +118,12 @@
 			let receptor = selectBox.options[selectBox.selectedIndex].text;
 			let idOfTarget = document.getElementById("idOfTarget").value;
 			let url = b.parentNode.action.replace("idOfTarget", idOfTarget);
-			let username = [[${username}]];
 			console.log(url);
 			e.preventDefault();
 			console.log(b, b.parentNode);
-			dt.row.add({from : username, to : receptor, sent : formatDate(new Date().toISOString()), text : document.getElementById("men").value}).draw();
+			captureAdminMSG(); //Escribe los mensajes escritos por el cliente
+			let newRow = dt.row.add({from : username, sent : formatDate(new Date().toISOString()), text : document.getElementById("men").value}).draw().node();
+			$(newRow).addClass("table-info");
 			console.log(dt);
 			go(url, 'POST', {men: 
 					document.getElementById("men").value})
@@ -107,12 +132,32 @@
 		}
 	});
 
-	ws.receive = (m) => {
+	ws.receive = (m) => { //Recibe un json por parte de un canal suscrito
 		console.log(m);
-		if(document.getElementById("idOfTarget").value == m.to || (document.getElementById("idOfTarget").value == m.from && m.to != "0")){
-			dt.row.add([m.from, m.to, formatDate(new Date().toISOString()), m.text]).draw();
-		}		
+		//En caso de que el mensaje sea para el canal de admin ó el mensaje se envíe por el usuario del chat y no sea para el canal de admin
+		if(document.getElementById("idOfTarget").value == m.to || (document.getElementById("idOfTarget").value == m.fromId && m.to != "0")){
+			let newRow = dt.row.add({from : m.from, sent : formatDate(new Date().toISOString()), text : m.text}).draw().node();
+			$(newRow).addClass("table-success");
+		}
+		if(m.to == "0"){ //Algún cliente ha escrito en el canal Admin
+			$.get("/admin/newClientAvailableChat/", function(data){
+				if(data > optionCount){ //Si ha recibido un mensaje de un cliente nuevo, aumenta el contador y el cliente se mostrará disponible para chatear
+					optionCount = data;
+					console.log(m.fromId);
+					console.log(m.fromId);
+					$('#idOfTarget').append($('<option>', {
+						value: m.fromId,
+						text: m.from
+					}));
+				}
+			})
+		}
 	}
 	</script>
+
+	<th:block th:replace="frags/pie.html">
+	Aqui va lo que hay en header, esto no se ve
+	</th:block>
+
 </body>
 </html>

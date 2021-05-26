@@ -9,7 +9,7 @@ Scenario: ADMIN: login, add product | User 1: login & place price | User 2: logi
   * call read('logins.feature@admin')
 
   # Accedemos a la tienda
-  * click("a[class=tienda]")   
+  * click("a[class~=tienda]")   
   * match html('title') contains 'NewChance Shop'
   * driver.screenshot()
 
@@ -29,7 +29,7 @@ Scenario: ADMIN: login, add product | User 1: login & place price | User 2: logi
   * input('#desc', 'Muy supreme, con un diseño vanguardista')
   * input('#talla', '44')
   * click("button[id=addProducto]")
-  * click("a[class=tienda]")
+  * click("a[class~=tienda]")
   * driver.screenshot()
   * call read('logout.feature')
   
@@ -43,3 +43,8 @@ Scenario: ADMIN: login, add product | User 1: login & place price | User 2: logi
 
   #Danidassler realiza una compra con el precio fijado por Alvaro09
   * call read('compra.feature')
+
+  #----------------------------------RESTAURA (añadimos dinero a Danidassler) ------------------------------
+
+  * call read('restaura.feature')
+  * call read('logout.feature')

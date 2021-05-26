@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <link rel="stylesheet" th:href="@{/css/error.css}" href="css/error.css" type="text/css"/>
     <title>Confirmación</title>
 </head>
 <body>
@@ -16,6 +15,7 @@
         <div class="row m-5 pb-3 border border-danger border-5 rounded">
             <div class="col-12 mt-3 mb-3">
                 <h2 class="font-monospace" th:if="${userDiferente==1}">ERROR: No puedes acceder o realizar operaciones en un perfil que no es el tuyo.</h2>
+                <h2 class="font-monospace" th:if="${noAdmin==1}">ERROR: No eres administrador.</h2>
             </div>
                         
             <div class="col-12">

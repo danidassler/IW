@@ -7,14 +7,13 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import com.example.iw.LocalData;
-import com.example.iw.model.Oferta;
-import com.example.iw.model.Producto;
-import com.example.iw.model.Usuario;
+import com.example.iw.model.*;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +24,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,11 +32,15 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.LocalDateTime;
-import com.example.iw.model.Mensaje;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.web.bind.annotation.RequestBody;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 /**
  * Admin-only controller
  * @author mfreire
@@ -55,11 +57,14 @@ public class AdminController {
 	@Autowired
 	private LocalData localData;
 	
-    @Autowired
-	private SimpMessagingTemplate messagingTemplate;
-
 	@Autowired
 	private Environment env;
+    
+    @Autowired
+	private ServletContext context;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
 	@GetMapping("/")
 	public String index(Model model) {
@@ -98,7 +103,7 @@ public class AdminController {
         return "formularioProducto";
     }
 
-    @PostMapping("formularioProducto")
+    @PostMapping("/formularioProducto")
     @Transactional
     public String formularioProducto(
         @RequestParam String nombre,
@@ -110,8 +115,17 @@ public class AdminController {
         @RequestParam("photo") MultipartFile photo,  
         HttpSession session) throws IOException{
         
-        //CONTROLAR QUE NO SE METE UN PRODUCTO YA EXISTENTE
-        //incluir el nuevo producto en la bbdd
+        long n = (long) entityManager.createNamedQuery("Producto.hasProducto")
+        .setParameter("nombre", nombre).setParameter("talla", talla)
+        .getSingleResult();
+        
+        int errorP = 0;
+        if(n > 0){ //ya esta el producto
+            errorP = 1;
+            model.addAttribute("errorP", errorP);
+            return "formularioProducto";
+        }
+
         Producto prod = new Producto();
         prod.setNombre(nombre);
         prod.setDesc(desc);
@@ -136,6 +150,9 @@ public class AdminController {
 			log.info("Successfully uploaded photo for {} into {}!", id, f.getAbsolutePath());
 		}
 
+        List<?> cats = entityManager.createNamedQuery("Producto.categories").getResultList();
+        context.setAttribute("categorias", cats);
+
         return "formularioProducto";
     }
 
@@ -156,14 +173,29 @@ public class AdminController {
         @RequestParam String talla,
         Model model){
         
-        //CONTROLAR QUE NO SE METE UN PRODUCTO YA EXISTENTE
         Producto prod = entityManager.find(Producto.class, id);
+
+        long n = (long) entityManager.createNamedQuery("Producto.hasProducto2")
+        .setParameter("nombre", nombre).setParameter("talla", talla).setParameter("id", id)
+        .getSingleResult();
+
+        int errorP = 0;
+        if(n > 0){ //ya esta el producto
+            errorP = 1;
+            model.addAttribute("errorP", errorP);
+            model.addAttribute("prod", prod);
+            return "modificarProducto";
+        }
+
         prod.setNombre(nombre);
         prod.setDesc(desc);
         prod.setCategorias(categorias);
         prod.setTalla(talla);
         entityManager.merge(prod);
         model.addAttribute("prod", prod);     
+
+        List<?> cats = entityManager.createNamedQuery("Producto.categories").getResultList();
+        context.setAttribute("categorias", cats);
 
         return "modificarProducto";
     }
@@ -172,7 +204,7 @@ public class AdminController {
     @Transactional 
     public String adminUsuarios(Model model) {    
             
-        List<?> users = entityManager.createQuery("SELECT u FROM Usuario u").getResultList();
+        List<?> users = entityManager.createQuery("SELECT u FROM Usuario u WHERE u.id != 0").getResultList();
 
         model.addAttribute("users", users); 
             
@@ -202,77 +234,98 @@ public class AdminController {
         
         model.addAttribute("prods", prods); 
             
-        return "adminProductos";                     
+        return "adminProductos"; 
     }
 
-    @PostMapping("banearUsuario/{id}")
+    @GetMapping(path = "banearUsuario/{id}" , produces = "application/json")
     @Transactional
-    public String banearUsuario(
-        @PathVariable long id,
-        Model model){
+    @ResponseBody
+    public int banearUsuario(@PathVariable long id){
             Usuario user = entityManager.find(Usuario.class, id); 
+            int res = 0;
             if(user.getEnabled() == 1){ //aun esta activo
                 user.setEnabled((byte)0);
                 entityManager.merge(user);
+                res = 1;
             }
             else{ //esta baneado
                 user.setEnabled((byte)1);
                 entityManager.merge(user);
+                res = 2;
             }
-            
-            model.addAttribute("user", user);
-
-            return "administrarUsuario";
+        return res;
     }
-
+    
+    //Websockets
     @GetMapping("/adminChat/{id}")
     public String adminChat(@PathVariable long id, Model model, HttpSession session) {
-        model.addAttribute("users", entityManager.createQuery(
-            "SELECT u FROM Usuario u").getResultList());
+        List<Usuario> usuarios = new ArrayList<>();
+        usuarios = entityManager.createNamedQuery("Usuario.setAvailableChats").setParameter("userId", id).getResultList();
+        model.addAttribute("users", usuarios);
+        model.addAttribute("optionCount", usuarios.size());
         Usuario admin = entityManager.find(Usuario.class, id);
         model.addAttribute("username", admin.getUsername());
         return "adminChat";
-}
-
-@PostMapping("/{id}/msg")
-@ResponseBody
-@Transactional
-public String postMsg(@PathVariable long id, 
-        @RequestBody JsonNode o, Model model, HttpSession session) 
-    throws JsonProcessingException {
-    
-    String text = o.get("men").asText();
-    Usuario receiver = entityManager.find(Usuario.class, id);
-    Usuario admin = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
-    model.addAttribute("user", receiver);
-    
-    List<Mensaje> mensajesPending = entityManager.createNamedQuery("Mensaje.findNullMsgbyId").setParameter("userId", id).getResultList(); //Recoge todos los mensajes enviados a Atención al cliente del 
-    for(Mensaje msg: mensajesPending){
-        msg.setReceptor(admin);
-        entityManager.merge(msg);
     }
-    // construye mensaje, lo guarda en BD
-    Mensaje m = new Mensaje();
-    m.setReceptor(receiver);
-    m.setEmisor(admin);
-    m.setFechaEnvio(LocalDateTime.now());
-    m.setMensaje(text);
-    entityManager.persist(m);
-    entityManager.flush();
-    
-    // construye json
-    ObjectMapper mapper = new ObjectMapper();
-    ObjectNode rootNode = mapper.createObjectNode();
-    rootNode.put("from", admin.getId());
-    rootNode.put("to", receiver.getId());
-    rootNode.put("text", text);
-    //rootNode.put("id", m.getId());
-    String json = mapper.writeValueAsString(rootNode);
-    
-    log.info("Sending a message to {} with contents '{}'", id, json);
+	@GetMapping(path = "/newClientAvailableChat/", produces = "application/json")
+	@Transactional
+	@ResponseBody
+	public int newClientAvailableChat(HttpSession session) {
+        List<Usuario> usuarios = new ArrayList<>();
+        Usuario admin = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+        usuarios = entityManager.createNamedQuery("Usuario.setAvailableChats").setParameter("userId", admin.getId()).getResultList();
+		return  usuarios.size();
+	}
 
-    messagingTemplate.convertAndSend("/user/"+receiver.getUsername()+"/queue/updates", json);
-    return "{\"result\": \"message sent.\"}";
-}	
+	@GetMapping(path = "/adminMsgCapture/{clientId}", produces = "application/json") //Mensajes del cliente en canal Admin que serán capturados por el admin que le ha contestado
+	@Transactional
+	@ResponseBody
+	public List<Mensaje.Transfer> messagesFromClienttoAdmin(@PathVariable long clientId, HttpSession session) {
+        Usuario admin = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+		List<Mensaje.Transfer> mensajes = new ArrayList<>();
+		List<Mensaje> mensajesToAdmin = entityManager.createNamedQuery("Mensaje.findNullMsgbyId").setParameter("userId", clientId).getResultList();
+        for(Mensaje msg: mensajesToAdmin){
+            msg.setReceptor(admin);
+            entityManager.merge(msg);
+        }
+        entityManager.flush();
 
+		mensajes.addAll(mensajesToAdmin.stream().map(Transferable::toTransfer).collect(Collectors.toList()));
+		return  mensajes;
+	}
+    @PostMapping("/{id}/msg")
+    @ResponseBody
+    @Transactional
+    public String postMsg(@PathVariable long id, @RequestBody JsonNode o, Model model, HttpSession session) 
+        throws JsonProcessingException {
+
+        String text = o.get("men").asText();
+        Usuario receiver = entityManager.find(Usuario.class, id);
+        Usuario admin = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+        model.addAttribute("user", receiver);
+
+        // construye mensaje, lo guarda en BD
+        Mensaje m = new Mensaje();
+        m.setReceptor(receiver);
+        m.setEmisor(admin);
+        m.setFechaEnvio(LocalDateTime.now());
+        m.setMensaje(text);
+        entityManager.persist(m);
+        entityManager.flush();
+
+        // construye json
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode rootNode = mapper.createObjectNode();
+        rootNode.put("from", admin.getUsername());
+        rootNode.put("fromId", admin.getId());
+        rootNode.put("to", receiver.getId());
+        rootNode.put("text", text);
+        //rootNode.put("id", m.getId());
+        String json = mapper.writeValueAsString(rootNode);
+
+        log.info("Sending a message to {} with contents '{}'", id, json);
+
+        messagingTemplate.convertAndSend("/user/"+receiver.getUsername()+"/queue/updates", json);
+        return "{\"result\": \"message sent.\"}";
+    }
 }

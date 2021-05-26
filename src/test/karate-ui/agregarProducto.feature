@@ -1,8 +1,5 @@
 Feature: Admin agrega un producto, un usuario pone un precio al producto nuevo y otro usuario compra el producto con su precio.
 
-Background:
-  * configure driver = { type: 'chrome', showDriverLog: true }
-    
 Scenario: ADMIN: login, add product | User 1: login & place price | User 2: login, buy & confirm
 
   #IMPORTANTE: no repetir la ejecucion de los features sin volver a ejecutar la app.
@@ -36,9 +33,15 @@ Scenario: ADMIN: login, add product | User 1: login & place price | User 2: logi
   # Logout del Admin
   * click("button[class=logout]")
   * match html('title') contains 'Login'
+  * clearCookies()
 
   # Sergiom23 fija un precio nuevo 
   * call read('precio.feature')
+
+  # Logout de Sergio
+  * click("button[class=logout]")
+  * match html('title') contains 'Login'
+  * clearCookies()
 
   #Danidassler realiza una compra con el precio fijado por Sergiom23
   * call read('compra.feature')

@@ -4,87 +4,96 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<title>Mensajes</title>
-	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-	<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-	<link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
-	<link rel ="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
-	<link rel ="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
-	<script th:src="@{/js/simple-datatables-2.1.10.min.js}"></script>
-	<link th:href="@{/css/simple-datatables-2.1.10.css}" rel="stylesheet">
 </head>
 <body>
-    <nav th:replace="frags/nav.html :: nav">
-		Nav goes here
-	</nav>
     <div>
         <th:block th:replace="frags/header.html">
             Aqui va lo que hay en header, esto no se ve
         </th:block>
     </div>
 	
-	<div class="container">
-	<div class="main">
-	<h1>Mensajes recibidos</h1>
-	
-	<table class="datatable" id="datatable"></table>
-	
-	</div>
+	<div class="container-fluid text-center align-middle align-items-center">
+		<div class="main">
+			<h1 class="font-monospace col-12 pt-4">Mensajes</h1>
+			
+			<table id="datatable" class="display" style="width:100%"></table>
+			
+			<div class="sidebar" th:if="${session.u.hasRole('ADMIN')}">
+				Eres un administrador, no puedes utilizar Atención al Cliente.
+			</div>
+
+			<div class="sidebar" th:if="${session.u.hasRole('USER')}">
+				<form th:action="@{/perfil/chatconadmin}" method="POST">
+				<p class="pt-3"><textarea id="men" class="form-control" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea></p>
+				<p class="pt-3"><button id="sendmsg2" class="btn btn-primary" type="submit">Enviar</button></p>
+				</form>
+			</div>
+		</div>
 	</div>	
 
-	<div class="sidebar" th:if="${session.u.hasRole('ADMIN')}">
-		Eres un administrador, no puedes utilizar Atención al Cliente.
-	</div>
+	<script th:inline="javascript">
 
-	<div class="sidebar" th:if="${session.u.hasRole('USER')}">
-		<form th:action="@{/perfil/chatconadmin}" method="POST">
-		<textarea id="men" placeholder="Escribe el mensaje" rows="4" cols="20"></textarea>
-		<button id="sendmsg2" type="submit">Enviar</button>
-		</form>
-	</div>
-
-	<script>
-	
 	function formatDate(d) {
-		// 2020-03-23T10:48:11.074 => 23/3/2020@10:48:18
-		return new Date(d).toLocaleString("es-ES").split(" ").join("@")
+		// 2020-03-23T10:48:11.074 => 10:48:18
+		return new Date(d).toLocaleString("es-ES").split(" ")[1];
 	}
-    function asignarAdmin(from) {
+
+    function asignarAdmin(from) { //Función auxiliar que asigna al admin que ha contestado, todos los próximos mensajes del cliente
 		admin = from;
 		console.log(from);
-   }
+	}
 
-   let admin = [[${adminId}]]; //Variable global
-	// mostrando una tabla dinámica con datos cargados del servidor vía AJAX
-    var dt = $('#datatable').DataTable( {
-    ajax: { url: "/chat/userReceived/" + document.getElementById("idOfTarget").value,
-	dataSrc:""
-		},
+	//Variables globales
+	var admin = [[${adminId}]]; // 0 Si no está definido ningún admin, x si está definido
+	var username = [[${username}]]; // El username del usuario con session 
+
+	var dt = $('#datatable').DataTable( { //Inicializada database
 	columns: [
 	{ data: 'from' },
-	{ data: 'to' },
 	{ data: 'sent' },
 	{ data: 'text' },
- 	]
+ 	],
+	"stripeClasses": [],
+    "aaSorting": []
+   	});
+	$(function() { //función que agrega todas las filas al database
+		$.get("/chat/userReceived/" + admin, function(data){
+		for (let i=0; i<data.length; i++) {
+			let row = data[i];
+			row.sent = formatDate(row.sent);
+			if (row.received) {
+				row.received = formatDate(row.received);
+			}
+			console.log(row);
+			let newRow = dt.row.add({from : row.from, sent : row.sent , text : row.text}).draw().node();
+			if(row.from == username){ //Los mensajes que envías, se le asignan un color
+				$(newRow).addClass("table-info");
+			}
+			else{
+				$(newRow).addClass("table-success");
+			}
+		}
+	})
+	});
 
-   	} );
-
+	// envío de mensajes vía AJAX, sin recargar la página
 	document.addEventListener("DOMContentLoaded", () => {
 		let b = document.getElementById("sendmsg2");
 		b.onclick = (e) => {
-			e.preventDefault();
+			e.preventDefault(); //Ignora el action del formulario
 
-			//dt.rows().add(["yo", admin, formatDate(new Date().toISOString()), document.getElementById("men").value]);
-			if(admin == 0){
+			let newRow = dt.row.add({from : username, sent : formatDate(new Date().toISOString()), text : document.getElementById("men").value}).draw().node();
+			$(newRow).addClass("table-info");
+			if(admin == 0){ //Mensajes para enviar al canal de admin
 				console.log(b, b.parentNode)
 				go("/perfil/chatconadmin", 'POST', {men: 
 						document.getElementById("men").value})
 					.then(d => console.log("happy", d))
 					.catch(e => console.log("sad", e))
 			}
-			else{
+			else{ //Mensajes para enviar a un admin en concreto
 				console.log(b, b.parentNode)
-				let url = "/perfil/" + admin + "/msg";
-				go(url, 'POST', {men: 
+				go("/perfil/" + admin + "/msg", 'POST', {men: 
 						document.getElementById("men").value})
 					.then(d => console.log("happy", d))
 					.catch(e => console.log("sad", e))
@@ -92,15 +101,19 @@
 		}
 	});
 
-	// sobreescribid esta funcion para especificar qué sucede cuando recibes un mensaje
-	// aquí estoy metiendo el mensaje al final de la tabla
 	ws.receive = (m) => {
-		//dt.rows().add([m.from, m.to, formatDate(new Date().toISOString()), m.text]);		
-		if(admin != m.from && admin == 0){ //Le asignara los mensajes al primer admin que le hable
-			asignarAdmin(m.from);
+		let newRow = dt.row.add({from : m.from, sent : formatDate(new Date().toISOString()), text : m.text}).draw().node();
+		$(newRow).addClass("table-success");
+		if(admin != m.fromId && admin == 0){ //Le asignara los mensajes al primer admin que le hable
+			asignarAdmin(m.fromId);
 		}
 	}
-	
 	</script>
+
+
+	<th:block th:replace="frags/pie.html">
+	Aqui va lo que hay en header, esto no se ve
+	</th:block>
+
 </body>
 </html>

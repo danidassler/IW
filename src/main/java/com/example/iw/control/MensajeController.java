@@ -38,6 +38,8 @@ public class MensajeController {
 		long adminId = 0;
 		model.addAttribute("users", entityManager.createQuery(
 			"SELECT u FROM Usuario u").getResultList());
+		Usuario u = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+		model.addAttribute("username", u.getUsername());
 		try {
 			adminId = (long)entityManager.createNamedQuery("Mensaje.findAdmin").setParameter("userId", id).getSingleResult();
 		}catch (Exception e) {
