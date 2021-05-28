@@ -15,28 +15,38 @@ import lombok.Data;
 @Entity
 @Data
 @NamedQueries({
-	@NamedQuery(name="Oferta.byUser",
-			query="SELECT o FROM Oferta o "
-					+ "WHERE o.comprador.id = :userId OR o.vendedor.id = :userId"),
+        @NamedQuery(name="Oferta.byUser",
+                        query="SELECT o FROM Oferta o "
+                                        + "WHERE o.comprador.id = :userId OR o.vendedor.id = :userId"),
     @NamedQuery(name="Oferta.mejorPuja",
-            query="SELECT MAX(precio) FROM Oferta WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId"),
+            query="SELECT MAX(precio) FROM Oferta WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId AND (CURRENT_DATE() BETWEEN fechaInicio AND fechaExpiracion)"),
     @NamedQuery(name="Oferta.mPuja",
             query="SELECT o FROM Oferta o " + 
-            "WHERE o.precio = (SELECT MAX(precio) FROM Oferta WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId AND NOT comprador.id =:userId)"),
+            "WHERE o.precio = (SELECT MAX(precio) FROM Oferta WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId AND NOT comprador.id =:userId AND (CURRENT_DATE() BETWEEN fechaInicio AND fechaExpiracion))"),
     @NamedQuery(name="Oferta.menorPrecio",
-            query="SELECT MIN(precio) FROM Oferta WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId"),
+            query="SELECT MIN(precio) FROM Oferta WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId AND (CURRENT_DATE() BETWEEN fechaInicio AND fechaExpiracion)"),
     @NamedQuery(name="Oferta.mPrecio",
             query="SELECT o FROM Oferta o " + 
-            "WHERE o.precio = (SELECT MIN(precio) FROM Oferta WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId AND NOT vendedor.id =:userId)"),
+            "WHERE o.precio = (SELECT MIN(precio) FROM Oferta WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId AND NOT vendedor.id =:userId AND (CURRENT_DATE() BETWEEN fechaInicio AND fechaExpiracion))"),
     @NamedQuery(name="Oferta.pujas",
-            query="SELECT o FROM Oferta o WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId ORDER BY precio DESC"),
+            query="SELECT o FROM Oferta o WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId AND (CURRENT_DATE() BETWEEN fechaInicio AND fechaExpiracion) ORDER BY precio DESC"),
     @NamedQuery(name="Oferta.precios", 
-            query="SELECT o FROM Oferta o WHERE tipo = 1 AND estado = 0  AND producto.id = :productoId ORDER BY precio"),
+            query="SELECT o FROM Oferta o WHERE tipo = 1 AND estado = 0  AND producto.id = :productoId AND (CURRENT_DATE() BETWEEN fechaInicio AND fechaExpiracion) ORDER BY precio"),
 
     @NamedQuery(name="Oferta.pujasUser",
             query="SELECT o FROM Oferta o WHERE tipo = 0 AND estado = 0 AND comprador.id = :userId"),
     @NamedQuery(name="Oferta.preciosUser", 
             query="SELECT o FROM Oferta o WHERE tipo = 1 AND estado = 0 AND vendedor.id = :userId"),
+
+    @NamedQuery(name="Oferta.allPujas",
+            query="SELECT o FROM Oferta o WHERE tipo = 0 AND (estado = 0 OR estado = 4) AND comprador.id = :userId"),
+    @NamedQuery(name="Oferta.allPrecios",
+            query="SELECT o FROM Oferta o WHERE tipo = 1 AND (estado = 0 OR estado = 4) AND vendedor.id = :userId"),
+
+    @NamedQuery(name="Oferta.getExpiredPujas",
+            query="SELECT o FROM Oferta o WHERE tipo = 0 AND estado = 0 AND comprador.id = :userId AND NOT (CURRENT_DATE() BETWEEN fechaInicio AND fechaExpiracion)"),
+    @NamedQuery(name="Oferta.getExpiredPrecios",
+            query="SELECT o FROM Oferta o WHERE tipo = 1 AND estado = 0 AND comprador.id = :userId AND NOT (CURRENT_DATE() BETWEEN fechaInicio AND fechaExpiracion)"),
 
     @NamedQuery(name="Oferta.comprasUser",
             query="SELECT o FROM Oferta o WHERE fechaTransaccion IS NOT NULL AND comprador.id = :userId"),
@@ -61,7 +71,8 @@ public class Oferta {
         PENDIENTE, 
         TRANSACCION_REALIZADA,
         EN_ENVIO,
-        RECIBIDO
+        RECIBIDO,
+        EXPIRADO //Se le devuelve el dinero nada más entre a su cuenta
     };
 
     private Tipo tipo; 

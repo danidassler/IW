@@ -83,11 +83,11 @@ public class UserController {
 			return "errorUser";
 		}
 
-        List<Oferta> pujas = entityManager.createNamedQuery("Oferta.pujasUser")
+        List<Oferta> pujas = entityManager.createNamedQuery("Oferta.allPujas")
 								.setParameter("userId", id)
 								.getResultList(); //Aqui se necesita pujas altas
 
-		List<Oferta> precios = entityManager.createNamedQuery("Oferta.preciosUser")
+		List<Oferta> precios = entityManager.createNamedQuery("Oferta.allPrecios")
 								.setParameter("userId", id)
 								.getResultList();
 
@@ -103,6 +103,8 @@ public class UserController {
         model.addAttribute("tCompras", tCompras); 
         model.addAttribute("pujas", pujas); 
         model.addAttribute("precios", precios); 
+		model.addAttribute("expirado", Oferta.Estado.EXPIRADO); 
+
 
 		// construye y envía mensaje JSON
 		Usuario request = (Usuario)session.getAttribute("u");

@@ -74,7 +74,9 @@
                         <td class="col-2 align-middle align-items-center"><form method="post" th:action="@{'/oferta/eliminarOferta/' + ${p.id}}">
                             <input type="hidden" name="precio" th:value="${p.precio}">
                             <input type="hidden" name="idOferta" th:value="${p.id}">
-                            <button class="btn btn-danger btn-xs tiendaCompraAhora" type="submit">Cancelar Ahora</button>
+                            <button class="btn btn-danger btn-xs tiendaCompraAhora" th:if="${p.estado != expirado}" type="submit">Cancelar Ahora</button>
+                            <button class="btn btn-danger btn-xs tiendaCompraAhora disabled" th:if="${p.estado == expirado}" type="submit">Cancelar Ahora</button>
+
                         </form>
                         </td>
                         <td class="col-1"></td>
@@ -136,7 +138,8 @@
                             <td class="col-2 align-middle align-items-center"><form method="post" th:action="@{'/oferta/eliminarOferta/' + ${p.id}}">
                                 <input type="hidden" name="precio" th:value="${p.precio}">
                                 <input type="hidden" name="idOferta" th:value="${p.id}">
-                                <button class="btn btn-danger btn-xs tiendaCompraAhora" type="submit">Cancelar Ahora</button>
+                                <button class="btn btn-danger btn-xs tiendaCompraAhora" th:if="${p.estado != expirado}" type="submit">Cancelar Ahora</button>
+                                <button class="btn btn-danger btn-xs tiendaCompraAhora disabled" th:if="${p.estado == expirado}" type="submit">Cancelar Ahora</button>
                             </form>
                             </td>
                             <td class="col-1"></td>

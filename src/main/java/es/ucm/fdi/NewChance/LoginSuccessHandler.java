@@ -1,12 +1,15 @@
 package es.ucm.fdi.NewChance;
 
 import java.io.IOException;
+import java.util.List;
+
 
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,6 +19,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import es.ucm.fdi.NewChance.model.Usuario;
+import es.ucm.fdi.NewChance.model.Oferta;
 
 /**
  * Called when a user is first authenticated (via login).
@@ -41,6 +45,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
      * Called whenever a user authenticates correctly.
      */
     @Override
+	@Transactional
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 	    String username = ((org.springframework.security.core.userdetails.User)
@@ -51,13 +56,28 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 		Usuario u = entityManager.createNamedQuery("Usuario.byUsername", Usuario.class)
 		        .setParameter("username", username)
 		        .getSingleResult();		
+		
+		List<Oferta> pujasExpiradas = entityManager.createNamedQuery("Oferta.getExpiredPujas", Oferta.class)
+				.setParameter("userId", u.getId())
+				.getResultList();
+
+		List<Oferta> preciosExpirados = entityManager.createNamedQuery("Oferta.getExpiredPrecios", Oferta.class)
+				.setParameter("userId", u.getId())
+				.getResultList();
+
+		for(Oferta o: pujasExpiradas){
+			o.setEstado(Oferta.Estado.EXPIRADO);
+			u.setSaldo(u.getSaldo().add(o.getPrecio()));
+			entityManager.merge(o);
+			entityManager.merge(u);
+		}
+
+		for(Oferta o: preciosExpirados){
+			o.setEstado(Oferta.Estado.EXPIRADO);
+			entityManager.merge(o);
+		}
 		session.setAttribute("u", u);
-		
-		/*long unread = entityManager.createNamedQuery("Message.countUnread", Long.class)
-		        .setParameter("userId", u.getId())
-		        .getSingleResult();	
-		session.setAttribute("unread", unread);*/
-		
+
 		// add a 'ws' session variable
 		session.setAttribute("ws", request.getRequestURL().toString()
 				.replaceFirst("[^:]*", "ws")		// http[s]://... => ws://...
