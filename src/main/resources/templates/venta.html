@@ -44,7 +44,7 @@
                         <div class="col-6">
                             <form th:if="${mejorPuja!=0}" method="post" th:action="@{'/producto/confirmacionProducto/' + ${prod.id}}">
                                 <p><input type="checkbox" id="cb" required="required"><label for="cb" >Confirmo que mi articulo es nuevo y original.</label></p>
-                                <p><input type="checkbox" id="cb2" required="required"><label for="cb2" >Confirmo que enviare mi producto en dos dia hábiles.</label></p>
+                                <p><input type="checkbox" id="cb2" required="required"><label for="cb2" >Confirmo que enviare mi producto en dos dias hábiles.</label></p>
                                 <input type="hidden" name="precio" th:value="${precio}">
                                 <input type="hidden" name="precioFinal" th:value="${precioFinal}">
                                 <input type="hidden" name="impuestos" th:value="${impuestos}">

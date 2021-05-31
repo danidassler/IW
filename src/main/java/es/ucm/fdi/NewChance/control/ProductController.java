@@ -225,7 +225,6 @@ public class ProductController {
             oferta.setEstado(Oferta.Estado.TRANSACCION_REALIZADA);
             oferta.setFechaTransaccion(LocalDateTime.now());
             user.setSaldo(user.getSaldo().add(precioFinal));
-            //comp.setSaldo(precio.add(envio).add(impuestos)); --> no hace falta ya que el dinero se le resta cuando hace la puja
             oferta.setVendedor(user);
             entityManager.merge(comp);
 

@@ -21,6 +21,6 @@ INSERT INTO Oferta VALUES (3, 0, DATEADD('DAY', 2, CURRENT_DATE), DATEADD('DAY',
 INSERT INTO Oferta VALUES (4, 0, DATEADD('DAY', 6, CURRENT_DATE), DATEADD('DAY', -8, CURRENT_DATE), NULL, 445, 0, 3, 1, NULL); -- puja casado 445 p1 --
 INSERT INTO Oferta VALUES (5, 0, DATEADD('DAY', 5, CURRENT_DATE), DATEADD('DAY', -25, CURRENT_DATE), NULL, 510, 1, NULL, 1, 4); -- precio jin 510 p1 --
 
-INSERT INTO Oferta VALUES (6, 1,'2021-10-15', '2021-10-01', '2021-10-09', 405, 0, 1, 2, 3); -- Transaccion dani 405 p2 --
+INSERT INTO Oferta VALUES (6, 1,'2020-10-15', '2020-10-01', '2020-10-09', 405, 0, 1, 2, 3); -- Transaccion dani 405 p2 --
 INSERT INTO Oferta VALUES (7, 1,'2021-04-02', '2021-03-22', '2021-04-01', 490, 1, 5, 1, 4); -- Transaccion sergio 405 p1 --
 INSERT INTO Oferta VALUES (8, 1,'2021-04-02', '2021-03-22', '2021-04-02', 550, 1, 5, 1, 4); -- Transaccion sergio 405 p1 --

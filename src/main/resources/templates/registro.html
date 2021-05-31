@@ -9,6 +9,7 @@
       <th:block th:replace="frags/header.html">
             Aqui va lo que hay en header, esto no se ve
       </th:block>
+      <link rel="stylesheet" th:href="@{/css/login.css}" type="text/css" /> <!-- El css para el registro es igual que el de login -->
     </div>
     <div class="login-dark">
       <form  method="post" th:action="@{/registro}">

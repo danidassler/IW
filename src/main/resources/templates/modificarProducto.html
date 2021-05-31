@@ -27,18 +27,18 @@
                         <form method="post" th:action="@{'/admin/modificarProducto/' + ${prod.id}}">
                         <div class="row">
                             <div class="col">
-                                <p> <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre del producto" required="required"></input></p>
+                                <p> <input type="text" id="nombre" name="nombre" class="form-control" th:value="${prod.nombre}" required="required"></input></p>
                             </div>
                             <div class="col">
-                                <p><input type="text" id="categorias" name="categorias" class="form-control" placeholder="Categoria" required="required"></input> </p>
+                                <p><input type="text" id="categorias" name="categorias" class="form-control" th:value="${prod.categorias}" required="required"></input> </p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
-                                <p><input type="text" id="desc" name="desc" class="form-control" placeholder="Descripcion" required="required"></input></p>
+                                <p><input type="text" id="desc" name="desc" class="form-control" th:value="${prod.desc}" required="required"></input></p>
                             </div>
                             <div class="col">
-                                <p><input type="text" id="talla" name="talla" class="form-control" placeholder="Talla" required="required"></input></p>
+                                <p><input type="text" id="talla" name="talla" class="form-control" th:value="${prod.talla}" required="required"></input></p>
                             </div>
                         </div>
                         <div class="row">

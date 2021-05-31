@@ -272,7 +272,6 @@ public class UserController {
 
 	@GetMapping("/modificarPerfil/{id}") 
     public String modificarPerfil(@PathVariable long id, Model model, HttpSession session) {    
-		//AQUI HABRIA QUE CONTROLARLO TAMBIEN? 
         Usuario user = entityManager.find(Usuario.class, id);
 		Usuario u = (Usuario)session.getAttribute("u");
 
@@ -301,7 +300,7 @@ public class UserController {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 		
-		if(password.equals(password2) && passwordEncoder.matches(password, user.getPassword().substring(8))/*user.matchesPassword(password, user.getPassword().substring(8))*/){
+		if(newpassword.equals(password2) && passwordEncoder.matches(password, user.getPassword().substring(8))){
 			
 			user.setNombre(nombre);
 			user.setApellidos(apellidos);
