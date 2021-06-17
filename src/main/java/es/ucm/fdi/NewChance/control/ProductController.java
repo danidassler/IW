@@ -77,8 +77,26 @@ public class ProductController {
             user = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
 
         }
-        BigDecimal mejorPuja = obtenerMejorPuja(id, user);
-        BigDecimal menorPrecio = obtenerMenorPrecio(id, user);
+
+        BigDecimal menorPrecio = new BigDecimal("0");
+        BigDecimal mejorPuja = new BigDecimal("0");
+        List<Oferta> minPrecio = entityManager.createNamedQuery("Oferta.mPrecio")
+                                    .setParameter("productoId", id)
+                                    .setParameter("userId", user.getId())
+                                    .getResultList(); 
+
+        if((minPrecio.size() > 0)){
+            menorPrecio = minPrecio.get(0).getPrecio();
+        }
+
+        List<Oferta> mejPuja = entityManager.createNamedQuery("Oferta.mPuja")
+                                                .setParameter("productoId", id)
+                                                .setParameter("userId", user.getId())
+                                                .getResultList();
+
+        if((mejPuja.size() > 0)){
+            mejorPuja = mejPuja.get(0).getPrecio();
+        }
 
         model.addAttribute("prod", prod); 
         model.addAttribute("mejorPuja", mejorPuja);
