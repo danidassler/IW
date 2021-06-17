@@ -74,8 +74,9 @@ public class RootController {
         /*List<BigDecimal> menorPrecio = new ArrayList<>();
         List<BigDecimal> mejorPuja = new ArrayList<>();*/
         List<?> prods = new ArrayList<>();
-        prods = entityManager.createQuery("SELECT p FROM Producto p WHERE p.categorias LIKE '%" + categoria + "%'")
-                    .getResultList();
+        prods = entityManager.createNamedQuery("Producto.selectCat")
+            .setParameter("categoria", categoria)
+            .getResultList();
 
         model.addAttribute("prods", prods);
             
@@ -98,8 +99,7 @@ public class RootController {
     public String busqueda(Model model, @RequestParam String busqueda){
 
         List<?> prods = new ArrayList<>();
-        prods = entityManager.createQuery("SELECT p FROM Producto p WHERE p.nombre LIKE '%" + busqueda + "%' OR p.categorias LIKE '%" + busqueda + "%' OR p.talla LIKE '%" + busqueda + "%'").getResultList();
-        
+        prods = entityManager.createNamedQuery("Producto.busqueda").setParameter("busqueda1",busqueda).getResultList();
         int ok = 1;
         if(prods.isEmpty()){ //la busqueda no coincide con nada
             ok = 0;

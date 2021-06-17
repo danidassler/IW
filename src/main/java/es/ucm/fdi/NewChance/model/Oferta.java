@@ -19,19 +19,19 @@ import lombok.Data;
                         query="SELECT o FROM Oferta o "
                                         + "WHERE o.comprador.id = :userId OR o.vendedor.id = :userId"),
     @NamedQuery(name="Oferta.mejorPuja",
-            query="SELECT MAX(precio) FROM Oferta WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId AND (CURRENT_DATE() BETWEEN fechaInicio AND fechaExpiracion)"),
+            query="SELECT MAX(precio) FROM Oferta WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId AND (CURRENT_TIMESTAMP() BETWEEN fechaInicio AND fechaExpiracion)"),
     @NamedQuery(name="Oferta.mPuja",
             query="SELECT o FROM Oferta o " + 
-            "WHERE o.precio = (SELECT MAX(precio) FROM Oferta WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId AND NOT comprador.id =:userId AND (CURRENT_DATE() BETWEEN fechaInicio AND fechaExpiracion))"),
+            "WHERE o.precio = (SELECT MAX(precio) FROM Oferta WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId AND NOT comprador.id =:userId AND (CURRENT_TIMESTAMP() BETWEEN fechaInicio AND fechaExpiracion))"),
     @NamedQuery(name="Oferta.menorPrecio",
-            query="SELECT MIN(precio) FROM Oferta WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId AND (CURRENT_DATE() BETWEEN fechaInicio AND fechaExpiracion)"),
+            query="SELECT MIN(precio) FROM Oferta WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId AND (CURRENT_TIMESTAMP() BETWEEN fechaInicio AND fechaExpiracion)"),
     @NamedQuery(name="Oferta.mPrecio",
             query="SELECT o FROM Oferta o " + 
-            "WHERE o.precio = (SELECT MIN(precio) FROM Oferta WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId AND NOT vendedor.id =:userId AND (CURRENT_DATE() BETWEEN fechaInicio AND fechaExpiracion))"),
+            "WHERE o.precio = (SELECT MIN(precio) FROM Oferta WHERE tipo = 1 AND estado = 0 AND producto.id = :productoId AND NOT vendedor.id =:userId AND (CURRENT_TIMESTAMP() BETWEEN fechaInicio AND fechaExpiracion))"),
     @NamedQuery(name="Oferta.pujas",
-            query="SELECT o FROM Oferta o WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId AND (CURRENT_DATE() BETWEEN fechaInicio AND fechaExpiracion) ORDER BY precio DESC"),
+            query="SELECT o FROM Oferta o WHERE tipo = 0 AND estado = 0 AND producto.id = :productoId AND (CURRENT_TIMESTAMP() BETWEEN fechaInicio AND fechaExpiracion) ORDER BY precio DESC"),
     @NamedQuery(name="Oferta.precios", 
-            query="SELECT o FROM Oferta o WHERE tipo = 1 AND estado = 0  AND producto.id = :productoId AND (CURRENT_DATE() BETWEEN fechaInicio AND fechaExpiracion) ORDER BY precio"),
+            query="SELECT o FROM Oferta o WHERE tipo = 1 AND estado = 0  AND producto.id = :productoId AND (CURRENT_TIMESTAMP() BETWEEN fechaInicio AND fechaExpiracion) ORDER BY precio"),
 
     @NamedQuery(name="Oferta.pujasUser",
             query="SELECT o FROM Oferta o WHERE tipo = 0 AND estado = 0 AND comprador.id = :userId"),
@@ -44,9 +44,9 @@ import lombok.Data;
             query="SELECT o FROM Oferta o WHERE tipo = 1 AND (estado = 0 OR estado = 4) AND vendedor.id = :userId"),
 
     @NamedQuery(name="Oferta.getExpiredPujas",
-            query="SELECT o FROM Oferta o WHERE tipo = 0 AND estado = 0 AND comprador.id = :userId AND NOT (CURRENT_DATE() BETWEEN fechaInicio AND fechaExpiracion)"),
+            query="SELECT o FROM Oferta o WHERE tipo = 0 AND estado = 0 AND comprador.id = :userId AND NOT (CURRENT_TIMESTAMP() BETWEEN fechaInicio AND fechaExpiracion)"),
     @NamedQuery(name="Oferta.getExpiredPrecios",
-            query="SELECT o FROM Oferta o WHERE tipo = 1 AND estado = 0 AND comprador.id = :userId AND NOT (CURRENT_DATE() BETWEEN fechaInicio AND fechaExpiracion)"),
+            query="SELECT o FROM Oferta o WHERE tipo = 1 AND estado = 0 AND comprador.id = :userId AND NOT (CURRENT_TIMESTAMP() BETWEEN fechaInicio AND fechaExpiracion)"),
 
     @NamedQuery(name="Oferta.comprasUser",
             query="SELECT o FROM Oferta o WHERE fechaTransaccion IS NOT NULL AND comprador.id = :userId"),

@@ -1,6 +1,7 @@
 package es.ucm.fdi.NewChance;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import javax.servlet.ServletContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,6 +37,9 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Autowired 
     private HttpSession session;
+
+	@Autowired
+	private ServletContext context;
     
     @Autowired
     private EntityManager entityManager;    
@@ -67,7 +72,11 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
 		for(Oferta o: pujasExpiradas){
 			o.setEstado(Oferta.Estado.EXPIRADO);
-			u.setSaldo(u.getSaldo().add(o.getPrecio()));
+			BigDecimal precio = o.getPrecio();
+			BigDecimal aniadir = precio.add(precio.multiply(BigDecimal.valueOf((Double) context.getAttribute("impuestos"))
+			.divide(new BigDecimal("100")))
+			.add(BigDecimal.valueOf((Double) context.getAttribute("envio"))));
+			u.setSaldo(u.getSaldo().add(aniadir));
 			entityManager.merge(o);
 			entityManager.merge(u);
 		}

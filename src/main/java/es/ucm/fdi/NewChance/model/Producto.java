@@ -28,7 +28,11 @@ import lombok.Data;
                      + "WHERE u.nombre = :nombre AND u.talla = :talla AND u.id != :id"),
     @NamedQuery(name="Producto.categories",
             query="SELECT DISTINCT categorias "
-                     + "FROM Producto u")
+                     + "FROM Producto u"),
+    @NamedQuery(name="Producto.selectCat",
+            query="SELECT p FROM Producto p WHERE p.categorias LIKE :categoria"),
+    @NamedQuery(name="Producto.busqueda",
+            query="SELECT p FROM Producto p WHERE LOWER(p.nombre) LIKE lower(concat('%', :busqueda1 ,'%')) OR LOWER(p.categorias) LIKE lower(concat('%', :busqueda1 ,'%')) OR LOWER(p.talla) LIKE lower(concat('%', :busqueda1 ,'%'))")
 })
 public class Producto {
     @Id
