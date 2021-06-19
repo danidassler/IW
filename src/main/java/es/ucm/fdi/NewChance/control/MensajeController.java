@@ -54,6 +54,15 @@ public class MensajeController {
 		return "chat";
 	}
 
+	@GetMapping("/zapas")
+	public String getMessagesZapas(Model model, HttpSession session) {
+		
+		Usuario u = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+		model.addAttribute("username", u.getUsername());
+		
+		return "chatZapas";
+	}
+
 	@GetMapping(path = "/userReceived/{adminId}", produces = "application/json") //Mensajes recibidos por el usuario
 	@Transactional // para no recibir resultados inconsistentes
 	@ResponseBody  // para indicar que no devuelve vista, sino un objeto (jsonizado)
@@ -63,6 +72,17 @@ public class MensajeController {
 		if(adminId != 0){ //En caso de asignarle un admin, se mostrarán el chat
 			mensajes = getAllMessages2(adminId, session);
 		}
+		 //En caso de no tener ningún admin asignado, no se muestra ningún mensaje
+
+		return  mensajes;
+	}
+
+	@GetMapping(path = "/userReceived2", produces = "application/json") //Mensajes recibidos por el usuario
+	@Transactional // para no recibir resultados inconsistentes
+	@ResponseBody  // para indicar que no devuelve vista, sino un objeto (jsonizado)
+	public List<Mensaje.Transfer> messagesFromZapas(HttpSession session) {
+		List<Mensaje.Transfer> mensajes = new ArrayList<>(); //Ordenar por sent para que tenga coherencia/En caso de asignarle un admin, se mostrarán el chat
+			mensajes = getAllMessagesZapas();
 		 //En caso de no tener ningún admin asignado, no se muestra ningún mensaje
 
 		return  mensajes;
@@ -113,6 +133,16 @@ public class MensajeController {
 		List<Mensaje> msjs = entityManager.createNamedQuery("Mensaje.total")
 			.setParameter("userId", userId)
 			.setParameter("clienteId", receptorId)
+			.getResultList();
+
+		mensajes.addAll(msjs.stream().map(Transferable::toTransfer).collect(Collectors.toList()));
+		return mensajes;
+	}
+
+	public List<Mensaje.Transfer> getAllMessagesZapas(){
+		List<Mensaje.Transfer> mensajes = new ArrayList<>();	
+		
+		List<Mensaje> msjs = entityManager.createNamedQuery("Mensaje.zapas")
 			.getResultList();
 
 		mensajes.addAll(msjs.stream().map(Transferable::toTransfer).collect(Collectors.toList()));

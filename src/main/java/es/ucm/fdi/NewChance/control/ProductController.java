@@ -77,7 +77,7 @@ public class ProductController {
             user = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
 
         }
-
+        
         BigDecimal menorPrecio = new BigDecimal("0");
         BigDecimal mejorPuja = new BigDecimal("0");
         List<Oferta> minPrecio = entityManager.createNamedQuery("Oferta.mPrecio")

@@ -9,7 +9,20 @@
 
 		<h1>New Chance</h1>
 	
-		<p>Fecha ultima actualizacion 25-05-2021</p>
+		<p>Fecha ultima actualizacion 19-06-2021</p>
+		
+		<h2> MEJORAS POST EXAMEN </h2>
+		
+		<p>Todas las nuevas mejoras y ampliaciones han sido realizadas por todos los miembros del grupo, hemos participado todos, ya que muchas de ellas fueron de cara a estudiar y preparar el examen.</p>
+		<p>Mejoras realizadas por: Daniel Sanz Mayo, Alvaro Casado Molinero, Sergio Morán Agüero, Jin Wang Xu, Jin Tao Peng Zhou</p>
+			<ul>
+				<li>Eliminación de la posibilidad de inyección SQL creando named Querys en producto para que haya problemas a la hora de que un usuario realice una busqueda.</li>
+				<li>Posibilidad de poner varias categorías en un mismo producto separadas por comas (ejemplo: Zapatillas,Rebajas,Adidas) y que en la cabecera salgan individualmente (es decir, que no aparezcan separadas por comas y repetidas).</li>
+				<li>Nuevo topic 'zapas' creando un chat general y grupal entre todos los usuarios donde pueden hablar sobre zapatillas, ropa, productos de la tienda ...</li>
+				<li>Nueva tabla "Colores" en la bbdd con relación @ManyToMany con productos, que sirve para relacionar al producto con los colores que presenta (después se muestran en la pantalla de tienda)</li>
+				<li>El administrador puede ocultar y volver a mostrar productos en la tienda cambiando un nuevo atributo "enabled" incluido en la bbdd. Similar a los que se hace con banear usuario.</li>
+				<li>El usuario puede eliminar su cuenta si así lo desea, esta acción además de eliminar el usuario de la bbdd, también elimina sus ofertas activas de la bbdd para que sus pujas o precios ya no puedan ser aceptados, sin embargo, las transacciones ya realizadas en su nombre no se borran, ya que tienen que estar presentes para que el otro usuario que formaba parte de la transacción pueda tenerla como historial en su perfil.</li>
+			</ul>
 		
 				<h2> Detalles de la aplicación web</h2>
 		<p>

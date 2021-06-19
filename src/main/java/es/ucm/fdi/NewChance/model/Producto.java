@@ -3,6 +3,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,9 +31,9 @@ import lombok.Data;
             query="SELECT DISTINCT categorias "
                      + "FROM Producto u"),
     @NamedQuery(name="Producto.selectCat",
-            query="SELECT p FROM Producto p WHERE p.categorias LIKE :categoria"),
+            query="SELECT p FROM Producto p WHERE p.enabled = 1 AND p.categorias LIKE concat('%', :categoria ,'%')"),
     @NamedQuery(name="Producto.busqueda",
-            query="SELECT p FROM Producto p WHERE LOWER(p.nombre) LIKE lower(concat('%', :busqueda1 ,'%')) OR LOWER(p.categorias) LIKE lower(concat('%', :busqueda1 ,'%')) OR LOWER(p.talla) LIKE lower(concat('%', :busqueda1 ,'%'))")
+            query="SELECT p FROM Producto p WHERE p.enabled = 1 AND LOWER(p.nombre) LIKE lower(concat('%', :busqueda1 ,'%')) OR LOWER(p.categorias) LIKE lower(concat('%', :busqueda1 ,'%')) OR LOWER(p.talla) LIKE lower(concat('%', :busqueda1 ,'%'))")
 })
 public class Producto {
     @Id
@@ -45,6 +46,10 @@ public class Producto {
     private String desc;
     private String categorias;
     private String talla;
+    private byte enabled;
+
+    @ManyToMany(targetEntity = Color.class, fetch = FetchType.EAGER)
+    private List<Color> colores;
 
     @OneToMany
     @JoinColumn(name="producto_id")

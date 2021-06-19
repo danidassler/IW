@@ -42,6 +42,10 @@
                     <a th:if="${session.u.hasRole('ADMIN')}" class="btn btn-outline-primary mt-3" th:href="@{/admin/modificarImpuestos}">Modificar Impuestos </a>
                     <a th:if="${session.u.hasRole('ADMIN')}" class="btn btn-outline-primary mt-3" th:href="@{'/admin/adminChat/' + ${user.id}}">Chat </a>
                     <a th:if="${session.u.hasRole('USER')}" class="btn btn-outline-primary mt-3" th:href="@{'/chat/' + ${user.id}}">Chat </a>
+                    <a th:if="${session.u.hasRole('USER')}" class="btn btn-outline-primary mt-3" th:href="@{/chat/zapas}">Grupo Zapas</a>
+                    <form th:action="@{'/perfil/eliminarCuenta/' + ${user.id}}" method="post" th:if="${session.u.hasRole('USER')}">
+                        <button class="btn btn-outline-primary" id="logout" type="submit">Eliminar Cuenta</button>
+                    </form>
                 </div>
 
             </div>

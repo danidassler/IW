@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import es.ucm.fdi.NewChance.model.Mensaje;
 import es.ucm.fdi.NewChance.model.Usuario;
+import es.ucm.fdi.NewChance.model.Producto;
+import es.ucm.fdi.NewChance.model.Color;
 
 @Controller
 public class RootController {
@@ -58,13 +60,21 @@ public class RootController {
 
     @GetMapping("/tienda") 
     public String tienda(Model model) {   
-        
-        /*List<BigDecimal> menorPrecio = new ArrayList<>();
-        List<BigDecimal> mejorPuja = new ArrayList<>();*/
-        List<?> prods = new ArrayList<>();
-        prods = entityManager.createQuery("SELECT p FROM Producto p").getResultList();
+
+        List<Producto> prods = new ArrayList<>();
+        prods = entityManager.createQuery("SELECT p FROM Producto p WHERE p.enabled = 1")
+                .getResultList();
         model.addAttribute("prods", prods);
-            
+
+        for(Producto p: prods){
+            String col = "";
+            List<Color> colores = new ArrayList<>();
+            colores = p.getColores();
+            for(Color c: colores){
+               col = col + "," + c.getNombre();
+            }
+        }
+
         return "tienda";                     
     }
 
@@ -88,7 +98,7 @@ public class RootController {
     public String busqueda(Model model){
 
         List<?> prods = new ArrayList<>();
-        prods = entityManager.createQuery("SELECT p FROM Producto p").getResultList();
+        prods = entityManager.createQuery("SELECT p FROM Producto p WHERE p.enabled = 1").getResultList();
         model.addAttribute("prods", prods);
             
         return "busqueda";  

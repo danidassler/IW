@@ -86,6 +86,9 @@ function go(url, method, data = {}) {
 document.addEventListener("DOMContentLoaded", () => {
     if (config.socketUrl) {
         let subs = config.admin ? ["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
+		if(config.zapas){
+			subs.push("/topic/zapas");
+		}
         ws.initialize(config.socketUrl, subs);
     }
 

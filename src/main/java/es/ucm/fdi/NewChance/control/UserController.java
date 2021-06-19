@@ -236,6 +236,40 @@ public class UserController {
 
 		return "{\"result\": \"message sent.\"}";
 	}	
+
+	@PostMapping("/chatconzapas")
+	@ResponseBody
+	@Transactional
+	public String postMsgZapas( 
+			@RequestBody JsonNode o, Model model, HttpSession session) 
+		throws JsonProcessingException {
+		
+		String text = o.get("men").asText();
+		Usuario sender = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+		Usuario grupo = entityManager.find(Usuario.class, (long) 200);
+		// construye mensaje, lo guarda en BD
+		Mensaje m = new Mensaje();
+		m.setReceptor(grupo); 
+		m.setEmisor(sender);
+		m.setFechaEnvio(LocalDateTime.now());
+		m.setMensaje(text);
+		entityManager.persist(m);
+		entityManager.flush(); // to get Id before commit
+			
+		// construye json
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode rootNode = mapper.createObjectNode();
+		rootNode.put("from", sender.getUsername()); //Nombre de usuario del emisor
+		rootNode.put("fromId", sender.getId()); //Id del emisor
+		rootNode.put("to", "200"); // Se lo envía a canal Admin
+		rootNode.put("text", text);
+		String json = mapper.writeValueAsString(rootNode);
+	
+		messagingTemplate.convertAndSend("/topic/zapas", json);
+
+		return "{\"result\": \"message sent.\"}";
+	}	
+
 	@PostMapping("/{id}/photo")
 	public String postPhoto(
 			HttpServletResponse response,
@@ -404,4 +438,27 @@ public class UserController {
 		return true;
 	}
 
+	@PostMapping("/eliminarCuenta/{id}")
+	@Transactional
+	public String eliminarCuenta(@PathVariable long id, 
+		Model model, HttpSession session){
+
+		Usuario us = entityManager.find(Usuario.class, ((Usuario)session.getAttribute("u")).getId());
+		List<Oferta> ofertas = entityManager.createNamedQuery("Oferta.eliminar")
+								.setParameter("userId", us.getId()).getResultList();
+		List<Mensaje> mensajes = entityManager.createNamedQuery("Mensaje.eliminar")
+								.setParameter("userId", us.getId()).getResultList();
+
+		for(Oferta o: ofertas){
+			entityManager.remove(o);
+		}
+		for(Mensaje m: mensajes){
+			entityManager.remove(m);
+		}
+
+		entityManager.remove(us);
+		session.invalidate();
+		
+		return "login";
+	}	
 }

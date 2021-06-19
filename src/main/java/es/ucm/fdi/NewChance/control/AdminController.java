@@ -151,8 +151,7 @@ public class AdminController {
 			log.info("Successfully uploaded photo for {} into {}!", id, f.getAbsolutePath());
 		}
 
-        List<?> cats = entityManager.createNamedQuery("Producto.categories").getResultList();
-        context.setAttribute("categorias", cats);
+        setCategorias();
 
         return "formularioProducto";
     }
@@ -197,8 +196,7 @@ public class AdminController {
         entityManager.merge(prod);
         model.addAttribute("prod", prod);     
 
-        List<?> cats = entityManager.createNamedQuery("Producto.categories").getResultList();
-        context.setAttribute("categorias", cats);
+        setCategorias();
 
         return "modificarProducto";
     }
@@ -264,6 +262,27 @@ public class AdminController {
             }
         return res;
     }
+
+
+    @GetMapping(path = "ocultarProducto/{id}" , produces = "application/json")
+    @Transactional
+    @ResponseBody
+    public int ocultarProducto(@PathVariable long id){
+            Producto prod = entityManager.find(Producto.class, id); 
+            int res = 0;
+            if(prod.getEnabled() == 1){ //aun esta activo
+                prod.setEnabled((byte)0);
+                entityManager.merge(prod);
+                res = 1;
+            }
+            else{ //esta baneado
+                prod.setEnabled((byte)1);
+                entityManager.merge(prod);
+                res = 2;
+            }
+        return res;
+    }
+
     
     //Websockets
     @GetMapping("/adminChat/{id}")
@@ -372,5 +391,34 @@ public class AdminController {
         return "modificarImpuestos";
     }
 
+    private void setCategorias(){
+
+        List<String> cats = entityManager.createNamedQuery("Producto.categories").getResultList();
+        List<String> aux = new ArrayList<>();
+        List<String> aux2 = new ArrayList<>();
+
+        aux2.addAll(cats);
+
+        int s = aux2.size();
+        //para que se puedan tener categorias multiples en un producto, separadas por comas
+        for(int j=0; j<s; j++){
+            if(aux2.get(j).contains(",")){
+                cats.remove(aux2.get(j));
+                String [] newcats = aux2.get(j).split(",");
+                int size = newcats.length;
+
+                for(int i=0; i<size ; i++){
+                    if(cats.contains(newcats[i])){
+                        cats.remove(newcats[i]);
+                    }
+                    if(!aux.contains(newcats[i])){  
+                        aux.add(newcats[i]);
+                    }  
+                }
+            }
+        }
+        cats.addAll(aux);
+        context.setAttribute("categorias", cats);
+    }
 
 }

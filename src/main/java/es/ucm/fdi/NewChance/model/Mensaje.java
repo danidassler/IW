@@ -29,7 +29,13 @@ import lombok.AllArgsConstructor;
 					+ "WHERE m.receptor.id = 0 AND m.emisor.id = :userId"),
 	@NamedQuery(name="Mensaje.findAdmin", //Query para recoger el primer admin que te ha hablado
 			query="SELECT m.emisor.id FROM Mensaje m "
-					+ "WHERE m.receptor.id = :userId")		
+					+ "WHERE m.receptor.id = :userId"),
+	@NamedQuery(name="Mensaje.eliminar",
+            query ="SELECT m FROM Mensaje m "
+                    + "WHERE m.emisor.id = :userId OR m.receptor.id = :userId"),	
+	@NamedQuery(name="Mensaje.zapas",
+			query="SELECT m FROM Mensaje m "
+					+ "WHERE m.receptor.id  = 200"),		
 
         })
 public class Mensaje implements Transferable<Mensaje.Transfer>{

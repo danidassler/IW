@@ -53,8 +53,32 @@ public class StartupConfig {
 		log.info("Setting global envio property to {}", 
 				context.getAttribute("envio"));
 
-		List<?> categorias = entityManager.createNamedQuery("Producto.categories").getResultList();
-        context.setAttribute("categorias", categorias);
+		List<String> cats = entityManager.createNamedQuery("Producto.categories").getResultList();
+		List<String> aux = new ArrayList<>();
+		List<String> aux2 = new ArrayList<>();
+	
+		aux2.addAll(cats);
+	
+		int s = aux2.size();
+		//para que se puedan tener categorias multiples en un producto, separadas por comas
+		for(int j=0; j<s; j++){
+			if(aux2.get(j).contains(",")){
+				cats.remove(aux2.get(j));
+				String [] newcats = aux2.get(j).split(",");
+				int size = newcats.length;
+
+				for(int i=0; i<size ; i++){
+					if(cats.contains(newcats[i])){
+						cats.remove(newcats[i]);
+					}
+					if(!aux.contains(newcats[i])){  
+						aux.add(newcats[i]);
+					}  
+				}
+			}
+		}
+		cats.addAll(aux);
+		context.setAttribute("categorias", cats);
 
 		
 		// see http://www.ecma-international.org/ecma-262/5.1/#sec-15.9.1.15

@@ -20,42 +20,35 @@
     <table class="tabla_productos table align-middle table-borderless text-center container-fluid">
         <thead>
             <tr class="d-flex m-3">
-                <th class="col-1 font-monospace fs-5" scope="col"></th>
                 <th class="col-2 font-monospace fs-5" scope="col">Imagen</th>
                 <th class="col-2 font-monospace fs-5" scope="col">Nombre</th>
                 <th class="col-2 font-monospace fs-5" scope="col">Categoría</th>
                 <th class="col-2 font-monospace fs-5" scope="col">Talla (EUR)</th>
+                <th class="col-2 font-monospace fs-5" scope="col">Colores</th>
                 <!--<th>Maxima Puja</th>
                 <th>Menor Precio</th>-->
                 <th class="col-2 font-monospace fs-5">Opciones</th>
-                <th class="col-1 fs-5" scope="col"></th>
             </tr>
         </thead>
         <tbody>
             <tr class="d-flex m-3 p-3 align-items-center" th:each="p: ${prods}">
-                <td class="col-1"></td>
+                <!--<td class="col-1"></td>-->
                 <td class="col-2"><img class="img_tienda_producto"th:src="@{/producto/{id}/photo(id=${p.id})}" alt="foto" width="150" height="150"/></td>
                 <td class="col-2"><a class="productoTienda align-middle fs-5" th:href="@{'/producto/' + ${p.id}}" th:text="${p.nombre}">N</a></td>
                 <td class="col-2 fs-5" th:text="${p.categorias}">C</td>
                 <td class="col-2 fs-5" th:text="${p.talla} ">T</td>
-                <!--<td th:text="${mp}">MP</td>
-                <td th:text="${mprec}">MP</td>-->
+                <td class="col-2 fs-5"><div th:each="c: ${p.colores}" ><span th:text="${c.nombre}"></span></div></td>
                 <td class="col-2">
                     <p>
-                        <!-- en estos botones controlar que: si el producto no tiene aun ninguna
-                        oferta o precio de venta, entonces estos botones no deberian de aparecer,
-                        ya que  todavia no se podrian realizar dichas operaciones-->
+                      
                         <a class="btn btn-success btn-xs tiendaCompraAhora" role="button" th:href="@{'/producto/compra/' + ${p.id}}">Comprar ya</a>
                     </p>
                     <p>
                         <a class="btn btn-danger btn-xs tiendaCompraAhora" role="button" th:href="@{'/producto/venta/' + ${p.id}}">Vender ya</a>
                     </p>
-                    <!--<p>
-                        <button class="tiendaPujar"><a th:href="@{'/oferta/pujar/' + ${p.id}}">Pujar</a></button>
-                        <button><a th:href="@{'/oferta/fijarPrecio/' + ${p.id}}">Fijar precio</a></button> 
-                    </p>-->
+
                 </td>
-                <td class="col-1"></td>
+                <!--<td class="col-1"></td>-->
             </tr>
         </tbody>
         </table>

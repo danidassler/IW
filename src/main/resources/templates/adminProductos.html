@@ -18,26 +18,57 @@
             <table class="tabla_productos table align-middle table-borderless text-center container-fluid">
                 <thead>
                     <tr class="d-flex m-3">
-                        <th class="col-3 font-monospace fs-5" scope="col">Imagen</th>
-                        <th class="col-3 font-monospace fs-5" scope="col">Nombre</th>
-                        <th class="col-3 font-monospace fs-5" scope="col">Categoría</th>
-                        <th class="col-3 font-monospace fs-5">Editar Productos</th>
+                        <th class="col-1"></th>
+                        <th class="col-2 font-monospace fs-5" scope="col">Imagen</th>
+                        <th class="col-2 font-monospace fs-5" scope="col">Nombre</th>
+                        <th class="col-2 font-monospace fs-5" scope="col">Categoría</th>
+                        <th class="col-2 font-monospace fs-5">Editar Productos</th>
+                        <th class="col-2 font-monospace fs-5">Ocultar Productos</th>
+                        <th class="col-1"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="d-flex m-3 p-3 align-items-center" th:each="p: ${prods}">
-
-                        <td class="col-3"><img class="img_tienda_producto" th:src="@{/producto/{id}/photo(id=${p.id})}" alt="foto" width="150" height="150" /></td>
-                        <td class="col-3 align-middle align-items-center"><a class="productoTienda align-middle fs-5" th:href="@{'/producto/' + ${p.id}}" th:text="${p.nombre}">N</a></td>
-                        <td class="col-3 align-middle align-items-center fs-5" th:text="${p.categorias}">C</td>
-                        <td class="col-3 align-middle align-items-center">
+                        <td class="col-1"></td>
+                        <td class="col-2"><img class="img_tienda_producto" th:src="@{/producto/{id}/photo(id=${p.id})}" alt="foto" width="150" height="150" /></td>
+                        <td class="col-2 align-middle align-items-center"><a class="productoTienda align-middle fs-5" th:href="@{'/producto/' + ${p.id}}" th:text="${p.nombre}">N</a></td>
+                        <td class="col-2 align-middle align-items-center fs-5" th:text="${p.categorias}">C</td>
+                        <td class="col-2 align-middle align-items-center">
                             <a class="btn btn-primary" th:href="@{'/admin/modificarProducto/' + ${p.id}}" role="button">Editar Producto</a>
                         </td>
+                        <td class="col-2 align-middle align-items-center" th:if = "${p.enabled == 1}">
+                            <!--<a class="btn btn-primary" th:href="@{'/admin/modificarProducto/' + ${p.id}}" role="button">Ocultar Producto</a>-->
+                            <input id = "name" type="hidden" name="idProd" th:value="${p.id}">
+                            <input id ="submit" type="submit" onClick="changeInput(event);" class="btn btn-primary" value="Ocultar Producto" style= "margin: 5px;">
+                        </td>
+                        <td class="col-2 align-middle align-items-center" th:if = "${p.enabled == 0}">
+                            <!--<a class="btn btn-primary" th:href="@{'/admin/modificarProducto/' + ${p.id}}" role="button">Mostrar Producto</a>-->
+                            <input id = "name" type="hidden" name="idProd" th:value="${p.id}">
+                            <input id ="submit" type="submit" onClick="changeInput(event);" class="btn btn-primary" value="Mostrar Producto" style= "margin: 5px;">
+                        </td>
+                        <td class="col-1"></td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
+    <script>
+        function changeInput(e){
+            e.preventDefault();
+            let value = document.getElementById("name").value;
+            $.get("/admin/ocultarProducto/" + value, function(data){
+		    });
+            if(document.getElementById("submit").value == "Mostrar Producto"){
+                document.getElementById("submit").value = "Ocultar Producto";
+            }
+            else{
+                document.getElementById("submit").value = "Mostrar Producto";
+            }
+        };
+
+    </script>
+
         <div>
             <th:block th:replace="frags/pie.html">
                 Aqui va lo que hay en header, esto no se ve
